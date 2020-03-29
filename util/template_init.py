@@ -1,17 +1,17 @@
 """
-The Arcade Library
+The ArcadePlus Library
 
 A Python simple, easy to use module for creating 2D games.
 """
 
-# Note: DO NOT EDIT arcade/__init__.py
+# Note: DO NOT EDIT arcadeplus/__init__.py
 # Instead look at util/init_template.py and update_init.py
 
-# Error out if we import Arcade with an incompatible version of Python.
+# Error out if we import arcadeplus with an incompatible version of Python.
 import sys
 
 if sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 6):
-    sys.exit("The Arcade Library requires Python 3.6 or higher.")
+    sys.exit("The ArcadePlus Library requires Python 3.6 or higher.")
 
 try:
     import pyglet_ffmpeg2
@@ -24,10 +24,10 @@ import pyglet
 pyglet.options['shadow_window'] = False
 
 # noinspection PyPep8
-from arcade import color
+from arcadeplus import color
 # noinspection PyPep8
-from arcade import csscolor
+from arcadeplus import csscolor
 # noinspection PyPep8
-from arcade import key
+from arcadeplus import key
 # noinspection PyPep8
-from arcade import resources
+from arcadeplus import resources

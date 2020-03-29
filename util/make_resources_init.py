@@ -14,9 +14,9 @@ from typing import List
 
 
 def main() -> None:
-    """Creates __init__.py in the arcade/resources directory."""
+    """Creates __init__.py in the arcadeplus/resources directory."""
     media_types = ['.png', '.wav', '.tmx', '.tsx', '.wav', '.mp3', '.ogg']
-    parent = pathlib.Path(__file__).parent.parent / "arcade/resources"
+    parent = pathlib.Path(__file__).parent.parent / "arcadeplus/resources"
 
     used_variable_names: List[str] = []
 

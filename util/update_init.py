@@ -49,7 +49,7 @@ def main():
     text_classes = []
     text_functions = []
 
-    os.chdir("../arcade")
+    os.chdir("../arcadeplus")
     file_list = "window_commands.py", \
                 "application.py", \
                 "arcade_types.py", \
@@ -93,11 +93,11 @@ def main():
         init_template += "\n"
 
         for item in type_list:
-            text_data += [f"- :data:`~arcade.{item[1]}`\n"]
+            text_data += [f"- :data:`~arcadeplus.{item[1]}`\n"]
         for item in function_list:
-            text_functions += [f"- :func:`~arcade.{item[1]}`\n"]
+            text_functions += [f"- :func:`~arcadeplus.{item[1]}`\n"]
         for item in class_list:
-            text_classes += [f"- :class:`~arcade.{item[1]}`\n"]
+            text_classes += [f"- :class:`~arcadeplus.{item[1]}`\n"]
 
     init_template += "\n__all__ = ["
     all_list.sort()
