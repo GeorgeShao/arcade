@@ -1,9 +1,9 @@
 import pytest
 from pyglet import gl
-from arcade import window_commands
+from arcadeplus import window_commands
 import numpy as np
 from ctypes import POINTER
-from arcade.buffered_draw_commands import (
+from arcadeplus.buffered_draw_commands import (
     create_line,
     create_line_generic_with_colors,
     create_line_generic,
@@ -77,7 +77,7 @@ def test_create_line_generic_with_colors():
 
 
 def test_create_line_generic(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     create_line_generic(
         point_list=[(10, 20), (30, 40), (50, 60)],
         color=(100, 110, 120),
@@ -93,7 +93,7 @@ def test_create_line_generic(mocker):
 
 
 def test_create_line_strip(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     create_line_strip(
         point_list=[(10, 20), (30, 40), (50, 60)],
         color=(100, 110, 120),
@@ -108,7 +108,7 @@ def test_create_line_strip(mocker):
 
 
 def test_create_line_loop(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     create_line_loop(
         point_list=[(10, 20), (30, 40), (50, 60)],
         color=(100, 110, 120),
@@ -124,7 +124,7 @@ def test_create_line_loop(mocker):
 
 
 def test_create_lines(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     create_lines(
         point_list=[(10, 20), (30, 40), (50, 60), (70, 80)],
         color=(100, 110, 120),
@@ -140,7 +140,7 @@ def test_create_lines(mocker):
 
 
 def test_create_polygon(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     create_polygon(
         point_list=[(30, 20), (10, 40), (50, 80), (90, 40), (50, 20)],
         color=(100, 110, 120)
@@ -155,7 +155,7 @@ def test_create_polygon(mocker):
 
 
 def test_create_rectangle(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     create_rectangle(
         center_x=200, center_y=200, width=50, height=50,
         color=(0, 255, 0), border_width=3, tilt_angle=0
@@ -169,7 +169,7 @@ def test_create_rectangle(mocker):
 
 
 def test_create_rectangle_outline(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     create_rectangle_outline(
         center_x=200, center_y=200, width=50, height=50,
         color=(0, 255, 0), border_width=3, tilt_angle=0
@@ -184,7 +184,7 @@ def test_create_rectangle_outline(mocker):
 
 
 def test_create_rectangle_filled(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_rectangle")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_rectangle")
     create_rectangle_filled(
         center_x=200, center_y=200, width=50, height=50,
         color=(0, 255, 0), tilt_angle=0
@@ -203,7 +203,7 @@ def test_get_rectangle_points():
 
 
 def test_create_rectangle_filled_with_colors(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     create_rectangle_filled_with_colors(
         point_list=[(0, 0), (100, 0), (100, 100), (0, 100)],
         color_list=[(100, 110, 120), (130, 140, 150),
@@ -218,7 +218,7 @@ def test_create_rectangle_filled_with_colors(mocker):
 
 
 def test_create_triangles_filled_with_colors(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     create_triangles_filled_with_colors(
         point_list=[(0, 0), (100, 0), (0, 100)],
         color_list=[(100, 110, 120), (130, 140, 150), (190, 200, 210)]
@@ -231,7 +231,7 @@ def test_create_triangles_filled_with_colors(mocker):
 
 
 def test_create_ellipse(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic")
     create_ellipse(
         center_x=100, center_y=100, width=50, height=80,
         color=(200, 150, 100), num_segments=10
@@ -254,7 +254,7 @@ def test_create_ellipse(mocker):
 
 
 def test_create_ellipse_outline(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic")
     create_ellipse_outline(
         center_x=100, center_y=100, width=50, height=80,
         color=(200, 150, 100), num_segments=10
@@ -278,7 +278,7 @@ def test_create_ellipse_outline(mocker):
 
 
 def test_create_ellipse_filled(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_ellipse")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_ellipse")
     create_ellipse_filled(center_x=100, center_y=100, width=50, height=80,
                           color=(200, 150, 100))
     border_width = 1
@@ -291,7 +291,7 @@ def test_create_ellipse_filled(mocker):
 
 
 def test_create_ellipse_filled_with_colors(mocker):
-    mock = mocker.patch("arcade.buffered_draw_commands.create_line_generic_with_colors")
+    mock = mocker.patch("arcadeplus.buffered_draw_commands.create_line_generic_with_colors")
     num_segments = 10
     create_ellipse_filled_with_colors(
         center_x=100, center_y=100, width=50, height=80,
