@@ -1,5 +1,5 @@
 import os
-import arcade
+import arcadeplus
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -8,7 +8,7 @@ CHARACTER_SCALING = 0.5
 COIN_SCALE = 0.25
 
 
-class MyTestWindow(arcade.Window):
+class MyTestWindow(arcadeplus.Window):
 
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
@@ -17,33 +17,33 @@ class MyTestWindow(arcade.Window):
         os.chdir(file_path)
 
         self.frame_count = 0
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
-        self.character_list = arcade.SpriteList()
+        self.character_list = arcadeplus.SpriteList()
 
-        self.player = arcade.AnimatedWalkingSprite()
+        self.player = arcadeplus.AnimatedWalkingSprite()
 
-        self.player.stand_right_textures = [arcade.load_texture(":resources:images/animated_characters/robot/robot_idle.png")]
+        self.player.stand_right_textures = [arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_idle.png")]
 
-        self.player.stand_left_textures = [arcade.load_texture(":resources:images/animated_characters/robot/robot_idle.png", mirrored=True)]
+        self.player.stand_left_textures = [arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_idle.png", mirrored=True)]
 
-        self.player.walk_right_textures = [arcade.load_texture(":resources:images/animated_characters/robot/robot_walk0.png"),
-                                           arcade.load_texture(":resources:images/animated_characters/robot/robot_walk1.png"),
-                                           arcade.load_texture(":resources:images/animated_characters/robot/robot_walk2.png"),
-                                           arcade.load_texture(":resources:images/animated_characters/robot/robot_walk3.png"),
-                                           arcade.load_texture(":resources:images/animated_characters/robot/robot_walk4.png"),
-                                           arcade.load_texture(":resources:images/animated_characters/robot/robot_walk5.png"),
-                                           arcade.load_texture(":resources:images/animated_characters/robot/robot_walk6.png"),
-                                           arcade.load_texture(":resources:images/animated_characters/robot/robot_walk7.png")]
+        self.player.walk_right_textures = [arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk0.png"),
+                                           arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk1.png"),
+                                           arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk2.png"),
+                                           arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk3.png"),
+                                           arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk4.png"),
+                                           arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk5.png"),
+                                           arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk6.png"),
+                                           arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk7.png")]
 
-        self.player.walk_left_textures = [arcade.load_texture(":resources:images/animated_characters/robot/robot_walk0.png", mirrored=True),
-                                          arcade.load_texture(":resources:images/animated_characters/robot/robot_walk1.png", mirrored=True),
-                                          arcade.load_texture(":resources:images/animated_characters/robot/robot_walk2.png", mirrored=True),
-                                          arcade.load_texture(":resources:images/animated_characters/robot/robot_walk3.png", mirrored=True),
-                                          arcade.load_texture(":resources:images/animated_characters/robot/robot_walk4.png", mirrored=True),
-                                          arcade.load_texture(":resources:images/animated_characters/robot/robot_walk5.png", mirrored=True),
-                                          arcade.load_texture(":resources:images/animated_characters/robot/robot_walk6.png", mirrored=True),
-                                          arcade.load_texture(":resources:images/animated_characters/robot/robot_walk7.png", mirrored=True)]
+        self.player.walk_left_textures = [arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk0.png", mirrored=True),
+                                          arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk1.png", mirrored=True),
+                                          arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk2.png", mirrored=True),
+                                          arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk3.png", mirrored=True),
+                                          arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk4.png", mirrored=True),
+                                          arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk5.png", mirrored=True),
+                                          arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk6.png", mirrored=True),
+                                          arcadeplus.load_texture(":resources:images/animated_characters/robot/robot_walk7.png", mirrored=True)]
 
         self.player.texture_change_distance = 20
 
@@ -55,25 +55,25 @@ class MyTestWindow(arcade.Window):
 
         self.character_list.append(self.player)
 
-        self.coin_list = arcade.SpriteList()
+        self.coin_list = arcadeplus.SpriteList()
 
-        coin = arcade.AnimatedTimeSprite(scale=0.5)
+        coin = arcadeplus.AnimatedTimeSprite(scale=0.5)
         coin.center_x = 500
         coin.center_y = 500
 
         coin.textures = []
-        coin.textures.append(arcade.load_texture(":resources:images/items/gold_1.png"))
-        coin.textures.append(arcade.load_texture(":resources:images/items/gold_2.png"))
-        coin.textures.append(arcade.load_texture(":resources:images/items/gold_3.png"))
-        coin.textures.append(arcade.load_texture(":resources:images/items/gold_4.png"))
-        coin.textures.append(arcade.load_texture(":resources:images/items/gold_3.png"))
-        coin.textures.append(arcade.load_texture(":resources:images/items/gold_2.png"))
+        coin.textures.append(arcadeplus.load_texture(":resources:images/items/gold_1.png"))
+        coin.textures.append(arcadeplus.load_texture(":resources:images/items/gold_2.png"))
+        coin.textures.append(arcadeplus.load_texture(":resources:images/items/gold_3.png"))
+        coin.textures.append(arcadeplus.load_texture(":resources:images/items/gold_4.png"))
+        coin.textures.append(arcadeplus.load_texture(":resources:images/items/gold_3.png"))
+        coin.textures.append(arcadeplus.load_texture(":resources:images/items/gold_2.png"))
         coin.scale = COIN_SCALE
         coin.set_texture(0)
         self.coin_list.append(coin)
 
     def on_draw(self):
-        arcade.start_render()
+        arcadeplus.start_render()
         self.coin_list.draw()
         self.character_list.draw()
 

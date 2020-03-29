@@ -1,10 +1,10 @@
-import arcade
+import arcadeplus
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height):
@@ -13,23 +13,23 @@ class MyGame(arcade.Window):
         """
         super().__init__(width, height)
 
-        arcade.set_background_color(arcade.color.WHITE)
-        self.laser_wav = arcade.load_sound(":resources:sounds/laser1.wav")
-        self.laser_mp3 = arcade.load_sound(":resources:sounds/laser1.mp3")
-        self.laser_ogg = arcade.load_sound(":resources:sounds/laser1.ogg")
+        arcadeplus.set_background_color(arcadeplus.color.WHITE)
+        self.laser_wav = arcadeplus.load_sound(":resources:sounds/laser1.wav")
+        self.laser_mp3 = arcadeplus.load_sound(":resources:sounds/laser1.mp3")
+        self.laser_ogg = arcadeplus.load_sound(":resources:sounds/laser1.ogg")
         self.frame_count = 0
 
     def update(self, dt):
         self.frame_count += 1
 
         if self.frame_count == 1:
-            arcade.play_sound(self.laser_wav)
+            arcadeplus.play_sound(self.laser_wav)
 
         if self.frame_count == 60:
-            arcade.play_sound(self.laser_ogg)
+            arcadeplus.play_sound(self.laser_ogg)
 
         if self.frame_count == 90:
-            arcade.play_sound(self.laser_mp3)
+            arcadeplus.play_sound(self.laser_mp3)
 
     def on_draw(self):
         """
@@ -37,7 +37,7 @@ class MyGame(arcade.Window):
         """
 
         # Start the render process. This must be done before any drawing commands.
-        arcade.start_render()
+        arcadeplus.start_render()
 
 
 def test_main():

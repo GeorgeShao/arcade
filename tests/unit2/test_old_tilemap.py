@@ -1,15 +1,15 @@
 import os
 
-import arcade
+import arcadeplus
 
 GRID_PIXEL_SIZE = 128
 TILE_SCALING = 0.5
 
 def test_one():
     file_path = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(file_path + "/../../arcade/resources/tmx_maps")
+    os.chdir(file_path + "/../../arcadeplus/resources/tmx_maps")
 
-    my_map = arcade.read_tiled_map(":resources:/tmx_maps/test_map_1.tmx")
+    my_map = arcadeplus.read_tiled_map(":resources:/tmx_maps/test_map_1.tmx")
 
 
     # Grab the layer of items we can't move through
@@ -20,7 +20,7 @@ def test_one():
     print(end_of_map)
 
     # -- Platforms
-    wall_list = arcade.generate_sprites(my_map, 'Platforms', TILE_SCALING)
+    wall_list = arcadeplus.generate_sprites(my_map, 'Platforms', TILE_SCALING)
 
     assert wall_list[0].center_x == -32
     assert wall_list[0].center_y == 32

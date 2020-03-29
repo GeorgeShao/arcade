@@ -1,8 +1,8 @@
 # import pytest
-# import arcade
+# import arcadeplus
 #
 #
-# class FakeWindow(arcade.Window):
+# class FakeWindow(arcadeplus.Window):
 #     """A test double Window that is never displayed"""
 #
 #     def __init__(self):
@@ -27,7 +27,7 @@
 #             self.flip()
 #
 #
-# class BaseView(arcade.View):
+# class BaseView(arcadeplus.View):
 #     def update(self, delta_time):
 #         self.window.update_calls.append(self.__class__.__name__)
 #         self.window.dispatch_event("on_mouse_motion", 42, 43, 1, 1)  # change

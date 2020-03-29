@@ -1,4 +1,4 @@
-import arcade
+import arcadeplus
 import os
 
 SCREEN_WIDTH = 800
@@ -8,7 +8,7 @@ CHARACTER_SCALING = 0.5
 GRAVITY = 0.5
 
 
-class MyTestWindow(arcade.Window):
+class MyTestWindow(arcadeplus.Window):
 
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
@@ -16,27 +16,27 @@ class MyTestWindow(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
-        self.character_list = arcade.SpriteList()
-        self.character_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", CHARACTER_SCALING)
+        self.character_list = arcadeplus.SpriteList()
+        self.character_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", CHARACTER_SCALING)
         self.character_sprite.center_x = 150
         self.character_sprite.center_y = 110
         self.character_list.append(self.character_sprite)
 
-        self.wall_list = arcade.SpriteList()
+        self.wall_list = arcadeplus.SpriteList()
         for x in range(0, 1200, 64):
-            sprite = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", CHARACTER_SCALING)
+            sprite = arcadeplus.Sprite(":resources:images/tiles/boxCrate_double.png", CHARACTER_SCALING)
             sprite.center_x = x
             sprite.center_y = 32
             self.wall_list.append(sprite)
 
-        self.physics_engine = arcade.PhysicsEnginePlatformer(self.character_sprite,
+        self.physics_engine = arcadeplus.PhysicsEnginePlatformer(self.character_sprite,
                                                              self.wall_list,
                                                              gravity_constant=GRAVITY)
 
     def on_draw(self):
-        arcade.start_render()
+        arcadeplus.start_render()
         self.wall_list.draw()
         self.character_list.draw()
 

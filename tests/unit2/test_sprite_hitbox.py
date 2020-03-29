@@ -1,10 +1,10 @@
-import arcade
+import arcadeplus
 
 
 class Test():
     def __init__(self):
         # setup
-        my_sprite = arcade.Sprite()
+        my_sprite = arcadeplus.Sprite()
         hit_box = [-10, -10], [-10, 10], [10, 10], [10, -10]
         my_sprite.set_hit_box(hit_box)
         my_sprite.scale = 1.0

@@ -3,8 +3,8 @@ Unit tests
 Sprites with texture transformations
 """
 
-import arcade
-from arcade import Matrix3x3
+import arcadeplus
+from arcadeplus import Matrix3x3
 import os
 
 SCREEN_WIDTH = 800
@@ -13,7 +13,7 @@ SHIP_SPEED = 5
 ASPECT = SCREEN_HEIGHT / SCREEN_WIDTH
 SCREEN_TITLE = "Texture transformations"
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -36,14 +36,14 @@ class MyGame(arcade.Window):
 
     def setup(self):
         """ Setup """
-        self.ship = arcade.Sprite(":resources:images/space_shooter/playerShip1_orange.png", 0.5)
+        self.ship = arcadeplus.Sprite(":resources:images/space_shooter/playerShip1_orange.png", 0.5)
         self.ship.center_x = SCREEN_WIDTH / 2
         self.ship.center_y = SCREEN_HEIGHT / 2
         self.ship.angle = 270
-        self.xy_square = arcade.load_texture(":resources:images/test_textures/xy_square.png")
+        self.xy_square = arcadeplus.load_texture(":resources:images/test_textures/xy_square.png")
 
         # Set the background color
-        arcade.set_background_color(arcade.color.BLACK)
+        arcadeplus.set_background_color(arcadeplus.color.BLACK)
 
     def on_draw(self):
         """
@@ -51,7 +51,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         print()
 
@@ -70,12 +70,12 @@ class MyGame(arcade.Window):
             x = 80 + 180 * (i % 4)
             y = 420 - (i // 4) * 320
             text, texture, desired_color = test_data
-            arcade.draw_text(text, x, y - 20 - text.count('\n') * 10, arcade.color.WHITE, 10)
+            arcadeplus.draw_text(text, x, y - 20 - text.count('\n') * 10, arcadeplus.color.WHITE, 10)
             self.xy_square.draw_transformed(x, y, 100, 100, 0, 255, texture)
 
             test_x = x + 5
             test_y = y + 5
-            actual_color = arcade.get_pixel(test_x, test_y)
+            actual_color = arcadeplus.get_pixel(test_x, test_y)
             assert actual_color[0] == desired_color[0]
             assert actual_color[1] == desired_color[1]
             assert actual_color[2] == desired_color[2]
@@ -86,4 +86,4 @@ def test_texture_transform():
     window.setup()
     window.test(50)
     window.close()
-    arcade.cleanup_texture_cache()
+    arcadeplus.cleanup_texture_cache()

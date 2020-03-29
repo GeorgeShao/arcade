@@ -1,12 +1,12 @@
-import arcade
+import arcadeplus
 
 
 def make_named_sprites(amount):
-    spritelist = arcade.SpriteList()
+    spritelist = arcadeplus.SpriteList()
 
     sprites = []
     for i in range(amount):
-        sprite = arcade.Sprite()
+        sprite = arcadeplus.Sprite()
         sprite.name = i
         sprites.append(sprite)
 
@@ -15,10 +15,10 @@ def make_named_sprites(amount):
 
 
 def test_it_can_extend_a_spritelist():
-    spritelist = arcade.SpriteList()
+    spritelist = arcadeplus.SpriteList()
     sprites = []
     for i in range(10):
-        sprites.append(arcade.Sprite())
+        sprites.append(arcadeplus.Sprite())
 
     spritelist.extend(sprites)
 
@@ -29,7 +29,7 @@ def test_it_can_extend_a_spritelist():
 def test_it_can_insert_in_a_spritelist():
     spritelist = make_named_sprites(2)
 
-    sprite = arcade.Sprite()
+    sprite = arcadeplus.Sprite()
     sprite.name = 2
     spritelist.insert(1, sprite)
 
