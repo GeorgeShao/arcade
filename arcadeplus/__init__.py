@@ -24,13 +24,13 @@ import pyglet
 pyglet.options['shadow_window'] = False
 
 # noinspection PyPep8
-from arcade import color
+from arcadeplus import color
 # noinspection PyPep8
-from arcade import csscolor
+from arcadeplus import csscolor
 # noinspection PyPep8
-from arcade import key
+from arcadeplus import key
 # noinspection PyPep8
-from arcade import resources
+from arcadeplus import resources
 from .window_commands import close_window
 from .window_commands import create_orthogonal_projection
 from .window_commands import finish_render
