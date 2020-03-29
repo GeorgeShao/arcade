@@ -1,10 +1,10 @@
 """
 Buttons with text on them
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.gui_text_button
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.gui_text_button
 """
-import arcade
+import arcadeplus
 import random
 import os
 
@@ -22,9 +22,9 @@ class TextButton:
                  text,
                  font_size=18,
                  font_face="Arial",
-                 face_color=arcade.color.LIGHT_GRAY,
-                 highlight_color=arcade.color.WHITE,
-                 shadow_color=arcade.color.GRAY,
+                 face_color=arcadeplus.color.LIGHT_GRAY,
+                 highlight_color=arcadeplus.color.WHITE,
+                 shadow_color=arcadeplus.color.GRAY,
                  button_height=2):
         self.center_x = center_x
         self.center_y = center_y
@@ -41,7 +41,7 @@ class TextButton:
 
     def draw(self):
         """ Draw the button """
-        arcade.draw_rectangle_filled(self.center_x, self.center_y, self.width,
+        arcadeplus.draw_rectangle_filled(self.center_x, self.center_y, self.width,
                                      self.height, self.face_color)
 
         if not self.pressed:
@@ -50,12 +50,12 @@ class TextButton:
             color = self.highlight_color
 
         # Bottom horizontal
-        arcade.draw_line(self.center_x - self.width / 2, self.center_y - self.height / 2,
+        arcadeplus.draw_line(self.center_x - self.width / 2, self.center_y - self.height / 2,
                          self.center_x + self.width / 2, self.center_y - self.height / 2,
                          color, self.button_height)
 
         # Right vertical
-        arcade.draw_line(self.center_x + self.width / 2, self.center_y - self.height / 2,
+        arcadeplus.draw_line(self.center_x + self.width / 2, self.center_y - self.height / 2,
                          self.center_x + self.width / 2, self.center_y + self.height / 2,
                          color, self.button_height)
 
@@ -65,12 +65,12 @@ class TextButton:
             color = self.shadow_color
 
         # Top horizontal
-        arcade.draw_line(self.center_x - self.width / 2, self.center_y + self.height / 2,
+        arcadeplus.draw_line(self.center_x - self.width / 2, self.center_y + self.height / 2,
                          self.center_x + self.width / 2, self.center_y + self.height / 2,
                          color, self.button_height)
 
         # Left vertical
-        arcade.draw_line(self.center_x - self.width / 2, self.center_y - self.height / 2,
+        arcadeplus.draw_line(self.center_x - self.width / 2, self.center_y - self.height / 2,
                          self.center_x - self.width / 2, self.center_y + self.height / 2,
                          color, self.button_height)
 
@@ -80,8 +80,8 @@ class TextButton:
             x -= self.button_height
             y += self.button_height
 
-        arcade.draw_text(self.text, x, y,
-                         arcade.color.BLACK, font_size=self.font_size,
+        arcadeplus.draw_text(self.text, x, y,
+                         arcadeplus.color.BLACK, font_size=self.font_size,
                          width=self.width, align="center",
                          anchor_x="center", anchor_y="center")
 
@@ -134,7 +134,7 @@ class StopTextButton(TextButton):
         self.action_function()
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
 
@@ -153,7 +153,7 @@ class MyGame(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
         self.pause = False
         self.coin_list = None
@@ -161,9 +161,9 @@ class MyGame(arcade.Window):
 
     def setup(self):
         # Create your sprites and sprite lists here
-        self.coin_list = arcade.SpriteList()
+        self.coin_list = arcadeplus.SpriteList()
         for i in range(10):
-            coin = arcade.Sprite(":resources:images/items/coinGold.png", 0.25)
+            coin = arcadeplus.Sprite(":resources:images/items/coinGold.png", 0.25)
             coin.center_x = random.randrange(SCREEN_WIDTH)
             coin.center_y = random.randrange(SCREEN_HEIGHT)
             coin.change_y = -1
@@ -183,7 +183,7 @@ class MyGame(arcade.Window):
         Render the screen.
         """
 
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw the coins
         self.coin_list.draw()
@@ -231,7 +231,7 @@ def main():
     """ Main method """
     game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     game.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

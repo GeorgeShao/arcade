@@ -7,19 +7,17 @@ It assumes a programmer knows how to create functions already.
 It does not assume a programmer knows how to create classes. If you do know
 how to create classes, see the starting template for a better example:
 
-http://arcade.academy/examples/starting_template.html
-
 Or look through the examples showing how to use Sprites.
 
 A video walk-through of this example is available at:
 https://vimeo.com/168063840
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.bouncing_rectangle
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.bouncing_rectangle
 
 """
 
-import arcade
+import arcadeplus
 
 # --- Set up the constants
 
@@ -40,14 +38,14 @@ def on_draw(delta_time):
 
     # Start the render. This must happen before any drawing
     # commands. We do NOT need a stop render command.
-    arcade.start_render()
+    arcadeplus.start_render()
 
     # Draw a rectangle.
     # For a full list of colors see:
-    # http://arcade.academy/arcade.color.html
-    arcade.draw_rectangle_filled(on_draw.center_x, on_draw.center_y,
+    # http://arcadeplus.academy/arcadeplus.color.html
+    arcadeplus.draw_rectangle_filled(on_draw.center_x, on_draw.center_y,
                                  RECT_WIDTH, RECT_HEIGHT,
-                                 arcade.color.ALIZARIN_CRIMSON)
+                                 arcadeplus.color.ALIZARIN_CRIMSON)
 
     # Modify rectangles position based on the delta
     # vector. (Delta means change. You can also think
@@ -81,14 +79,14 @@ on_draw.delta_y = 130   # type: ignore # dynamic attribute on function obj  # In
 
 def main():
     # Open up our window
-    arcade.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.set_background_color(arcade.color.WHITE)
+    arcadeplus.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    arcadeplus.set_background_color(arcadeplus.color.WHITE)
 
     # Tell the computer to call the draw command at the specified interval.
-    arcade.schedule(on_draw, 1 / 80)
+    arcadeplus.schedule(on_draw, 1 / 80)
 
     # Run the program
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

@@ -6,11 +6,11 @@ Isometric maps aren't fully supported, and needs some additional work.
 Isometric map created with Tiled Map Editor: https://www.mapeditor.org/
 Tiles by Kenney: http://kenney.nl/assets/isometric-dungeon-tiles
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.isometric_example
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.isometric_example
 """
 
-import arcade
+import arcadeplus
 import os
 
 SPRITE_SCALING = 0.5
@@ -30,14 +30,14 @@ def read_sprite_list(grid, sprite_list):
     for row in grid:
         for grid_location in row:
             if grid_location.tile is not None:
-                tile_sprite = arcade.Sprite("../resources/images/" + grid_location.tile.source, SPRITE_SCALING)
+                tile_sprite = arcadeplus.Sprite("../resources/images/" + grid_location.tile.source, SPRITE_SCALING)
                 tile_sprite.center_x = grid_location.center_x * SPRITE_SCALING
                 tile_sprite.center_y = grid_location.center_y * SPRITE_SCALING
                 # print(f"{grid_location.tile.source} -- ({tile_sprite.center_x:4}, {tile_sprite.center_y:4})")
                 sprite_list.append(tile_sprite)
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -70,17 +70,17 @@ class MyGame(arcade.Window):
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList()
-        self.floor_list = arcade.SpriteList()
-        self.objects_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
+        self.wall_list = arcadeplus.SpriteList()
+        self.floor_list = arcadeplus.SpriteList()
+        self.objects_list = arcadeplus.SpriteList()
 
         # noinspection PyDeprecation
-        self.my_map = arcade.read_tiled_map('../resources/tmx_maps/isometric_dungeon.tmx', SPRITE_SCALING)
+        self.my_map = arcadeplus.read_tiled_map('../resources/tmx_maps/isometric_dungeon.tmx', SPRITE_SCALING)
 
         # Set up the player
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", 0.4)
-        px, py = arcade.isometric_grid_to_screen(self.my_map.width // 2,
+        self.player_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", 0.4)
+        px, py = arcadeplus.isometric_grid_to_screen(self.my_map.width // 2,
                                                  self.my_map.height // 2,
                                                  self.my_map.width,
                                                  self.my_map.height,
@@ -97,9 +97,9 @@ class MyGame(arcade.Window):
 
         # Set the background color
         if self.my_map.backgroundcolor is None:
-            arcade.set_background_color(arcade.color.BLACK)
+            arcadeplus.set_background_color(arcadeplus.color.BLACK)
         else:
-            arcade.set_background_color(self.my_map.backgroundcolor)
+            arcadeplus.set_background_color(self.my_map.backgroundcolor)
 
         # Set the viewport boundaries
         # These numbers set where we have 'scrolled' to.
@@ -112,7 +112,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw all the sprites.
         self.floor_list.draw()
@@ -122,21 +122,21 @@ class MyGame(arcade.Window):
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
 
-        if key == arcade.key.UP:
+        if key == arcadeplus.key.UP:
             self.player_sprite.change_y = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
+        elif key == arcadeplus.key.DOWN:
             self.player_sprite.change_y = -MOVEMENT_SPEED
-        elif key == arcade.key.LEFT:
+        elif key == arcadeplus.key.LEFT:
             self.player_sprite.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.RIGHT:
             self.player_sprite.change_x = MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
 
-        if key == arcade.key.UP or key == arcade.key.DOWN:
+        if key == arcadeplus.key.UP or key == arcadeplus.key.DOWN:
             self.player_sprite.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.LEFT or key == arcadeplus.key.RIGHT:
             self.player_sprite.change_x = 0
 
     def on_update(self, delta_time):
@@ -179,7 +179,7 @@ class MyGame(arcade.Window):
         if changed:
             self.view_left = int(self.view_left)
             self.view_bottom = int(self.view_bottom)
-            arcade.set_viewport(self.view_left,
+            arcadeplus.set_viewport(self.view_left,
                                 SCREEN_WIDTH + self.view_left,
                                 self.view_bottom,
                                 SCREEN_HEIGHT + self.view_bottom)
@@ -189,7 +189,7 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

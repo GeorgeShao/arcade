@@ -6,11 +6,11 @@ at https://en.wikipedia.org/wiki/Maze_generation_algorithm
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.maze_recursive
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.maze_recursive
 """
 import random
-import arcade
+import arcadeplus
 import timeit
 import os
 
@@ -136,7 +136,7 @@ def make_maze_recursion(maze_width, maze_height):
     return maze
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -175,8 +175,8 @@ class MyGame(arcade.Window):
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
+        self.wall_list = arcadeplus.SpriteList()
 
         # Set up the player
         self.score = 0
@@ -190,12 +190,12 @@ class MyGame(arcade.Window):
             for row in range(MAZE_HEIGHT):
                 for column in range(MAZE_WIDTH):
                     if maze[row][column] == 1:
-                        wall = arcade.Sprite(":resources:images/tiles/grassCenter.png", SPRITE_SCALING)
+                        wall = arcadeplus.Sprite(":resources:images/tiles/grassCenter.png", SPRITE_SCALING)
                         wall.center_x = column * SPRITE_SIZE + SPRITE_SIZE / 2
                         wall.center_y = row * SPRITE_SIZE + SPRITE_SIZE / 2
                         self.wall_list.append(wall)
         else:
-            # This uses new Arcade 1.3.1 features, that allow me to create a
+            # This uses new arcadeplus 1.3.1 features, that allow me to create a
             # larger sprite with a repeating texture. So if there are multiple
             # cells in a row with a wall, we merge them into one sprite, with a
             # repeating texture for each cell. This reduces our sprite count.
@@ -212,7 +212,7 @@ class MyGame(arcade.Window):
                     column_count = end_column - start_column + 1
                     column_mid = (start_column + end_column) / 2
 
-                    wall = arcade.Sprite(":resources:images/tiles/grassCenter.png", SPRITE_SCALING,
+                    wall = arcadeplus.Sprite(":resources:images/tiles/grassCenter.png", SPRITE_SCALING,
                                          repeat_count_x=column_count)
                     wall.center_x = column_mid * SPRITE_SIZE + SPRITE_SIZE / 2
                     wall.center_y = row * SPRITE_SIZE + SPRITE_SIZE / 2
@@ -220,7 +220,7 @@ class MyGame(arcade.Window):
                     self.wall_list.append(wall)
 
         # Set up the player
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING)
+        self.player_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING)
         self.player_list.append(self.player_sprite)
 
         # Randomly place the player. If we are in a wall, repeat until we aren't.
@@ -232,15 +232,15 @@ class MyGame(arcade.Window):
             self.player_sprite.center_y = random.randrange(MAZE_HEIGHT * SPRITE_SIZE)
 
             # Are we in a wall?
-            walls_hit = arcade.check_for_collision_with_list(self.player_sprite, self.wall_list)
+            walls_hit = arcadeplus.check_for_collision_with_list(self.player_sprite, self.wall_list)
             if len(walls_hit) == 0:
                 # Not in a wall! Success!
                 placed = True
 
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)
+        self.physics_engine = arcadeplus.PhysicsEngineSimple(self.player_sprite, self.wall_list)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
         # Set the viewport boundaries
         # These numbers set where we have 'scrolled' to.
@@ -254,7 +254,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Start timing how long this takes
         draw_start_time = timeit.default_timer()
@@ -267,43 +267,43 @@ class MyGame(arcade.Window):
         sprite_count = len(self.wall_list)
 
         output = f"Sprite Count: {sprite_count}"
-        arcade.draw_text(output,
+        arcadeplus.draw_text(output,
                          self.view_left + 20,
                          SCREEN_HEIGHT - 20 + self.view_bottom,
-                         arcade.color.WHITE, 16)
+                         arcadeplus.color.WHITE, 16)
 
         output = f"Drawing time: {self.draw_time:.3f}"
-        arcade.draw_text(output,
+        arcadeplus.draw_text(output,
                          self.view_left + 20,
                          SCREEN_HEIGHT - 40 + self.view_bottom,
-                         arcade.color.WHITE, 16)
+                         arcadeplus.color.WHITE, 16)
 
         output = f"Processing time: {self.processing_time:.3f}"
-        arcade.draw_text(output,
+        arcadeplus.draw_text(output,
                          self.view_left + 20,
                          SCREEN_HEIGHT - 60 + self.view_bottom,
-                         arcade.color.WHITE, 16)
+                         arcadeplus.color.WHITE, 16)
 
         self.draw_time = timeit.default_timer() - draw_start_time
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
 
-        if key == arcade.key.UP:
+        if key == arcadeplus.key.UP:
             self.player_sprite.change_y = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
+        elif key == arcadeplus.key.DOWN:
             self.player_sprite.change_y = -MOVEMENT_SPEED
-        elif key == arcade.key.LEFT:
+        elif key == arcadeplus.key.LEFT:
             self.player_sprite.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.RIGHT:
             self.player_sprite.change_x = MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
 
-        if key == arcade.key.UP or key == arcade.key.DOWN:
+        if key == arcadeplus.key.UP or key == arcadeplus.key.DOWN:
             self.player_sprite.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.LEFT or key == arcadeplus.key.RIGHT:
             self.player_sprite.change_x = 0
 
     def on_update(self, delta_time):
@@ -346,7 +346,7 @@ class MyGame(arcade.Window):
             changed = True
 
         if changed:
-            arcade.set_viewport(self.view_left,
+            arcadeplus.set_viewport(self.view_left,
                                 SCREEN_WIDTH + self.view_left,
                                 self.view_bottom,
                                 SCREEN_HEIGHT + self.view_bottom)
@@ -359,7 +359,7 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

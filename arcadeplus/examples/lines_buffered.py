@@ -1,10 +1,10 @@
 """
 Using a Vertex Buffer Object With Lines
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.lines_buffered
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.lines_buffered
 """
-import arcade
+import arcadeplus
 import random
 
 # Do the math to figure out our screen dimensions
@@ -13,7 +13,7 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Vertex Buffer Object With Lines Example"
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -24,7 +24,7 @@ class MyGame(arcade.Window):
         """
         super().__init__(width, height, title)
 
-        self.shape_list = arcade.ShapeElementList()
+        self.shape_list = arcadeplus.ShapeElementList()
         point_list = ((0, 50),
                       (10, 10),
                       (50, 0),
@@ -35,8 +35,8 @@ class MyGame(arcade.Window):
                       (-10, 10),
                       (0, 50))
         colors = [
-            getattr(arcade.color, color)
-            for color in dir(arcade.color)
+            getattr(arcadeplus.color, color)
+            for color in dir(arcadeplus.color)
             if not color.startswith("__")
         ]
         for i in range(200):
@@ -45,21 +45,21 @@ class MyGame(arcade.Window):
             color = random.choice(colors)
             points = [(px + x, py + y) for px, py in point_list]
 
-            my_line_strip = arcade.create_line_strip(points, color, 5)
+            my_line_strip = arcadeplus.create_line_strip(points, color, 5)
             self.shape_list.append(my_line_strip)
 
         self.shape_list.center_x = SCREEN_WIDTH // 2
         self.shape_list.center_y = SCREEN_HEIGHT // 2
         self.shape_list.angle = 0
 
-        arcade.set_background_color(arcade.color.BLACK)
+        arcadeplus.set_background_color(arcadeplus.color.BLACK)
 
     def on_draw(self):
         """
         Render the screen.
         """
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         self.shape_list.draw()
 
@@ -71,7 +71,7 @@ class MyGame(arcade.Window):
 
 def main():
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

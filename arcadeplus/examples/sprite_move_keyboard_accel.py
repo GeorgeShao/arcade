@@ -3,11 +3,11 @@ Show how to use acceleration and friction
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_move_keyboard_accel
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_move_keyboard_accel
 """
 
-import arcade
+import arcadeplus
 import os
 
 SPRITE_SCALING = 0.5
@@ -27,7 +27,7 @@ ACCELERATION_RATE = 0.1
 # How fast to slow down after we letr off the key
 FRICTION = 0.02
 
-class Player(arcade.Sprite):
+class Player(arcadeplus.Sprite):
 
     def update(self):
         self.center_x += self.change_x
@@ -49,7 +49,7 @@ class Player(arcade.Sprite):
             self.change_y = 0
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -82,13 +82,13 @@ class MyGame(arcade.Window):
         self.down_pressed = False
 
         # Set the background color
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
     def setup(self):
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.player_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
 
         # Set up the player
         self.player_sprite = Player(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING)
@@ -102,14 +102,14 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw all the sprites.
         self.player_list.draw()
 
         # Display speed
-        arcade.draw_text(f"X Speed: {self.player_sprite.change_x:6.3f}", 10, 50, arcade.color.BLACK)
-        arcade.draw_text(f"Y Speed: {self.player_sprite.change_y:6.3f}", 10, 70, arcade.color.BLACK)
+        arcadeplus.draw_text(f"X Speed: {self.player_sprite.change_x:6.3f}", 10, 50, arcadeplus.color.BLACK)
+        arcadeplus.draw_text(f"Y Speed: {self.player_sprite.change_y:6.3f}", 10, 70, arcadeplus.color.BLACK)
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -156,25 +156,25 @@ class MyGame(arcade.Window):
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
 
-        if key == arcade.key.UP:
+        if key == arcadeplus.key.UP:
             self.up_pressed = True
-        elif key == arcade.key.DOWN:
+        elif key == arcadeplus.key.DOWN:
             self.down_pressed = True
-        elif key == arcade.key.LEFT:
+        elif key == arcadeplus.key.LEFT:
             self.left_pressed = True
-        elif key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.RIGHT:
             self.right_pressed = True
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
 
-        if key == arcade.key.UP:
+        if key == arcadeplus.key.UP:
             self.up_pressed = False
-        elif key == arcade.key.DOWN:
+        elif key == arcadeplus.key.DOWN:
             self.down_pressed = False
-        elif key == arcade.key.LEFT:
+        elif key == arcadeplus.key.LEFT:
             self.left_pressed = False
-        elif key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.RIGHT:
             self.right_pressed = False
 
 
@@ -182,7 +182,7 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

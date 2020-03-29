@@ -1,10 +1,10 @@
 """
 Sound Demo
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sound
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sound
 """
-import arcade
+import arcadeplus
 import os
 
 # Set the working directory (where we expect to find files) to the same
@@ -14,7 +14,7 @@ import os
 file_path = os.path.dirname(os.path.abspath(__file__))
 os.chdir(file_path)
 
-arcade.open_window(300, 300, "Sound Demo")
-laser_sound = arcade.load_sound(":resources:sounds/laser1.wav")
-arcade.play_sound(laser_sound)
-arcade.run()
+arcadeplus.open_window(300, 300, "Sound Demo")
+laser_sound = arcadeplus.load_sound(":resources:sounds/laser1.wav")
+arcadeplus.play_sound(laser_sound)
+arcadeplus.run()

@@ -3,10 +3,10 @@ Load a map stored in csv format, as exported by the program 'Tiled.'
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_ramps
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_ramps
 """
-import arcade
+import arcadeplus
 import os
 
 from typing import List, Union
@@ -42,7 +42,7 @@ def get_map():
     return map_array
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -77,12 +77,12 @@ class MyGame(arcade.Window):
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.all_sprites_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList()
-        self.player_list = arcade.SpriteList()
+        self.all_sprites_list = arcadeplus.SpriteList()
+        self.wall_list = arcadeplus.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
 
         # Set up the player
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png",
+        self.player_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png",
                                            SPRITE_SCALING)
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 270
@@ -111,7 +111,7 @@ class MyGame(arcade.Window):
                 if item == -1:
                     continue
                 else:
-                    wall = arcade.Sprite(map_items[item],
+                    wall = arcadeplus.Sprite(map_items[item],
                                          SPRITE_SCALING)
 
                     # Change the collision polygon to be a ramp instead of
@@ -131,12 +131,12 @@ class MyGame(arcade.Window):
                 self.wall_list.append(wall)
 
         self.physics_engine = \
-            arcade.PhysicsEnginePlatformer(self.player_sprite,
+            arcadeplus.PhysicsEnginePlatformer(self.player_sprite,
                                            self.wall_list,
                                            gravity_constant=GRAVITY)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
         # Set the viewport boundaries
         # These numbers set where we have 'scrolled' to.
@@ -151,7 +151,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw all the sprites.
         self.wall_list.draw()
@@ -162,32 +162,32 @@ class MyGame(arcade.Window):
         # scroll the text too.
         distance = self.player_sprite.right
         output = "Distance: {}".format(distance)
-        arcade.draw_text(output, self.view_left + 10, self.view_bottom + 20,
-                         arcade.color.WHITE, 14)
+        arcadeplus.draw_text(output, self.view_left + 10, self.view_bottom + 20,
+                         arcadeplus.color.WHITE, 14)
 
         if self.game_over:
             output = "Game Over"
-            arcade.draw_text(output, self.view_left + 200,
+            arcadeplus.draw_text(output, self.view_left + 200,
                              self.view_bottom + 200,
-                             arcade.color.WHITE, 30)
+                             arcadeplus.color.WHITE, 30)
 
     def on_key_press(self, key, modifiers):
         """
         Called whenever a key is pressed down.
         """
-        if key == arcade.key.UP:
+        if key == arcadeplus.key.UP:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = JUMP_SPEED
-        elif key == arcade.key.LEFT:
+        elif key == arcadeplus.key.LEFT:
             self.player_sprite.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.RIGHT:
             self.player_sprite.change_x = MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """
         Called when the user releases a key.
         """
-        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
+        if key == arcadeplus.key.LEFT or key == arcadeplus.key.RIGHT:
             self.player_sprite.change_x = 0
 
     def on_update(self, delta_time):
@@ -233,7 +233,7 @@ class MyGame(arcade.Window):
 
         # If we need to scroll, go ahead and do it.
         if changed:
-            arcade.set_viewport(self.view_left,
+            arcadeplus.set_viewport(self.view_left,
                                 SCREEN_WIDTH + self.view_left,
                                 self.view_bottom,
                                 SCREEN_HEIGHT + self.view_bottom)
@@ -242,7 +242,7 @@ class MyGame(arcade.Window):
 def main():
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.start_new_game()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

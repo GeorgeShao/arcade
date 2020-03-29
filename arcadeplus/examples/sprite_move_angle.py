@@ -5,10 +5,10 @@ Simple program to show basic sprite usage.
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_move_angle
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_move_angle
 """
-import arcade
+import arcadeplus
 import os
 import math
 
@@ -22,7 +22,7 @@ MOVEMENT_SPEED = 5
 ANGLE_SPEED = 5
 
 
-class Player(arcade.Sprite):
+class Player(arcadeplus.Sprite):
     """ Player class """
 
     def __init__(self, image, scale):
@@ -46,7 +46,7 @@ class Player(arcade.Sprite):
         self.center_y += self.speed * math.cos(angle_rad)
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -73,13 +73,13 @@ class MyGame(arcade.Window):
         self.player_sprite = None
 
         # Set the background color
-        arcade.set_background_color(arcade.color.BLACK)
+        arcadeplus.set_background_color(arcadeplus.color.BLACK)
 
     def setup(self):
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.player_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
 
         # Set up the player
         self.player_sprite = Player(":resources:images/space_shooter/playerShip1_orange.png", SPRITE_SCALING)
@@ -93,7 +93,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw all the sprites.
         self.player_list.draw()
@@ -109,23 +109,23 @@ class MyGame(arcade.Window):
         """Called whenever a key is pressed. """
 
         # Forward/back
-        if key == arcade.key.UP:
+        if key == arcadeplus.key.UP:
             self.player_sprite.speed = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
+        elif key == arcadeplus.key.DOWN:
             self.player_sprite.speed = -MOVEMENT_SPEED
 
         # Rotate left/right
-        elif key == arcade.key.LEFT:
+        elif key == arcadeplus.key.LEFT:
             self.player_sprite.change_angle = ANGLE_SPEED
-        elif key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.RIGHT:
             self.player_sprite.change_angle = -ANGLE_SPEED
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
 
-        if key == arcade.key.UP or key == arcade.key.DOWN:
+        if key == arcadeplus.key.UP or key == arcadeplus.key.DOWN:
             self.player_sprite.speed = 0
-        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.LEFT or key == arcadeplus.key.RIGHT:
             self.player_sprite.change_angle = 0
 
 
@@ -133,7 +133,7 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

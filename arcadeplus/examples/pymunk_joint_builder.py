@@ -1,10 +1,10 @@
 """
 Pymunk 2
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.pymunk_joint_builder
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.pymunk_joint_builder
 """
-import arcade
+import arcadeplus
 import pymunk
 import timeit
 import math
@@ -31,7 +31,7 @@ Right-click, fire coin
 """
 
 
-class PhysicsSprite(arcade.Sprite):
+class PhysicsSprite(arcadeplus.Sprite):
     def __init__(self, pymunk_shape, filename):
         super().__init__(filename, center_x=pymunk_shape.body.position.x, center_y=pymunk_shape.body.position.y)
         self.pymunk_shape = pymunk_shape
@@ -51,7 +51,7 @@ class BoxSprite(PhysicsSprite):
         self.height = height
 
 
-class MyApplication(arcade.Window):
+class MyApplication(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -64,14 +64,14 @@ class MyApplication(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
-        arcade.set_background_color(arcade.color.DARK_SLATE_GRAY)
+        arcadeplus.set_background_color(arcadeplus.color.DARK_SLATE_GRAY)
 
         # -- Pymunk
         self.space = pymunk.Space()
         self.space.gravity = (0.0, -900.0)
 
         # Lists of sprites or lines
-        self.sprite_list: arcade.SpriteList[PhysicsSprite] = arcade.SpriteList()
+        self.sprite_list: arcadeplus.SpriteList[PhysicsSprite] = arcadeplus.SpriteList()
         self.static_lines = []
 
         # Used for dragging shapes aruond with the mouse
@@ -104,7 +104,7 @@ class MyApplication(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Start timing how long this takes
         draw_start_time = timeit.default_timer()
@@ -118,29 +118,29 @@ class MyApplication(arcade.Window):
 
             pv1 = body.position + line.a.rotated(body.angle)
             pv2 = body.position + line.b.rotated(body.angle)
-            arcade.draw_line(pv1.x, pv1.y, pv2.x, pv2.y, arcade.color.WHITE, 2)
+            arcadeplus.draw_line(pv1.x, pv1.y, pv2.x, pv2.y, arcadeplus.color.WHITE, 2)
 
         for joint in self.joints:
-            color = arcade.color.WHITE
+            color = arcadeplus.color.WHITE
             if isinstance(joint, pymunk.DampedSpring):
-                color = arcade.color.DARK_GREEN
-            arcade.draw_line(joint.a.position.x, joint.a.position.y, joint.b.position.x, joint.b.position.y, color, 3)
+                color = arcadeplus.color.DARK_GREEN
+            arcadeplus.draw_line(joint.a.position.x, joint.a.position.y, joint.b.position.x, joint.b.position.y, color, 3)
 
-        # arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
+        # arcadeplus.draw_text(output, 10, 20, arcadeplus.color.WHITE, 14)
         # Display timings
         output = f"Processing time: {self.processing_time:.3f}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 20, arcade.color.WHITE)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 20, arcadeplus.color.WHITE)
 
         output = f"Drawing time: {self.draw_time:.3f}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 40, arcade.color.WHITE)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 40, arcadeplus.color.WHITE)
 
         self.draw_time = timeit.default_timer() - draw_start_time
 
         output = f"Mode: {self.mode}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 60, arcade.color.WHITE)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 60, arcadeplus.color.WHITE)
 
         output = f"Physics: {self.physics}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 80, arcade.color.WHITE)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 80, arcadeplus.color.WHITE)
 
     def make_box(self, x, y):
         size = 45
@@ -262,27 +262,27 @@ class MyApplication(arcade.Window):
             self.shape_being_dragged.shape.body.velocity = dx * 20, dy * 20
 
     def on_key_press(self, symbol: int, modifiers: int):
-        if symbol == arcade.key.KEY_1:
+        if symbol == arcadeplus.key.KEY_1:
             self.mode = "Drag"
-        elif symbol == arcade.key.KEY_2:
+        elif symbol == arcadeplus.key.KEY_2:
             self.mode = "Make Box"
-        elif symbol == arcade.key.KEY_3:
+        elif symbol == arcadeplus.key.KEY_3:
             self.mode = "Make Circle"
 
-        elif symbol == arcade.key.KEY_4:
+        elif symbol == arcadeplus.key.KEY_4:
             self.mode = "Make PinJoint"
-        elif symbol == arcade.key.KEY_5:
+        elif symbol == arcadeplus.key.KEY_5:
             self.mode = "Make DampedSpring"
 
-        elif symbol == arcade.key.S:
+        elif symbol == arcadeplus.key.S:
             self.space.gravity = (0.0, 0.0)
             self.space.damping = 1
             self.physics = "Outer Space"
-        elif symbol == arcade.key.L:
+        elif symbol == arcadeplus.key.L:
             self.space.gravity = (0.0, 0.0)
             self.space.damping = 0
             self.physics = "Layout"
-        elif symbol == arcade.key.G:
+        elif symbol == arcadeplus.key.G:
             self.space.damping = 0.95
             self.space.gravity = (0.0, -900.0)
             self.physics = "Normal"
@@ -319,4 +319,4 @@ class MyApplication(arcade.Window):
 
 window = MyApplication(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 
-arcade.run()
+arcadeplus.run()

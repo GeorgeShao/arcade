@@ -1,7 +1,7 @@
-import arcade
+import arcadeplus
 
 
-class Window(arcade.Window):
+class Window(arcadeplus.Window):
     def __init__(self):
         super().__init__(800, 600)
         self.text = ""
@@ -9,18 +9,18 @@ class Window(arcade.Window):
         self.center_y = self.height / 2
 
     def setup(self):
-        arcade.set_background_color(arcade.color.AMETHYST)
-        self.text_list.append(arcade.TextLabel("Name: ", self.center_x - 225, self.center_y))
-        self.textbox_list.append(arcade.TextBox(self.center_x - 125, self.center_y))
-        self.button_list.append(arcade.SubmitButton(self.textbox_list[0], self.on_submit,
+        arcadeplus.set_background_color(arcadeplus.color.AMETHYST)
+        self.text_list.append(arcadeplus.TextLabel("Name: ", self.center_x - 225, self.center_y))
+        self.textbox_list.append(arcadeplus.TextBox(self.center_x - 125, self.center_y))
+        self.button_list.append(arcadeplus.SubmitButton(self.textbox_list[0], self.on_submit,
                                                     self.center_x,
                                                     self.center_y))
 
     def on_draw(self):
-        arcade.start_render()
+        arcadeplus.start_render()
         super().on_draw()
         if self.text:
-            arcade.draw_text(f"Hello {self.text}", 400, 100, arcade.color.BLACK, 24)
+            arcadeplus.draw_text(f"Hello {self.text}", 400, 100, arcadeplus.color.BLACK, 24)
 
     def on_submit(self):
         self.text = self.textbox_list[0].text_storage.text
@@ -29,7 +29,7 @@ class Window(arcade.Window):
 def main():
     window = Window()
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

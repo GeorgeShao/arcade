@@ -2,11 +2,11 @@
 Bounce balls on the screen.
 Spawn a new ball for each mouse-click.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.bouncing_balls
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.bouncing_balls
 """
 
-import arcade
+import arcadeplus
 import random
 
 # --- Set up the constants
@@ -54,7 +54,7 @@ def make_ball():
     return ball
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self):
@@ -69,14 +69,14 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         for ball in self.ball_list:
-            arcade.draw_circle_filled(ball.x, ball.y, ball.size, ball.color)
+            arcadeplus.draw_circle_filled(ball.x, ball.y, ball.size, ball.color)
 
         # Put the text on the screen.
         output = "Balls: {}".format(len(self.ball_list))
-        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
+        arcadeplus.draw_text(output, 10, 20, arcadeplus.color.WHITE, 14)
 
     def on_update(self, delta_time):
         """ Movement and game logic """
@@ -106,7 +106,7 @@ class MyGame(arcade.Window):
 
 def main():
     MyGame()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

@@ -1,8 +1,8 @@
 import os
-import arcade
+import arcadeplus
 
 
-class ShowButton(arcade.gui.TextButton):
+class ShowButton(arcadeplus.gui.TextButton):
     def __init__(self, dialoguebox, x, y, width=110, height=50, text="Show", theme=None):
         super().__init__(x, y, width, height, text, theme=theme)
         self.dialoguebox = dialoguebox
@@ -17,7 +17,7 @@ class ShowButton(arcade.gui.TextButton):
             self.dialoguebox.active = True
 
 
-class CloseButton(arcade.gui.TextButton):
+class CloseButton(arcadeplus.gui.TextButton):
     def __init__(self, dialoguebox, x, y, width=110, height=50, text="Close", theme=None):
         super().__init__(x, y, width, height, text, theme=theme)
         self.dialoguebox = dialoguebox
@@ -32,7 +32,7 @@ class CloseButton(arcade.gui.TextButton):
             self.dialoguebox.active = False
 
 
-class Window(arcade.Window):
+class Window(arcadeplus.Window):
     def __init__(self):
         super().__init__()
 
@@ -49,18 +49,18 @@ class Window(arcade.Window):
 
     def add_dialogue_box(self):
         color = (220, 228, 255)
-        dialoguebox = arcade.gui.DialogueBox(self.half_width, self.half_height, self.half_width*1.1,
+        dialoguebox = arcadeplus.gui.DialogueBox(self.half_width, self.half_height, self.half_width*1.1,
                                              self.half_height*1.5, color, self.theme)
         close_button = CloseButton(dialoguebox, self.half_width, self.half_height-(self.half_height/2) + 40,
                                    theme=self.theme)
         dialoguebox.button_list.append(close_button)
         message = "Hello I am a Dialogue Box."
-        dialoguebox.text_list.append(arcade.gui.TextBox(message, self.half_width, self.half_height, self.theme.font_color))
+        dialoguebox.text_list.append(arcadeplus.gui.TextBox(message, self.half_width, self.half_height, self.theme.font_color))
         self.dialogue_box_list.append(dialoguebox)
 
     def add_text(self):
         message = "Press this button to activate the Dialogue Box"
-        self.text_list.append(arcade.gui.TextBox(message, self.half_width-50, self.half_height))
+        self.text_list.append(arcadeplus.gui.TextBox(message, self.half_width-50, self.half_height))
 
     def add_button(self):
         show_button = ShowButton(self.dialogue_box_list[0], self.width-100, self.half_height, theme=self.theme)
@@ -78,20 +78,20 @@ class Window(arcade.Window):
         self.theme.add_button_textures(normal, hover, clicked, locked)
 
     def set_theme(self):
-        self.theme = arcade.gui.Theme()
+        self.theme = arcadeplus.gui.Theme()
         self.set_dialogue_box_texture()
         self.set_button_texture()
-        self.theme.set_font(24, arcade.color.WHITE)
+        self.theme.set_font(24, arcadeplus.color.WHITE)
 
     def setup(self):
-        arcade.set_background_color(arcade.color.ALICE_BLUE)
+        arcadeplus.set_background_color(arcadeplus.color.ALICE_BLUE)
         self.set_theme()
         self.add_dialogue_box()
         self.add_text()
         self.add_button()
 
     def on_draw(self):
-        arcade.start_render()
+        arcadeplus.start_render()
         super().on_draw()
 
     def on_update(self, delta_time):
@@ -102,7 +102,7 @@ class Window(arcade.Window):
 def main():
     window = Window()
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

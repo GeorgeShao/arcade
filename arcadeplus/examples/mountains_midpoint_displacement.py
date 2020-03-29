@@ -5,12 +5,12 @@ Create a random mountain range.
 Original idea and some code from:
 https://bitesofcode.wordpress.com/2016/12/23/landscape-generation-using-midpoint-displacement/
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.mountains_midpoint_displacement
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.mountains_midpoint_displacement
 """
 
 # Library imports
-import arcade
+import arcadeplus
 import random
 import bisect
 
@@ -112,19 +112,19 @@ def fix_points(points):
 
 def create_mountain_range(start, end, roughness, vertical_displacement, num_of_iterations, color_start):
 
-    shape_list = arcade.ShapeElementList()
+    shape_list = arcadeplus.ShapeElementList()
 
     layer_1 = midpoint_displacement(start, end, roughness, vertical_displacement, num_of_iterations)
     layer_1 = fix_points(layer_1)
 
     color_list = [color_start] * len(layer_1)
-    lines = arcade.create_rectangles_filled_with_colors(layer_1, color_list)
+    lines = arcadeplus.create_rectangles_filled_with_colors(layer_1, color_list)
     shape_list.append(lines)
 
     return shape_list
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -134,22 +134,22 @@ class MyGame(arcade.Window):
 
         self.mountains = None
 
-        arcade.set_background_color(arcade.color.WHITE)
+        arcadeplus.set_background_color(arcadeplus.color.WHITE)
 
     def setup(self):
         """
-        This, and any function with the arcade.decorator.init decorator,
+        This, and any function with the arcadeplus.decorator.init decorator,
         is run automatically on start-up.
         """
         self.mountains = []
 
-        background = arcade.ShapeElementList()
+        background = arcadeplus.ShapeElementList()
 
         color1 = (195, 157, 224)
         color2 = (240, 203, 163)
         points = (0, 0), (SCREEN_WIDTH, 0), (SCREEN_WIDTH, SCREEN_HEIGHT), (0, SCREEN_HEIGHT)
         colors = (color1, color1, color2, color2)
-        rect = arcade.create_rectangle_filled_with_colors(points, colors)
+        rect = arcadeplus.create_rectangle_filled_with_colors(points, colors)
 
         background.append(rect)
         self.mountains.append(background)
@@ -171,7 +171,7 @@ class MyGame(arcade.Window):
         Render the screen.
         """
 
-        arcade.start_render()
+        arcadeplus.start_render()
         """
         This is called every time we need to update our screen. About 60
         times per second.
@@ -194,7 +194,7 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

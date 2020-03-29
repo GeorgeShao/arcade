@@ -5,12 +5,12 @@ Simple program to show basic sprite usage.
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_collect_coins_with_stats
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_collect_coins_with_stats
 """
 
 import random
-import arcade
+import arcadeplus
 import os
 import timeit
 
@@ -24,7 +24,7 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprite Collect Coins with Stats Example"
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Our custom Window Class"""
 
     def __init__(self):
@@ -56,21 +56,21 @@ class MyGame(arcade.Window):
         self.fps_start_timer = None
         self.fps = None
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
     def setup(self):
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
+        self.coin_list = arcadeplus.SpriteList()
 
         # Score
         self.score = 0
 
         # Set up the player
         # Character image from kenney.nl
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING_PLAYER)
+        self.player_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
@@ -80,7 +80,7 @@ class MyGame(arcade.Window):
 
             # Create the coin instance
             # Coin image from kenney.nl
-            coin = arcade.Sprite(":resources:images/items/coinGold.png", SPRITE_SCALING_COIN)
+            coin = arcadeplus.Sprite(":resources:images/items/coinGold.png", SPRITE_SCALING_COIN)
 
             # Position the coin
             coin.center_x = random.randrange(SCREEN_WIDTH)
@@ -102,24 +102,24 @@ class MyGame(arcade.Window):
             self.fps_start_timer = timeit.default_timer()
         self.frame_count += 1
 
-        arcade.start_render()
+        arcadeplus.start_render()
         self.coin_list.draw()
         self.player_list.draw()
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
-        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
+        arcadeplus.draw_text(output, 10, 20, arcadeplus.color.WHITE, 14)
 
         # Display timings
         output = f"Processing time: {self.processing_time:.3f}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 20, arcade.color.BLACK, 16)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 20, arcadeplus.color.BLACK, 16)
 
         output = f"Drawing time: {self.draw_time:.3f}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 40, arcade.color.BLACK, 16)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 40, arcadeplus.color.BLACK, 16)
 
         if self.fps is not None:
             output = f"FPS: {self.fps:.0f}"
-            arcade.draw_text(output, 20, SCREEN_HEIGHT - 60, arcade.color.BLACK, 16)
+            arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 60, arcadeplus.color.BLACK, 16)
 
         self.draw_time = timeit.default_timer() - draw_start_time
 
@@ -139,7 +139,7 @@ class MyGame(arcade.Window):
         self.coin_list.update()
 
         # Generate a list of all sprites that collided with the player.
-        coins_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        coins_hit_list = arcadeplus.check_for_collision_with_list(self.player_sprite, self.coin_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
         for coin in coins_hit_list:
@@ -151,7 +151,7 @@ def main():
     """ Main method """
     window = MyGame()
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

@@ -1,11 +1,11 @@
 """
 Bounce a ball on the screen, using gravity.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.bouncing_ball
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.bouncing_ball
 """
 
-import arcade
+import arcadeplus
 
 # --- Set up the constants
 
@@ -31,11 +31,11 @@ def draw(_delta_time):
 
     # Start the render. This must happen before any drawing
     # commands. We do NOT need an stop render command.
-    arcade.start_render()
+    arcadeplus.start_render()
 
     # Draw our rectangle
-    arcade.draw_circle_filled(draw.x, draw.y, CIRCLE_RADIUS,
-                              arcade.color.BLACK)
+    arcadeplus.draw_circle_filled(draw.x, draw.y, CIRCLE_RADIUS,
+                              arcadeplus.color.BLACK)
 
     # Modify rectangles position based on the delta
     # vector. (Delta means change. You can also think
@@ -80,17 +80,17 @@ draw.delta_y = 0                        # type: ignore # dynamic attribute on fu
 
 def main():
     # Open up our window
-    arcade.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.set_background_color(arcade.color.WHITE)
+    arcadeplus.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    arcadeplus.set_background_color(arcadeplus.color.WHITE)
 
     # Tell the computer to call the draw command at the specified interval.
-    arcade.schedule(draw, 1 / 80)
+    arcadeplus.schedule(draw, 1 / 80)
 
     # Run the program
-    arcade.run()
+    arcadeplus.run()
 
     # When done running the program, close the window.
-    arcade.close_window()
+    arcadeplus.close_window()
 
 
 if __name__ == "__main__":

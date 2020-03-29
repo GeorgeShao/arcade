@@ -1,15 +1,15 @@
 """
-Example "Arcade" library code.
+Example "arcadeplus" library code.
 
 This example shows how to use functions and loops to draw a scene.
 It does not assume that the programmer knows how to use classes yet.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.drawing_with_loops
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.drawing_with_loops
 """
 
 # Library imports
-import arcade
+import arcadeplus
 import random
 
 SCREEN_WIDTH = 800
@@ -22,22 +22,22 @@ def draw_background():
     This function draws the background. Specifically, the sky and ground.
     """
     # Draw the sky in the top two-thirds
-    arcade.draw_rectangle_filled(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 2 / 3,
+    arcadeplus.draw_rectangle_filled(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 2 / 3,
                                  SCREEN_WIDTH - 1, SCREEN_HEIGHT * 2 / 3,
-                                 arcade.color.SKY_BLUE)
+                                 arcadeplus.color.SKY_BLUE)
 
     # Draw the ground in the bottom third
-    arcade.draw_rectangle_filled(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 6,
+    arcadeplus.draw_rectangle_filled(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 6,
                                  SCREEN_WIDTH - 1, SCREEN_HEIGHT / 3,
-                                 arcade.color.DARK_SPRING_GREEN)
+                                 arcadeplus.color.DARK_SPRING_GREEN)
 
 
 def draw_bird(x, y):
     """
     Draw a bird using a couple arcs.
     """
-    arcade.draw_arc_outline(x, y, 20, 20, arcade.color.BLACK, 0, 90)
-    arcade.draw_arc_outline(x + 40, y, 20, 20, arcade.color.BLACK, 90, 180)
+    arcadeplus.draw_arc_outline(x, y, 20, 20, arcadeplus.color.BLACK, 0, 90)
+    arcadeplus.draw_arc_outline(x + 40, y, 20, 20, arcadeplus.color.BLACK, 90, 180)
 
 
 def draw_pine_tree(center_x, center_y):
@@ -49,8 +49,8 @@ def draw_pine_tree(center_x, center_y):
       :center_y: y position of the tree trunk center.
     """
     # Draw the trunkcenter_x
-    arcade.draw_rectangle_filled(center_x, center_y, 20, 40,
-                                 arcade.color.DARK_BROWN)
+    arcadeplus.draw_rectangle_filled(center_x, center_y, 20, 40,
+                                 arcadeplus.color.DARK_BROWN)
 
     tree_bottom_y = center_y + 20
 
@@ -59,7 +59,7 @@ def draw_pine_tree(center_x, center_y):
                   (center_x, tree_bottom_y + 100),
                   (center_x + 40, tree_bottom_y))
 
-    arcade.draw_polygon_filled(point_list, arcade.color.DARK_GREEN)
+    arcadeplus.draw_polygon_filled(point_list, arcadeplus.color.DARK_GREEN)
 
 
 def main():
@@ -68,10 +68,10 @@ def main():
     """
 
     # Open the window
-    arcade.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    arcadeplus.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 
     # Start the render process. This must be done before any drawing commands.
-    arcade.start_render()
+    arcadeplus.start_render()
 
     # Call our drawing functions.
     draw_background()
@@ -99,10 +99,10 @@ def main():
     # Finish the render.
     # Nothing will be drawn without this.
     # Must happen after all draw commands
-    arcade.finish_render()
+    arcadeplus.finish_render()
 
     # Keep the window up until someone closes it.
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

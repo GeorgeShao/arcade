@@ -1,10 +1,10 @@
 """
 Shape List Non-center Rotation Demo
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.shape_list_non_center_rotate
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.shape_list_non_center_rotate
 """
-import arcade
+import arcadeplus
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -13,7 +13,7 @@ SCREEN_TITLE = "Shape List Non-center Rotation Demo"
 
 def make_shape():
 
-    shape_list = arcade.ShapeElementList()
+    shape_list = arcadeplus.ShapeElementList()
 
     # Shape center around which we will rotate
     center_x = 20
@@ -22,13 +22,13 @@ def make_shape():
     width = 30
     height = 40
 
-    shape = arcade.create_ellipse_filled(center_x, center_y, width, height, arcade.color.WHITE)
+    shape = arcadeplus.create_ellipse_filled(center_x, center_y, width, height, arcadeplus.color.WHITE)
     shape_list.append(shape)
 
     return shape_list
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self):
@@ -41,7 +41,7 @@ class MyGame(arcade.Window):
         self.shape_list.center_x = SCREEN_WIDTH / 2
         self.shape_list.center_y = SCREEN_HEIGHT / 2
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
     def on_draw(self):
         """
@@ -49,7 +49,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         self.shape_list.draw()
 
@@ -60,7 +60,7 @@ class MyGame(arcade.Window):
 
 def main():
     MyGame()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

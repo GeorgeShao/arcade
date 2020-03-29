@@ -4,12 +4,12 @@ Mountains Random Walk
 Idea and algorithm from:
 https://hackernoon.com/a-procedural-landscape-experiment-4efe1826906f
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.mountains_random_walk
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.mountains_random_walk
 """
 
 # Library imports
-import arcade
+import arcadeplus
 import random
 
 SCREEN_WIDTH = 1200
@@ -19,7 +19,7 @@ SCREEN_TITLE = "Mountains Random Walk Example"
 
 def create_mountain_range(height_min, height_max, color_start, color_end):
 
-    shape_list = arcade.ShapeElementList()
+    shape_list = arcadeplus.ShapeElementList()
 
     step_max = 1.5
     step_change = 0.5
@@ -49,24 +49,24 @@ def create_mountain_range(height_min, height_max, color_start, color_end):
         line_point_list.extend(((x, height), (x, 0)))
         line_color_list.extend((color_start, color_end))
 
-    lines = arcade.create_lines_with_colors(line_point_list, line_color_list)
+    lines = arcadeplus.create_lines_with_colors(line_point_list, line_color_list)
     shape_list.append(lines)
 
     return shape_list
 
 
 def create_line_strip():
-    shape_list = arcade.ShapeElementList()
+    shape_list = arcadeplus.ShapeElementList()
 
     colors = (
-        arcade.color.RED,
-        arcade.color.BLACK,
-        arcade.color.GREEN,
-        arcade.color.BLACK,
-        arcade.color.BLUE,
-        arcade.color.BLACK
+        arcadeplus.color.RED,
+        arcadeplus.color.BLACK,
+        arcadeplus.color.GREEN,
+        arcadeplus.color.BLACK,
+        arcadeplus.color.BLUE,
+        arcadeplus.color.BLACK
     )
-    line_strip = arcade.create_lines_with_colors(
+    line_strip = arcadeplus.create_lines_with_colors(
         ([10, 10], [500, 10],
          [10, 250], [500, 250],
          [10, 500], [500, 500]),
@@ -78,7 +78,7 @@ def create_line_strip():
     return shape_list
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -88,21 +88,21 @@ class MyGame(arcade.Window):
 
         self.mountains = None
 
-        arcade.set_background_color(arcade.color.WHITE)
+        arcadeplus.set_background_color(arcadeplus.color.WHITE)
 
     def setup(self):
         """
-        This, and any function with the arcade.decorator.init decorator,
+        This, and any function with the arcadeplus.decorator.init decorator,
         is run automatically on start-up.
         """
 
         self.mountains = []
 
-        background = arcade.ShapeElementList()
+        background = arcadeplus.ShapeElementList()
 
         points = (0, 0), (SCREEN_WIDTH, 0), (SCREEN_WIDTH, SCREEN_HEIGHT), (0, SCREEN_HEIGHT)
-        colors = (arcade.color.SKY_BLUE, arcade.color.SKY_BLUE, arcade.color.BLUE, arcade.color.BLUE)
-        rect = arcade.create_rectangles_filled_with_colors(points, colors)
+        colors = (arcadeplus.color.SKY_BLUE, arcadeplus.color.SKY_BLUE, arcadeplus.color.BLUE, arcadeplus.color.BLUE)
+        rect = arcadeplus.create_rectangles_filled_with_colors(points, colors)
 
         background.append(rect)
         self.mountains.append(background)
@@ -124,7 +124,7 @@ class MyGame(arcade.Window):
         """
         # Call our drawing functions.
 
-        arcade.start_render()
+        arcadeplus.start_render()
         for mountain_range in self.mountains:
             mountain_range.draw()
 
@@ -133,7 +133,7 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

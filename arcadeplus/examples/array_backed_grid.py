@@ -10,10 +10,10 @@ items, like the rectangles in this example.
 For faster drawing, create the shapes and then draw them as a batch.
 See array_backed_grid_buffered.py
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.array_backed_grid
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.array_backed_grid
 """
-import arcade
+import arcadeplus
 
 # Set how many rows and columns we will have
 ROW_COUNT = 15
@@ -33,7 +33,7 @@ SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 SCREEN_TITLE = "Array Backed Grid Example"
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -55,7 +55,7 @@ class MyGame(arcade.Window):
             for column in range(COLUMN_COUNT):
                 self.grid[row].append(0)  # Append a cell
 
-        arcade.set_background_color(arcade.color.BLACK)
+        arcadeplus.set_background_color(arcadeplus.color.BLACK)
 
     def on_draw(self):
         """
@@ -63,23 +63,23 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw the grid
         for row in range(ROW_COUNT):
             for column in range(COLUMN_COUNT):
                 # Figure out what color to draw the box
                 if self.grid[row][column] == 1:
-                    color = arcade.color.GREEN
+                    color = arcadeplus.color.GREEN
                 else:
-                    color = arcade.color.WHITE
+                    color = arcadeplus.color.WHITE
 
                 # Do the math to figure out where the box is
                 x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
                 y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
 
                 # Draw the box
-                arcade.draw_rectangle_filled(x, y, WIDTH, HEIGHT, color)
+                arcadeplus.draw_rectangle_filled(x, y, WIDTH, HEIGHT, color)
 
     def on_mouse_press(self, x, y, button, modifiers):
         """
@@ -106,7 +106,7 @@ class MyGame(arcade.Window):
 def main():
 
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

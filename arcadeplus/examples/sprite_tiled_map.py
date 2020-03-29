@@ -4,11 +4,11 @@ Load a Tiled map file
 Artwork from: http://kenney.nl
 Tiled available from: http://www.mapeditor.org/
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_tiled_map
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_tiled_map
 """
 
-import arcade
+import arcadeplus
 import os
 import time
 
@@ -34,7 +34,7 @@ JUMP_SPEED = 23
 GRAVITY = 1.1
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self):
@@ -72,11 +72,11 @@ class MyGame(arcade.Window):
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
+        self.coin_list = arcadeplus.SpriteList()
 
         # Set up the player
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png",
+        self.player_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png",
                                            PLAYER_SCALING)
 
         # Starting position of the player
@@ -87,22 +87,22 @@ class MyGame(arcade.Window):
         map_name = ":resources:/tmx_maps/map.tmx"
 
         # Read in the tiled map
-        my_map = arcade.tilemap.read_tmx(map_name)
+        my_map = arcadeplus.tilemap.read_tmx(map_name)
         self.end_of_map = my_map.map_size.width * GRID_PIXEL_SIZE
 
         # --- Platforms ---
-        self.wall_list = arcade.tilemap.process_layer(my_map, 'Platforms', TILE_SCALING)
+        self.wall_list = arcadeplus.tilemap.process_layer(my_map, 'Platforms', TILE_SCALING)
 
         # --- Coins ---
-        self.coin_list = arcade.tilemap.process_layer(my_map, 'Coins', TILE_SCALING)
+        self.coin_list = arcadeplus.tilemap.process_layer(my_map, 'Coins', TILE_SCALING)
 
         # --- Other stuff
         # Set the background color
         if my_map.background_color:
-            arcade.set_background_color(my_map.background_color)
+            arcadeplus.set_background_color(my_map.background_color)
 
         # Keep player from running through the wall_list layer
-        self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,
+        self.physics_engine = arcadeplus.PhysicsEnginePlatformer(self.player_sprite,
                                                              self.wall_list,
                                                              gravity_constant=GRAVITY)
 
@@ -121,7 +121,7 @@ class MyGame(arcade.Window):
         self.frame_count += 1
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw all the sprites.
         self.player_list.draw()
@@ -133,7 +133,7 @@ class MyGame(arcade.Window):
             self.fps_message = f"FPS: {fps:5.0f}"
 
         if self.fps_message:
-            arcade.draw_text(self.fps_message, self.view_left + 10, self.view_bottom + 40, arcade.color.BLACK, 14)
+            arcadeplus.draw_text(self.fps_message, self.view_left + 10, self.view_bottom + 40, arcadeplus.color.BLACK, 14)
 
         if self.frame_count % 60 == 0:
             self.last_time = time.time()
@@ -143,28 +143,28 @@ class MyGame(arcade.Window):
         # scroll the text too.
         distance = self.player_sprite.right
         output = f"Distance: {distance}"
-        arcade.draw_text(output, self.view_left + 10, self.view_bottom + 20, arcade.color.BLACK, 14)
+        arcadeplus.draw_text(output, self.view_left + 10, self.view_bottom + 20, arcadeplus.color.BLACK, 14)
 
         if self.game_over:
-            arcade.draw_text("Game Over", self.view_left + 200, self.view_bottom + 200, arcade.color.BLACK, 30)
+            arcadeplus.draw_text("Game Over", self.view_left + 200, self.view_bottom + 200, arcadeplus.color.BLACK, 30)
 
     def on_key_press(self, key, modifiers):
         """
         Called whenever the mouse moves.
         """
-        if key == arcade.key.UP:
+        if key == arcadeplus.key.UP:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = JUMP_SPEED
-        elif key == arcade.key.LEFT:
+        elif key == arcadeplus.key.LEFT:
             self.player_sprite.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.RIGHT:
             self.player_sprite.change_x = MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """
         Called when the user presses a mouse button.
         """
-        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
+        if key == arcadeplus.key.LEFT or key == arcadeplus.key.RIGHT:
             self.player_sprite.change_x = 0
 
     def on_update(self, delta_time):
@@ -178,7 +178,7 @@ class MyGame(arcade.Window):
         if not self.game_over:
             self.physics_engine.update()
 
-        coins_hit = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        coins_hit = arcadeplus.check_for_collision_with_list(self.player_sprite, self.coin_list)
         for coin in coins_hit:
             coin.remove_from_sprite_lists()
             self.score += 1
@@ -217,7 +217,7 @@ class MyGame(arcade.Window):
         if changed:
             self.view_left = int(self.view_left)
             self.view_bottom = int(self.view_bottom)
-            arcade.set_viewport(self.view_left,
+            arcadeplus.set_viewport(self.view_left,
                                 SCREEN_WIDTH + self.view_left,
                                 self.view_bottom,
                                 SCREEN_HEIGHT + self.view_bottom)
@@ -226,7 +226,7 @@ class MyGame(arcade.Window):
 def main():
     window = MyGame()
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

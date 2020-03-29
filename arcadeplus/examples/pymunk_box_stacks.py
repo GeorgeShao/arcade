@@ -9,13 +9,13 @@ pip install pymunk
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.pymunk_box_stacks
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.pymunk_box_stacks
 
 Click and drag with the mouse to move the boxes.
 """
 
-import arcade
+import arcadeplus
 import pymunk
 import timeit
 import math
@@ -26,7 +26,7 @@ SCREEN_HEIGHT = 800
 SCREEN_TITLE = "Pymunk test"
 
 
-class PhysicsSprite(arcade.Sprite):
+class PhysicsSprite(arcadeplus.Sprite):
     def __init__(self, pymunk_shape, filename):
         super().__init__(filename, center_x=pymunk_shape.body.position.x, center_y=pymunk_shape.body.position.y)
         self.pymunk_shape = pymunk_shape
@@ -46,7 +46,7 @@ class BoxSprite(PhysicsSprite):
         self.height = height
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -59,7 +59,7 @@ class MyGame(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
-        arcade.set_background_color(arcade.color.DARK_SLATE_GRAY)
+        arcadeplus.set_background_color(arcadeplus.color.DARK_SLATE_GRAY)
 
         # -- Pymunk
         self.space = pymunk.Space()
@@ -67,7 +67,7 @@ class MyGame(arcade.Window):
         self.space.gravity = (0.0, -900.0)
 
         # Lists of sprites or lines
-        self.sprite_list: arcade.SpriteList[PhysicsSprite] = arcade.SpriteList()
+        self.sprite_list: arcadeplus.SpriteList[PhysicsSprite] = arcadeplus.SpriteList()
         self.static_lines = []
 
         # Used for dragging shapes around with the mouse
@@ -110,7 +110,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Start timing how long this takes
         draw_start_time = timeit.default_timer()
@@ -124,19 +124,19 @@ class MyGame(arcade.Window):
 
             pv1 = body.position + line.a.rotated(body.angle)
             pv2 = body.position + line.b.rotated(body.angle)
-            arcade.draw_line(pv1.x, pv1.y, pv2.x, pv2.y, arcade.color.WHITE, 2)
+            arcadeplus.draw_line(pv1.x, pv1.y, pv2.x, pv2.y, arcadeplus.color.WHITE, 2)
 
         # Display timings
         output = f"Processing time: {self.processing_time:.3f}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 20, arcade.color.WHITE, 12)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 20, arcadeplus.color.WHITE, 12)
 
         output = f"Drawing time: {self.draw_time:.3f}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 40, arcade.color.WHITE, 12)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 40, arcadeplus.color.WHITE, 12)
 
         self.draw_time = timeit.default_timer() - draw_start_time
 
     def on_mouse_press(self, x, y, button, modifiers):
-        if button == arcade.MOUSE_BUTTON_LEFT:
+        if button == arcadeplus.MOUSE_BUTTON_LEFT:
             self.last_mouse_position = x, y
             # See if we clicked on anything
             shape_list = self.space.point_query((x, y), 1, pymunk.ShapeFilter())
@@ -145,7 +145,7 @@ class MyGame(arcade.Window):
             if len(shape_list) > 0:
                 self.shape_being_dragged = shape_list[0]
 
-        elif button == arcade.MOUSE_BUTTON_RIGHT:
+        elif button == arcadeplus.MOUSE_BUTTON_RIGHT:
             # With right mouse button, shoot a heavy coin fast.
             mass = 60
             radius = 10
@@ -161,7 +161,7 @@ class MyGame(arcade.Window):
             self.sprite_list.append(sprite)
 
     def on_mouse_release(self, x, y, button, modifiers):
-        if button == arcade.MOUSE_BUTTON_LEFT:
+        if button == arcadeplus.MOUSE_BUTTON_LEFT:
             # Release the item we are holding (if any)
             self.shape_being_dragged = None
 
@@ -208,7 +208,7 @@ class MyGame(arcade.Window):
 def main():
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

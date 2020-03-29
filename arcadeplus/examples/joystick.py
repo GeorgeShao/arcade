@@ -1,11 +1,11 @@
 """
 This simple animation example shows how to move an item with the joystick.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.joystick
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.joystick
 """
 
-import arcade
+import arcadeplus
 
 # Set up the constants
 SCREEN_WIDTH = 800
@@ -19,7 +19,7 @@ MOVEMENT_MULTIPLIER = 5
 DEAD_ZONE = 0.05
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -28,7 +28,7 @@ class MyGame(arcade.Window):
         self.player = None
         self.left_down = False
 
-        joysticks = arcade.get_joysticks()
+        joysticks = arcadeplus.get_joysticks()
         if joysticks:
             self.joystick = joysticks[0]
             self.joystick.open()
@@ -58,7 +58,7 @@ class MyGame(arcade.Window):
         x = SCREEN_WIDTH // 2
         y = SCREEN_HEIGHT // 2
         angle = 0
-        color = arcade.color.WHITE
+        color = arcadeplus.color.WHITE
         self.player = Rectangle(x, y, width, height, angle, color)
         self.left_down = False
 
@@ -84,7 +84,7 @@ class MyGame(arcade.Window):
         """
         Render the screen.
         """
-        arcade.start_render()
+        arcadeplus.start_render()
 
         self.player.draw()
 
@@ -114,7 +114,7 @@ class Rectangle:
 
     def draw(self):
         """ Draw our rectangle """
-        arcade.draw_rectangle_filled(self.x, self.y, self.width, self.height,
+        arcadeplus.draw_rectangle_filled(self.x, self.y, self.width, self.height,
                                      self.color, self.angle)
 
     def move(self):
@@ -144,7 +144,7 @@ class Rectangle:
 def main():
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

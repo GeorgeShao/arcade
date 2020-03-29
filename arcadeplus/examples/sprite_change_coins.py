@@ -5,12 +5,12 @@ This shows how you can change a sprite once it is hit, rather than eliminate it.
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_change_coins
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_change_coins
 """
 
 import random
-import arcade
+import arcadeplus
 import os
 
 SPRITE_SCALING = 1
@@ -20,7 +20,7 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprite Change Coins"
 
 
-class Collectable(arcade.Sprite):
+class Collectable(arcadeplus.Sprite):
     """ This class represents something the player collects. """
 
     def __init__(self, filename, scale):
@@ -29,7 +29,7 @@ class Collectable(arcade.Sprite):
         self.changed = False
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.a
     """
@@ -56,12 +56,12 @@ class MyGame(arcade.Window):
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
+        self.coin_list = arcadeplus.SpriteList()
 
         # Set up the player
         self.score = 0
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", 0.5)
+        self.player_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", 0.5)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
@@ -83,7 +83,7 @@ class MyGame(arcade.Window):
         self.set_mouse_visible(False)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
     def on_draw(self):
         """
@@ -91,7 +91,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw all the sprites.
         self.coin_list.draw()
@@ -99,7 +99,7 @@ class MyGame(arcade.Window):
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
-        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
+        arcadeplus.draw_text(output, 10, 20, arcadeplus.color.WHITE, 14)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """
@@ -117,14 +117,14 @@ class MyGame(arcade.Window):
         self.coin_list.update()
 
         # Generate a list of all sprites that collided with the player.
-        hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        hit_list = arcadeplus.check_for_collision_with_list(self.player_sprite, self.coin_list)
 
         # Loop through each colliding sprite, change it, and add to the score.
         for coin in hit_list:
             # Have we collected this?
             if not coin.changed:
                 # No? Then do so
-                coin.append_texture(arcade.load_texture(":resources:images/pinball/bumper.png"))
+                coin.append_texture(arcadeplus.load_texture(":resources:images/pinball/bumper.png"))
                 coin.set_texture(1)
                 coin.changed = True
                 coin.width = 30
@@ -136,7 +136,7 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

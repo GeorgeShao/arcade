@@ -1,10 +1,10 @@
 """
 Example showing how to draw text to the screen.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.text_loc_example_done
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.text_loc_example_done
 """
-import arcade
+import arcadeplus
 import gettext
 import os
 
@@ -24,7 +24,7 @@ SCREEN_TITLE = "Localizing Text Example"
 _ = gettext.gettext
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -32,7 +32,7 @@ class MyGame(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
 
-        arcade.set_background_color(arcade.color.WHITE)
+        arcadeplus.set_background_color(arcadeplus.color.WHITE)
         self.text_angle = 0
         self.time_elapsed = 0.0
 
@@ -47,22 +47,22 @@ class MyGame(arcade.Window):
 
         # This command should happen before we start drawing. It will clear
         # the screen to the background color, and erase what we drew last frame.
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # start_x and start_y make the start point for the text.
         # We draw a dot to make it easy too see
         # the text in relation to its start x and y.
         start_x = 50
         start_y = 450
-        arcade.draw_point(start_x, start_y, arcade.color.BLUE, 5)
-        arcade.draw_text(
-            _("Simple line of text in 12 point"), start_x, start_y, arcade.color.BLACK, 12
+        arcadeplus.draw_point(start_x, start_y, arcadeplus.color.BLUE, 5)
+        arcadeplus.draw_text(
+            _("Simple line of text in 12 point"), start_x, start_y, arcadeplus.color.BLACK, 12
         )
 
 
 def main():
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

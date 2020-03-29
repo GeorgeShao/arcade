@@ -4,17 +4,17 @@ Starting Template
 Once you have learned how to use classes, you can begin your program with this
 template.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.starting_template
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.starting_template
 """
-import arcade
+import arcadeplus
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Starting Template"
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
 
@@ -26,7 +26,7 @@ class MyGame(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
         # If you have sprite lists, you should create them here,
         # and set them to None
@@ -42,7 +42,7 @@ class MyGame(arcade.Window):
 
         # This command should happen before we start drawing. It will clear
         # the screen to the background color, and erase what we drew last frame.
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Call draw() on all your sprite lists below
 
@@ -59,7 +59,7 @@ class MyGame(arcade.Window):
         Called whenever a key on the keyboard is pressed.
 
         For a full list of keys, see:
-        http://arcade.academy/arcade.key.html
+        http://arcadeplus.academy/arcadeplus.key.html
         """
         pass
 
@@ -92,7 +92,7 @@ def main():
     """ Main method """
     game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     game.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

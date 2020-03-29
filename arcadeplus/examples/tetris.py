@@ -4,10 +4,10 @@ Tetris
 Tetris clone, with some ideas from silvasur's code:
 https://gist.github.com/silvasur/565419/d9de6a84e7da000797ac681976442073045c74a4
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.tetris
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.tetris
 """
-import arcade
+import arcadeplus
 import random
 import PIL
 
@@ -69,7 +69,7 @@ def create_textures():
     for color in colors:
         # noinspection PyUnresolvedReferences
         image = PIL.Image.new('RGB', (WIDTH, HEIGHT), color)
-        new_textures.append(arcade.Texture(str(color), image=image))
+        new_textures.append(arcadeplus.Texture(str(color), image=image))
     return new_textures
 
 
@@ -118,7 +118,7 @@ def new_board():
     return board
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -126,7 +126,7 @@ class MyGame(arcade.Window):
 
         super().__init__(width, height, title)
 
-        arcade.set_background_color(arcade.color.WHITE)
+        arcadeplus.set_background_color(arcadeplus.color.WHITE)
 
         self.board = None
         self.frame_count = 0
@@ -153,10 +153,10 @@ class MyGame(arcade.Window):
     def setup(self):
         self.board = new_board()
 
-        self.board_sprite_list = arcade.SpriteList()
+        self.board_sprite_list = arcadeplus.SpriteList()
         for row in range(len(self.board)):
             for column in range(len(self.board[0])):
-                sprite = arcade.Sprite()
+                sprite = arcadeplus.Sprite()
                 for texture in texture_list:
                     sprite.append_texture(texture)
                 sprite.set_texture(0)
@@ -224,13 +224,13 @@ class MyGame(arcade.Window):
         Rotate stone,
         or drop down
         """
-        if key == arcade.key.LEFT:
+        if key == arcadeplus.key.LEFT:
             self.move(-1)
-        elif key == arcade.key.RIGHT:
+        elif key == arcadeplus.key.RIGHT:
             self.move(1)
-        elif key == arcade.key.UP:
+        elif key == arcadeplus.key.UP:
             self.rotate_stone()
-        elif key == arcade.key.DOWN:
+        elif key == arcadeplus.key.DOWN:
             self.drop()
 
     # noinspection PyMethodMayBeStatic
@@ -250,7 +250,7 @@ class MyGame(arcade.Window):
                     y = SCREEN_HEIGHT - (MARGIN + HEIGHT) * (row + offset_y) + MARGIN + HEIGHT // 2
 
                     # Draw the box
-                    arcade.draw_rectangle_filled(x, y, WIDTH, HEIGHT, color)
+                    arcadeplus.draw_rectangle_filled(x, y, WIDTH, HEIGHT, color)
 
     def update_board(self):
         """
@@ -266,7 +266,7 @@ class MyGame(arcade.Window):
         """ Render the screen. """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
         self.board_sprite_list.draw()
         self.draw_grid(self.stone, self.stone_x, self.stone_y)
 
@@ -275,7 +275,7 @@ def main():
     """ Create the game window, setup, run """
     my_game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     my_game.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
 """
 Perlin Noise 2
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.perlin_noise_2
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.perlin_noise_2
 
 TODO: This code doesn't work properly, and isn't currently listed in the examples.
 """
-import arcade
+import arcadeplus
 import numpy as np
 from PIL import Image
 
@@ -74,7 +74,7 @@ def gradient(h, x, y):
     return g[:, :, 0] * x + g[:, :, 1] * y
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -85,7 +85,7 @@ class MyGame(arcade.Window):
         """
         super().__init__(width, height, title)
         self.background_list = None
-        arcade.set_background_color(arcade.color.BLACK)
+        arcadeplus.set_background_color(arcadeplus.color.BLACK)
 
         self.grid = None
         self.recreate_grid()
@@ -103,13 +103,13 @@ class MyGame(arcade.Window):
         #     print()
 
         im = Image.fromarray(np.uint8(self.grid), "L")
-        background_sprite = arcade.Sprite()
+        background_sprite = arcadeplus.Sprite()
         background_sprite.center_x = SCREEN_WIDTH / 2
         background_sprite.center_y = SCREEN_HEIGHT / 2
-        background_sprite.append_texture(arcade.Texture("dynamic noise image", im))
+        background_sprite.append_texture(arcadeplus.Texture("dynamic noise image", im))
         background_sprite.set_texture(0)
 
-        self.background_list = arcade.SpriteList()
+        self.background_list = arcadeplus.SpriteList()
         self.background_list.append(background_sprite)
 
     def on_draw(self):
@@ -118,7 +118,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
         self.background_list.draw()
 
     def on_mouse_press(self, x, y, button, modifiers):
@@ -147,7 +147,7 @@ class MyGame(arcade.Window):
 
 def main():
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

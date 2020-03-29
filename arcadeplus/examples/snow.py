@@ -1,16 +1,13 @@
 """
-Simple Snow
-Based primarily on: http://arcade.academy/examples/sprite_collect_coins_move_down.html
+Contributed to Python arcadeplus Library by Nicholas Hartunian
 
-Contributed to Python Arcade Library by Nicholas Hartunian
-
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.snow
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.snow
 """
 
 import random
 import math
-import arcade
+import arcadeplus
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -33,7 +30,7 @@ class Snowflake:
         self.x = random.randrange(SCREEN_WIDTH)
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -42,7 +39,7 @@ class MyGame(arcade.Window):
         :param width:
         :param height:
         """
-        # Calls "__init__" of parent class (arcade.Window) to setup screen
+        # Calls "__init__" of parent class (arcadeplus.Window) to setup screen
         super().__init__(width, height, title)
 
         # Sprite lists
@@ -72,7 +69,7 @@ class MyGame(arcade.Window):
         self.set_mouse_visible(False)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.BLACK)
+        arcadeplus.set_background_color(arcadeplus.color.BLACK)
 
     def on_draw(self):
         """
@@ -80,12 +77,12 @@ class MyGame(arcade.Window):
         """
 
         # This command is necessary before drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw the current position of each snowflake
         for snowflake in self.snowflake_list:
-            arcade.draw_circle_filled(snowflake.x, snowflake.y,
-                                      snowflake.size, arcade.color.WHITE)
+            arcadeplus.draw_circle_filled(snowflake.x, snowflake.y,
+                                      snowflake.size, arcadeplus.color.WHITE)
 
     def on_update(self, delta_time):
         """
@@ -108,7 +105,7 @@ class MyGame(arcade.Window):
 def main():
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.start_snowfall()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

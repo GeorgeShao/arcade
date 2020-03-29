@@ -2,11 +2,11 @@
 This simple animation example shows how to move an item with the mouse, and
 handle mouse clicks.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.move_mouse
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.move_mouse
 """
 
-import arcade
+import arcadeplus
 
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
@@ -24,10 +24,10 @@ class Ball:
 
     def draw(self):
         """ Draw the balls with the instance variables we have. """
-        arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
+        arcadeplus.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
 
     def __init__(self, width, height, title):
 
@@ -38,14 +38,14 @@ class MyGame(arcade.Window):
         # So we just see our object, not the pointer.
         self.set_mouse_visible(False)
 
-        arcade.set_background_color(arcade.color.ASH_GREY)
+        arcadeplus.set_background_color(arcadeplus.color.ASH_GREY)
 
         # Create our ball
-        self.ball = Ball(50, 50, 15, arcade.color.AUBURN)
+        self.ball = Ball(50, 50, 15, arcadeplus.color.AUBURN)
 
     def on_draw(self):
         """ Called whenever we need to draw the window. """
-        arcade.start_render()
+        arcadeplus.start_render()
         self.ball.draw()
 
     def on_mouse_motion(self, x, y, dx, dy):
@@ -58,20 +58,20 @@ class MyGame(arcade.Window):
         Called when the user presses a mouse button.
         """
         print(f"You clicked button number: {button}")
-        if button == arcade.MOUSE_BUTTON_LEFT:
-            self.ball.color = arcade.color.BLACK
+        if button == arcadeplus.MOUSE_BUTTON_LEFT:
+            self.ball.color = arcadeplus.color.BLACK
 
     def on_mouse_release(self, x, y, button, modifiers):
         """
         Called when a user releases a mouse button.
         """
-        if button == arcade.MOUSE_BUTTON_LEFT:
-            self.ball.color = arcade.color.AUBURN
+        if button == arcadeplus.MOUSE_BUTTON_LEFT:
+            self.ball.color = arcadeplus.color.AUBURN
 
 
 def main():
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

@@ -1,11 +1,11 @@
 """
 This animation example shows how perform a radar sweep animation.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.radar_sweep
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.radar_sweep
 """
 
-import arcade
+import arcadeplus
 import math
 
 # Set up the constants
@@ -32,14 +32,14 @@ def on_draw(_delta_time):
 
     # Start the render. This must happen before any drawing
     # commands. We do NOT need an stop render command.
-    arcade.start_render()
+    arcadeplus.start_render()
 
     # Draw the radar line
-    arcade.draw_line(CENTER_X, CENTER_Y, x, y, arcade.color.OLIVE, 4)
+    arcadeplus.draw_line(CENTER_X, CENTER_Y, x, y, arcadeplus.color.OLIVE, 4)
 
     # Draw the outline of the radar
-    arcade.draw_circle_outline(CENTER_X, CENTER_Y, SWEEP_LENGTH,
-                               arcade.color.DARK_GREEN, 10)
+    arcadeplus.draw_circle_outline(CENTER_X, CENTER_Y, SWEEP_LENGTH,
+                               arcadeplus.color.DARK_GREEN, 10)
 
 
 # This is a function-specific variable. Before we
@@ -51,17 +51,17 @@ on_draw.angle = 0  # type: ignore # dynamic attribute on function obj
 def main():
 
     # Open up our window
-    arcade.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.set_background_color(arcade.color.BLACK)
+    arcadeplus.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    arcadeplus.set_background_color(arcadeplus.color.BLACK)
 
     # Tell the computer to call the draw command at the specified interval.
-    arcade.schedule(on_draw, 1 / 80)
+    arcadeplus.schedule(on_draw, 1 / 80)
 
     # Run the program
-    arcade.run()
+    arcadeplus.run()
 
     # When done running the program, close the window.
-    arcade.close_window()
+    arcadeplus.close_window()
 
 
 if __name__ == "__main__":

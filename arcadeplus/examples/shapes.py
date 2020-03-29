@@ -8,17 +8,14 @@ and inefficient.
 Using buffered drawing commands (Vertex Buffer Objects) is a bit more complex,
 but faster.
 
-See http://arcade.academy/examples/shapes_buffered.html for this same example
-using shape element lists.
-
 Also, any Sprite class put in a SpriteList and drawn with the SpriteList will
 be drawn using Vertex Buffer Objects for better performance.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.shapes_buffered
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.shapes_buffered
 """
 
-import arcade
+import arcadeplus
 import random
 
 # Set up the constants
@@ -55,18 +52,18 @@ class Shape:
 class Ellipse(Shape):
 
     def draw(self):
-        arcade.draw_ellipse_filled(self.x, self.y, self.width, self.height,
+        arcadeplus.draw_ellipse_filled(self.x, self.y, self.width, self.height,
                                    self.color, self.angle)
 
 
 class Rectangle(Shape):
 
     def draw(self):
-        arcade.draw_rectangle_filled(self.x, self.y, self.width, self.height,
+        arcadeplus.draw_rectangle_filled(self.x, self.y, self.width, self.height,
                                      self.color, self.angle)
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self):
@@ -113,7 +110,7 @@ class MyGame(arcade.Window):
         """
         Render the screen.
         """
-        arcade.start_render()
+        arcadeplus.start_render()
 
         for shape in self.shape_list:
             shape.draw()
@@ -122,7 +119,7 @@ class MyGame(arcade.Window):
 def main():
     window = MyGame()
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

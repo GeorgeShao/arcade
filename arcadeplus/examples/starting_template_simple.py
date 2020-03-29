@@ -4,17 +4,17 @@ Starting Template Simple
 Once you have learned how to use classes, you can begin your program with this
 template.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.starting_template_simple
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.starting_template_simple
 """
-import arcade
+import arcadeplus
 
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Starting Template Simple"
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -22,7 +22,7 @@ class MyGame(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
 
-        arcade.set_background_color(arcade.color.WHITE)
+        arcadeplus.set_background_color(arcadeplus.color.WHITE)
 
     def setup(self):
         """ Set up the game here. Call this function to restart the game. """
@@ -33,7 +33,7 @@ class MyGame(arcade.Window):
         Render the screen.
         """
 
-        arcade.start_render()
+        arcadeplus.start_render()
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         """
@@ -46,7 +46,7 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

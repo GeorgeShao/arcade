@@ -8,16 +8,14 @@ and inefficient.
 Using buffered drawing commands (Vertex Buffer Objects) is a bit more complex,
 but faster.
 
-See http://arcade.academy/examples/index.html#shape-lists for some examples.
-
 Also, any Sprite class put in a SpriteList and drawn with the SpriteList will
 be drawn using Vertex Buffer Objects for better performance.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.shapes
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.shapes
 """
 
-import arcade
+import arcadeplus
 import random
 
 # Set up the constants
@@ -65,10 +63,10 @@ class Ellipse(Shape):
         super().__init__(x, y, width, height, angle, delta_x, delta_y,
                          delta_angle, color)
 
-        shape = arcade.create_ellipse_filled(self.x, self.y,
+        shape = arcadeplus.create_ellipse_filled(self.x, self.y,
                                              self.width, self.height,
                                              self.color, self.angle)
-        self.shape_list = arcade.ShapeElementList()
+        self.shape_list = arcadeplus.ShapeElementList()
         self.shape_list.append(shape)
 
 
@@ -80,14 +78,14 @@ class Rectangle(Shape):
         super().__init__(x, y, width, height, angle, delta_x, delta_y,
                          delta_angle, color)
 
-        shape = arcade.create_rectangle_filled(self.x, self.y,
+        shape = arcadeplus.create_rectangle_filled(self.x, self.y,
                                                self.width, self.height,
                                                self.color, self.angle)
-        self.shape_list = arcade.ShapeElementList()
+        self.shape_list = arcadeplus.ShapeElementList()
         self.shape_list.append(shape)
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self):
@@ -134,7 +132,7 @@ class MyGame(arcade.Window):
         """
         Render the screen.
         """
-        arcade.start_render()
+        arcadeplus.start_render()
 
         for shape in self.shape_list:
             shape.draw()
@@ -143,7 +141,7 @@ class MyGame(arcade.Window):
 def main():
     window = MyGame()
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

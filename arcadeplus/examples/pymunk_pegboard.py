@@ -9,13 +9,13 @@ pip install pymunk
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.pymunk_pegboard
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.pymunk_pegboard
 
 Click and drag with the mouse to move the boxes.
 """
 
-import arcade
+import arcadeplus
 import pymunk
 import random
 import timeit
@@ -27,7 +27,7 @@ SCREEN_HEIGHT = 800
 SCREEN_TITLE = "Pymunk Pegboard Example"
 
 
-class CircleSprite(arcade.Sprite):
+class CircleSprite(arcadeplus.Sprite):
     def __init__(self, filename, pymunk_shape):
         super().__init__(filename, center_x=pymunk_shape.body.position.x, center_y=pymunk_shape.body.position.y)
         self.width = pymunk_shape.radius * 2
@@ -35,7 +35,7 @@ class CircleSprite(arcade.Sprite):
         self.pymunk_shape = pymunk_shape
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -48,9 +48,9 @@ class MyGame(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
-        self.peg_list = arcade.SpriteList()
-        self.ball_list: arcade.SpriteList[CircleSprite] = arcade.SpriteList()
-        arcade.set_background_color(arcade.color.DARK_SLATE_GRAY)
+        self.peg_list = arcadeplus.SpriteList()
+        self.ball_list: arcadeplus.SpriteList[CircleSprite] = arcadeplus.SpriteList()
+        arcadeplus.set_background_color(arcadeplus.color.DARK_SLATE_GRAY)
 
         self.draw_time = 0
         self.processing_time = 0
@@ -103,7 +103,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         draw_start_time = timeit.default_timer()
         self.peg_list.draw()
@@ -114,14 +114,14 @@ class MyGame(arcade.Window):
 
             pv1 = body.position + line.a.rotated(body.angle)
             pv2 = body.position + line.b.rotated(body.angle)
-            arcade.draw_line(pv1.x, pv1.y, pv2.x, pv2.y, arcade.color.WHITE, 2)
+            arcadeplus.draw_line(pv1.x, pv1.y, pv2.x, pv2.y, arcadeplus.color.WHITE, 2)
 
         # Display timings
         output = f"Processing time: {self.processing_time:.3f}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 20, arcade.color.WHITE, 12)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 20, arcadeplus.color.WHITE, 12)
 
         output = f"Drawing time: {self.draw_time:.3f}"
-        arcade.draw_text(output, 20, SCREEN_HEIGHT - 40, arcade.color.WHITE, 12)
+        arcadeplus.draw_text(output, 20, SCREEN_HEIGHT - 40, arcadeplus.color.WHITE, 12)
 
         self.draw_time = timeit.default_timer() - draw_start_time
 
@@ -171,7 +171,7 @@ class MyGame(arcade.Window):
 def main():
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

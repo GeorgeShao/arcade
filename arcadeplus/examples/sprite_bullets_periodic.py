@@ -1,10 +1,10 @@
 """
 Show how to have enemies shoot bullets at regular intervals.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_bullets_periodic
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_bullets_periodic
 """
-import arcade
+import arcadeplus
 import os
 
 SCREEN_WIDTH = 800
@@ -12,7 +12,7 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprites and Periodic Bullets Example"
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class """
 
     def __init__(self):
@@ -25,29 +25,29 @@ class MyGame(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
-        arcade.set_background_color(arcade.color.BLACK)
+        arcadeplus.set_background_color(arcadeplus.color.BLACK)
 
         # --- Keep track of a frame count.
         # --- This is important for doing things every x frames
         self.frame_count = 0
 
-        self.player_list = arcade.SpriteList()
-        self.enemy_list = arcade.SpriteList()
-        self.bullet_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
+        self.enemy_list = arcadeplus.SpriteList()
+        self.bullet_list = arcadeplus.SpriteList()
 
         # Add player ship
-        self.player = arcade.Sprite(":resources:images/space_shooter/playerShip1_orange.png", 0.5)
+        self.player = arcadeplus.Sprite(":resources:images/space_shooter/playerShip1_orange.png", 0.5)
         self.player_list.append(self.player)
 
         # Add top-left enemy ship
-        enemy = arcade.Sprite(":resources:images/space_shooter/playerShip1_green.png", 0.5)
+        enemy = arcadeplus.Sprite(":resources:images/space_shooter/playerShip1_green.png", 0.5)
         enemy.center_x = 120
         enemy.center_y = SCREEN_HEIGHT - enemy.height
         enemy.angle = 180
         self.enemy_list.append(enemy)
 
         # Add top-right enemy ship
-        enemy = arcade.Sprite(":resources:images/space_shooter/playerShip1_green.png", 0.5)
+        enemy = arcadeplus.Sprite(":resources:images/space_shooter/playerShip1_green.png", 0.5)
         enemy.center_x = SCREEN_WIDTH - 120
         enemy.center_y = SCREEN_HEIGHT - enemy.height
         enemy.angle = 180
@@ -56,7 +56,7 @@ class MyGame(arcade.Window):
     def on_draw(self):
         """Render the screen. """
 
-        arcade.start_render()
+        arcadeplus.start_render()
 
         self.enemy_list.draw()
         self.bullet_list.draw()
@@ -73,7 +73,7 @@ class MyGame(arcade.Window):
 
             # --- Use the modulus to trigger doing something every 120 frames
             if self.frame_count % 120 == 0:
-                bullet = arcade.Sprite(":resources:images/space_shooter/laserBlue01.png")
+                bullet = arcadeplus.Sprite(":resources:images/space_shooter/laserBlue01.png")
                 bullet.center_x = enemy.center_x
                 bullet.angle = -90
                 bullet.top = enemy.bottom
@@ -97,7 +97,7 @@ class MyGame(arcade.Window):
 
 def main():
     MyGame()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

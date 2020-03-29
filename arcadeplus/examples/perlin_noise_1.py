@@ -1,12 +1,12 @@
 """
 Perlin Noise 1
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.perlin_noise_1
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.perlin_noise_1
 
 TODO: This code doesn't work properly, and isn't currently listed in the examples.
 """
-import arcade
+import arcadeplus
 import numpy as np
 from PIL import Image
 
@@ -74,7 +74,7 @@ def gradient(h, x, y):
     return g[:, :, 0] * x + g[:, :, 1] * y
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -87,7 +87,7 @@ class MyGame(arcade.Window):
 
         self.shape_list = None
 
-        arcade.set_background_color(arcade.color.BLACK)
+        arcadeplus.set_background_color(arcadeplus.color.BLACK)
 
         self.grid = None
         self.recreate_grid()
@@ -105,7 +105,7 @@ class MyGame(arcade.Window):
         #         print(f"{self.grid[row][column]:5.2f} ", end="")
         #     print()
 
-        self.shape_list = arcade.ShapeElementList()
+        self.shape_list = arcadeplus.ShapeElementList()
         for row in range(ROW_COUNT):
             for column in range(COLUMN_COUNT):
                 color = self.grid[row][column], 0, 0
@@ -113,7 +113,7 @@ class MyGame(arcade.Window):
                 x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
                 y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
 
-                current_rect = arcade.create_rectangle_filled(x, y, WIDTH, HEIGHT, color)
+                current_rect = arcadeplus.create_rectangle_filled(x, y, WIDTH, HEIGHT, color)
                 self.shape_list.append(current_rect)
 
         im = Image.fromarray(np.uint8(self.grid), "L")
@@ -125,7 +125,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         self.shape_list.draw()
 
@@ -155,7 +155,7 @@ class MyGame(arcade.Window):
 
 def main():
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

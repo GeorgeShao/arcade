@@ -2,10 +2,10 @@
 Simple program showing how to use a shape list to create a more complex shape
 out of basic ones.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.shape_list_demo_person
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.shape_list_demo_person
 """
-import arcade
+import arcadeplus
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -22,55 +22,55 @@ def make_person(head_radius,
                 arm_gap,
                 shoulder_height):
 
-    shape_list = arcade.ShapeElementList()
+    shape_list = arcadeplus.ShapeElementList()
 
     # Head
-    shape = arcade.create_ellipse_filled(0, chest_height / 2 + head_radius, head_radius, head_radius,
-                                         arcade.color.WHITE)
+    shape = arcadeplus.create_ellipse_filled(0, chest_height / 2 + head_radius, head_radius, head_radius,
+                                         arcadeplus.color.WHITE)
     shape_list.append(shape)
 
     # Chest
-    shape = arcade.create_rectangle_filled(0, 0, chest_width, chest_height, arcade.color.BLACK)
+    shape = arcadeplus.create_rectangle_filled(0, 0, chest_width, chest_height, arcadeplus.color.BLACK)
     shape_list.append(shape)
 
     # Left leg
-    shape = arcade.create_rectangle_filled(-(chest_width / 2) + leg_width / 2, -(chest_height / 2) - leg_height / 2,
-                                           leg_width, leg_height, arcade.color.RED)
+    shape = arcadeplus.create_rectangle_filled(-(chest_width / 2) + leg_width / 2, -(chest_height / 2) - leg_height / 2,
+                                           leg_width, leg_height, arcadeplus.color.RED)
     shape_list.append(shape)
 
     # Right leg
-    shape = arcade.create_rectangle_filled((chest_width / 2) - leg_width / 2, -(chest_height / 2) - leg_height / 2,
-                                           leg_width, leg_height, arcade.color.RED)
+    shape = arcadeplus.create_rectangle_filled((chest_width / 2) - leg_width / 2, -(chest_height / 2) - leg_height / 2,
+                                           leg_width, leg_height, arcadeplus.color.RED)
     shape_list.append(shape)
 
     # Left arm
-    shape = arcade.create_rectangle_filled(-(chest_width / 2) - arm_width / 2 - arm_gap,
+    shape = arcadeplus.create_rectangle_filled(-(chest_width / 2) - arm_width / 2 - arm_gap,
                                            (chest_height / 2) - arm_length / 2 - shoulder_height, arm_width, arm_length,
-                                           arcade.color.BLUE)
+                                           arcadeplus.color.BLUE)
     shape_list.append(shape)
 
     # Left shoulder
-    shape = arcade.create_rectangle_filled(-(chest_width / 2) - (arm_gap + arm_width) / 2,
+    shape = arcadeplus.create_rectangle_filled(-(chest_width / 2) - (arm_gap + arm_width) / 2,
                                            (chest_height / 2) - shoulder_height / 2, arm_gap + arm_width,
-                                           shoulder_height, arcade.color.BLUE_BELL)
+                                           shoulder_height, arcadeplus.color.BLUE_BELL)
     shape_list.append(shape)
 
     # Right arm
-    shape = arcade.create_rectangle_filled((chest_width / 2) + arm_width / 2 + arm_gap,
+    shape = arcadeplus.create_rectangle_filled((chest_width / 2) + arm_width / 2 + arm_gap,
                                            (chest_height / 2) - arm_length / 2 - shoulder_height, arm_width, arm_length,
-                                           arcade.color.BLUE)
+                                           arcadeplus.color.BLUE)
     shape_list.append(shape)
 
     # Right shoulder
-    shape = arcade.create_rectangle_filled((chest_width / 2) + (arm_gap + arm_width) / 2,
+    shape = arcadeplus.create_rectangle_filled((chest_width / 2) + (arm_gap + arm_width) / 2,
                                            (chest_height / 2) - shoulder_height / 2, arm_gap + arm_width,
-                                           shoulder_height, arcade.color.BLUE_BELL)
+                                           shoulder_height, arcadeplus.color.BLUE_BELL)
     shape_list.append(shape)
 
     return shape_list
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self):
@@ -98,7 +98,7 @@ class MyGame(arcade.Window):
                                       arm_gap,
                                       shoulder_height)
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
     def setup(self):
 
@@ -110,7 +110,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         self.shape_list.draw()
 
@@ -124,7 +124,7 @@ class MyGame(arcade.Window):
 def main():
     window = MyGame()
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

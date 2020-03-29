@@ -5,11 +5,11 @@ Simple program to show basic sprite usage.
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_collect_coins_background
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_collect_coins_background
 """
 import random
-import arcade
+import arcadeplus
 import os
 
 PLAYER_SCALING = 0.5
@@ -20,7 +20,7 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprite Collect Coins with Background Example"
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -54,7 +54,7 @@ class MyGame(arcade.Window):
         self.set_mouse_visible(False)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
     def setup(self):
         """ Set up the game and initialize the variables. """
@@ -62,15 +62,15 @@ class MyGame(arcade.Window):
         # Load the background image. Do this in the setup so we don't keep reloading it all the time.
         # Image from:
         # http://wallpaper-gallery.net/single/free-background-images/free-background-images-22.html
-        self.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
+        self.background = arcadeplus.load_texture(":resources:images/backgrounds/abstract_1.jpg")
 
         # Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
+        self.coin_list = arcadeplus.SpriteList()
 
         # Set up the player
         self.score = 0
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", PLAYER_SCALING)
+        self.player_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", PLAYER_SCALING)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
@@ -78,7 +78,7 @@ class MyGame(arcade.Window):
         for i in range(50):
 
             # Create the coin instance
-            coin = arcade.Sprite(":resources:images/items/coinGold.png", COIN_SCALING)
+            coin = arcadeplus.Sprite(":resources:images/items/coinGold.png", COIN_SCALING)
 
             # Position the coin
             coin.center_x = random.randrange(SCREEN_WIDTH)
@@ -93,11 +93,11 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw the background texture
         scale = SCREEN_WIDTH / self.background.width
-        arcade.draw_lrwh_rectangle_textured(0, 0,
+        arcadeplus.draw_lrwh_rectangle_textured(0, 0,
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
 
@@ -106,7 +106,7 @@ class MyGame(arcade.Window):
         self.player_list.draw()
 
         # Render the text
-        arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
+        arcadeplus.draw_text(f"Score: {self.score}", 10, 20, arcadeplus.color.WHITE, 14)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """
@@ -123,7 +123,7 @@ class MyGame(arcade.Window):
         self.coin_list.update()
 
         # Generate a list of all sprites that collided with the player.
-        hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        hit_list = arcadeplus.check_for_collision_with_list(self.player_sprite, self.coin_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
         for coin in hit_list:
@@ -135,7 +135,7 @@ def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

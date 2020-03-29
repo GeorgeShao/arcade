@@ -1,4 +1,4 @@
-from arcade.gui import *
+from arcadeplus.gui import *
 
 import os
 
@@ -31,7 +31,7 @@ class PauseButton(TextButton):
             self.pressed = False
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     def __init__(self):
         super().__init__(800, 600, "GUI Text Buton Example")
 
@@ -42,7 +42,7 @@ class MyGame(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
         self.pause = False
         self.text = "Graphical User Interface"
         self.text_x = 0
@@ -60,7 +60,7 @@ class MyGame(arcade.Window):
 
     def setup_theme(self):
         self.theme = Theme()
-        self.theme.set_font(24, arcade.color.WHITE)
+        self.theme.set_font(24, arcadeplus.color.WHITE)
         self.set_button_textures()
 
     def set_buttons(self):
@@ -72,9 +72,9 @@ class MyGame(arcade.Window):
         self.set_buttons()
 
     def on_draw(self):
-        arcade.start_render()
+        arcadeplus.start_render()
         super().on_draw()
-        arcade.draw_text(self.text, self.text_x, self.text_y, arcade.color.ALICE_BLUE, self.text_font_size)
+        arcadeplus.draw_text(self.text, self.text_x, self.text_y, arcadeplus.color.ALICE_BLUE, self.text_font_size)
 
     def update(self, delta_time):
         if self.pause:
@@ -88,7 +88,7 @@ class MyGame(arcade.Window):
 def main():
     game = MyGame()
     game.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

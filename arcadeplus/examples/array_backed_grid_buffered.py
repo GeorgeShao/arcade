@@ -4,10 +4,10 @@ Array Backed Grid
 Show how to use a two-dimensional list/array to back the display of a
 grid on-screen.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.array_backed_grid_buffered
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.array_backed_grid_buffered
 """
-import arcade
+import arcadeplus=
 
 # Set how many rows and columns we will have
 ROW_COUNT = 15
@@ -27,7 +27,7 @@ SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 SCREEN_TITLE = "Array Backed Grid Buffered Example"
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -50,22 +50,22 @@ class MyGame(arcade.Window):
             for column in range(COLUMN_COUNT):
                 self.grid[row].append(0)  # Append a cell
 
-        arcade.set_background_color(arcade.color.BLACK)
+        arcadeplus.set_background_color(arcadeplus.color.BLACK)
         self.recreate_grid()
 
     def recreate_grid(self):
-        self.shape_list = arcade.ShapeElementList()
+        self.shape_list = arcadeplus.ShapeElementList()
         for row in range(ROW_COUNT):
             for column in range(COLUMN_COUNT):
                 if self.grid[row][column] == 0:
-                    color = arcade.color.WHITE
+                    color = arcadeplus.color.WHITE
                 else:
-                    color = arcade.color.GREEN
+                    color = arcadeplus.color.GREEN
 
                 x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
                 y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
 
-                current_rect = arcade.create_rectangle_filled(x, y, WIDTH, HEIGHT, color)
+                current_rect = arcadeplus.create_rectangle_filled(x, y, WIDTH, HEIGHT, color)
                 self.shape_list.append(current_rect)
 
     def on_draw(self):
@@ -74,7 +74,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         self.shape_list.draw()
 
@@ -104,7 +104,7 @@ class MyGame(arcade.Window):
 
 def main():
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

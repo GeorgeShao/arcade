@@ -6,14 +6,14 @@ Simple program to show basic sprite usage.
 Artwork from http://kenney.nl
 Explosion graphics from http://www.explosiongenerator.com/
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_explosion
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_explosion
 """
 import random
-import arcade
+import arcadeplus
 import os
 import PIL
-from arcade.draw_commands import Texture
+from arcadeplus.draw_commands import Texture
 
 SPRITE_SCALING_PLAYER = 0.5
 SPRITE_SCALING_COIN = 0.2
@@ -29,7 +29,7 @@ BULLET_SPEED = 5
 EXPLOSION_TEXTURE_COUNT = 60
 
 
-class Explosion(arcade.Sprite):
+class Explosion(arcadeplus.Sprite):
     """ This class creates an explosion animation """
 
     def __init__(self, texture_list):
@@ -50,7 +50,7 @@ class Explosion(arcade.Sprite):
             self.remove_from_sprite_lists()
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self):
@@ -90,29 +90,29 @@ class MyGame(arcade.Window):
         file_name = ":resources:images/spritesheets/explosion.png"
 
         # Load the explosions from a sprite sheet
-        self.explosion_texture_list = arcade.load_spritesheet(file_name, sprite_width, sprite_height, columns, count)
+        self.explosion_texture_list = arcadeplus.load_spritesheet(file_name, sprite_width, sprite_height, columns, count)
 
         # Load sounds. Sounds from kenney.nl
-        self.gun_sound = arcade.sound.load_sound(":resources:sounds/laser2.wav")
-        self.hit_sound = arcade.sound.load_sound(":resources:sounds/explosion2.wav")
+        self.gun_sound = arcadeplus.sound.load_sound(":resources:sounds/laser2.wav")
+        self.hit_sound = arcadeplus.sound.load_sound(":resources:sounds/explosion2.wav")
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
     def setup(self):
 
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
-        self.bullet_list = arcade.SpriteList()
-        self.explosions_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
+        self.coin_list = arcadeplus.SpriteList()
+        self.bullet_list = arcadeplus.SpriteList()
+        self.explosions_list = arcadeplus.SpriteList()
 
         # Set up the player
         self.score = 0
 
         # Image from kenney.nl
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING_PLAYER)
+        self.player_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 70
         self.player_list.append(self.player_sprite)
@@ -122,7 +122,7 @@ class MyGame(arcade.Window):
 
             # Create the coin instance
             # Coin image from kenney.nl
-            coin = arcade.Sprite(":resources:images/items/coinGold.png", SPRITE_SCALING_COIN)
+            coin = arcadeplus.Sprite(":resources:images/items/coinGold.png", SPRITE_SCALING_COIN)
 
             # Position the coin
             coin.center_x = random.randrange(SCREEN_WIDTH)
@@ -132,7 +132,7 @@ class MyGame(arcade.Window):
             self.coin_list.append(coin)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
     def on_draw(self):
         """
@@ -140,7 +140,7 @@ class MyGame(arcade.Window):
         """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw all the sprites.
         self.coin_list.draw()
@@ -149,7 +149,7 @@ class MyGame(arcade.Window):
         self.explosions_list.draw()
 
         # Render the text
-        arcade.draw_text(f"Score: {self.score}", 10, 20, arcade.color.WHITE, 14)
+        arcadeplus.draw_text(f"Score: {self.score}", 10, 20, arcadeplus.color.WHITE, 14)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """
@@ -163,10 +163,10 @@ class MyGame(arcade.Window):
         """
 
         # Gunshot sound
-        arcade.sound.play_sound(self.gun_sound)
+        arcadeplus.sound.play_sound(self.gun_sound)
 
         # Create a bullet
-        bullet = arcade.Sprite(":resources:images/space_shooter/laserBlue01.png", SPRITE_SCALING_LASER)
+        bullet = arcadeplus.Sprite(":resources:images/space_shooter/laserBlue01.png", SPRITE_SCALING_LASER)
 
         # The image points to the right, and we want it to point up. So
         # rotate it.
@@ -193,7 +193,7 @@ class MyGame(arcade.Window):
         for bullet in self.bullet_list:
 
             # Check this bullet to see if it hit a coin
-            hit_list = arcade.check_for_collision_with_list(bullet, self.coin_list)
+            hit_list = arcadeplus.check_for_collision_with_list(bullet, self.coin_list)
 
             # If it did...
             if len(hit_list) > 0:
@@ -220,7 +220,7 @@ class MyGame(arcade.Window):
                 self.score += 1
 
                 # Hit Sound
-                arcade.sound.play_sound(self.hit_sound)
+                arcadeplus.sound.play_sound(self.hit_sound)
 
             # If the bullet flies off-screen, remove it.
             if bullet.bottom > SCREEN_HEIGHT:
@@ -230,7 +230,7 @@ class MyGame(arcade.Window):
 def main():
     window = MyGame()
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":
