@@ -1,7 +1,7 @@
 """
 Platformer Game
 """
-import arcade
+import arcadeplus
 import os
 
 # Constants
@@ -32,7 +32,7 @@ PLAYER_START_X = 64
 PLAYER_START_Y = 256
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """
     Main application class.
     """
@@ -73,9 +73,9 @@ class MyGame(arcade.Window):
         self.score = 0
 
         # Load sounds
-        self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
-        self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
-        self.game_over = arcade.load_sound(":resources:sounds/gameover1.wav")
+        self.collect_coin_sound = arcadeplus.load_sound(":resources:sounds/coin1.wav")
+        self.jump_sound = arcadeplus.load_sound(":resources:sounds/jump1.wav")
+        self.game_over = arcadeplus.load_sound(":resources:sounds/gameover1.wav")
 
     def setup(self):
         """ Set up the game here. Call this function to restart the game. """
@@ -88,14 +88,14 @@ class MyGame(arcade.Window):
         self.score = 0
 
         # Create the Sprite lists
-        self.player_list = arcade.SpriteList()
-        self.background_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList()
-        self.coin_list = arcade.SpriteList()
+        self.player_list = arcadeplus.SpriteList()
+        self.background_list = arcadeplus.SpriteList()
+        self.wall_list = arcadeplus.SpriteList()
+        self.coin_list = arcadeplus.SpriteList()
 
         # Set up the player, specifically placing it at these coordinates.
         image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
-        self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
+        self.player_sprite = arcadeplus.Sprite(image_source, CHARACTER_SCALING)
         self.player_sprite.center_x = PLAYER_START_X
         self.player_sprite.center_y = PLAYER_START_Y
         self.player_list.append(self.player_sprite)
@@ -113,35 +113,35 @@ class MyGame(arcade.Window):
         map_name = f":resources:tmx_maps/map_with_ladders.tmx"
 
         # Read in the tiled map
-        my_map = arcade.tilemap.read_tmx(map_name)
+        my_map = arcadeplus.tilemap.read_tmx(map_name)
 
         # Calculate the right edge of the my_map in pixels
         self.end_of_map = my_map.map_size.width * GRID_PIXEL_SIZE
 
         # -- Platforms
-        self.wall_list = arcade.tilemap.process_layer(my_map, platforms_layer_name, TILE_SCALING)
+        self.wall_list = arcadeplus.tilemap.process_layer(my_map, platforms_layer_name, TILE_SCALING)
 
         # -- Moving Platforms
-        moving_platforms_list = arcade.tilemap.process_layer(my_map, moving_platforms_layer_name, TILE_SCALING)
+        moving_platforms_list = arcadeplus.tilemap.process_layer(my_map, moving_platforms_layer_name, TILE_SCALING)
         for sprite in moving_platforms_list:
             self.wall_list.append(sprite)
 
         # -- Background objects
-        self.background_list = arcade.tilemap.process_layer(my_map, "Background", TILE_SCALING)
+        self.background_list = arcadeplus.tilemap.process_layer(my_map, "Background", TILE_SCALING)
 
         # -- Background objects
-        self.ladder_list = arcade.tilemap.process_layer(my_map, "Ladders", TILE_SCALING)
+        self.ladder_list = arcadeplus.tilemap.process_layer(my_map, "Ladders", TILE_SCALING)
 
         # -- Coins
-        self.coin_list = arcade.tilemap.process_layer(my_map, coins_layer_name, TILE_SCALING)
+        self.coin_list = arcadeplus.tilemap.process_layer(my_map, coins_layer_name, TILE_SCALING)
 
         # --- Other stuff
         # Set the background color
         if my_map.background_color:
-            arcade.set_background_color(my_map.background_color)
+            arcadeplus.set_background_color(my_map.background_color)
 
         # Create the 'physics engine'
-        self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,
+        self.physics_engine = arcadeplus.PhysicsEnginePlatformer(self.player_sprite,
                                                              self.wall_list,
                                                              gravity_constant=GRAVITY,
                                                              ladders=self.ladder_list)
@@ -150,7 +150,7 @@ class MyGame(arcade.Window):
         """ Render the screen. """
 
         # Clear the screen to the background color
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Draw our sprites
         self.wall_list.draw()
@@ -161,38 +161,38 @@ class MyGame(arcade.Window):
 
         # Draw our score on the screen, scrolling it with the viewport
         score_text = f"Score: {self.score}"
-        arcade.draw_text(score_text, 10 + self.view_left, 10 + self.view_bottom,
-                         arcade.csscolor.BLACK, 18)
+        arcadeplus.draw_text(score_text, 10 + self.view_left, 10 + self.view_bottom,
+                         arcadeplus.csscolor.BLACK, 18)
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
 
-        if key == arcade.key.UP or key == arcade.key.W:
+        if key == arcadeplus.key.UP or key == arcadeplus.key.W:
             if self.physics_engine.is_on_ladder():
                 self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
             elif self.physics_engine.can_jump():
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
-                arcade.play_sound(self.jump_sound)
-        elif key == arcade.key.DOWN or key == arcade.key.S:
+                arcadeplus.play_sound(self.jump_sound)
+        elif key == arcadeplus.key.DOWN or key == arcadeplus.key.S:
             if self.physics_engine.is_on_ladder():
                 self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
-        elif key == arcade.key.LEFT or key == arcade.key.A:
+        elif key == arcadeplus.key.LEFT or key == arcadeplus.key.A:
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
+        elif key == arcadeplus.key.RIGHT or key == arcadeplus.key.D:
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
 
-        if key == arcade.key.UP or key == arcade.key.W:
+        if key == arcadeplus.key.UP or key == arcadeplus.key.W:
             if self.physics_engine.is_on_ladder():
                 self.player_sprite.change_y = 0
-        elif key == arcade.key.DOWN or key == arcade.key.S:
+        elif key == arcadeplus.key.DOWN or key == arcadeplus.key.S:
             if self.physics_engine.is_on_ladder():
                 self.player_sprite.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.A:
+        elif key == arcadeplus.key.LEFT or key == arcadeplus.key.A:
             self.player_sprite.change_x = 0
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
+        elif key == arcadeplus.key.RIGHT or key == arcadeplus.key.D:
             self.player_sprite.change_x = 0
 
     def update(self, delta_time):
@@ -221,7 +221,7 @@ class MyGame(arcade.Window):
                 wall.change_y *= -1
 
         # See if we hit any coins
-        coin_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+        coin_hit_list = arcadeplus.check_for_collision_with_list(self.player_sprite,
                                                              self.coin_list)
 
         # Loop through each coin we hit (if any) and remove it
@@ -236,7 +236,7 @@ class MyGame(arcade.Window):
 
             # Remove the coin
             coin.remove_from_sprite_lists()
-            arcade.play_sound(self.collect_coin_sound)
+            arcadeplus.play_sound(self.collect_coin_sound)
 
         # Track if we need to change the viewport
         changed_viewport = False
@@ -274,7 +274,7 @@ class MyGame(arcade.Window):
             self.view_left = int(self.view_left)
 
             # Do the scrolling
-            arcade.set_viewport(self.view_left,
+            arcadeplus.set_viewport(self.view_left,
                                 SCREEN_WIDTH + self.view_left,
                                 self.view_bottom,
                                 SCREEN_HEIGHT + self.view_bottom)
@@ -284,7 +284,7 @@ def main():
     """ Main method """
     window = MyGame()
     window.setup()
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

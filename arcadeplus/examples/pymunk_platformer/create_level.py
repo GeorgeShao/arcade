@@ -3,10 +3,10 @@ This code creates the layout of level one.
 """
 import pymunk
 
-from arcade.examples.pymunk_platformer.physics_utility import (
+from arcadeplus.examples.pymunk_platformer.physics_utility import (
     PymunkSprite,
 )
-from arcade.examples.pymunk_platformer.constants import *
+from arcadeplus.examples.pymunk_platformer.constants import *
 
 
 def create_floor(space, sprite_list):

@@ -1,5 +1,5 @@
-import arcade
-from arcade.examples.pymunk_platformer.constants import (
+import arcadeplus
+from arcadeplus.examples.pymunk_platformer.constants import (
     DEFAULT_FRICTION,
     DEFAULT_MASS,
 )
@@ -8,7 +8,7 @@ import pymunk
 import math
 
 
-class PymunkSprite(arcade.Sprite):
+class PymunkSprite(arcadeplus.Sprite):
     """
     We need a Sprite and a Pymunk physics object. This class blends them
     together.

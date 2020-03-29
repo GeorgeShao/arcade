@@ -9,28 +9,28 @@ pip install pymunk
 
 Artwork from http://kenney.nl
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.pymunk_platformer.main_window
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.pymunk_platformer.main_window
 
 Click and drag with the mouse to move the boxes.
 """
 
 import timeit
 import os
-import arcade
+import arcadeplus
 import pymunk
 
-from arcade.examples.pymunk_platformer.create_level import create_level_1
-from arcade.examples.pymunk_platformer.physics_utility import (
+from arcadeplus.examples.pymunk_platformer.create_level import create_level_1
+from arcadeplus.examples.pymunk_platformer.physics_utility import (
     PymunkSprite,
     check_grounding,
     resync_physics_sprites,
 )
 
-from arcade.examples.pymunk_platformer.constants import *
+from arcadeplus.examples.pymunk_platformer.constants import *
 
 
-class MyGame(arcade.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -43,7 +43,7 @@ class MyGame(arcade.Window):
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
-        arcade.set_background_color(arcade.color.DARK_SLATE_GRAY)
+        arcadeplus.set_background_color(arcadeplus.color.DARK_SLATE_GRAY)
 
         # -- Pymunk
         self.space = pymunk.Space()
@@ -53,8 +53,8 @@ class MyGame(arcade.Window):
         self.grab_joint = None
 
         # Lists of sprites
-        self.dynamic_sprite_list = arcade.SpriteList[PymunkSprite]()
-        self.static_sprite_list = arcade.SpriteList()
+        self.dynamic_sprite_list = arcadeplus.SpriteList[PymunkSprite]()
+        self.static_sprite_list = arcadeplus.SpriteList()
 
         # Used for dragging shapes around with the mouse
         self.shape_being_dragged = None
@@ -85,7 +85,7 @@ class MyGame(arcade.Window):
         """ Render the screen. """
 
         # This command has to happen before we start drawing
-        arcade.start_render()
+        arcadeplus.start_render()
 
         # Start timing how long this takes
         draw_start_time = timeit.default_timer()
@@ -96,21 +96,21 @@ class MyGame(arcade.Window):
 
         # Display timings
         output = f"Processing time: {self.processing_time:.3f}"
-        arcade.draw_text(output, 20 + self.view_left, SCREEN_HEIGHT - 20 + self.view_bottom, arcade.color.WHITE, 12)
+        arcadeplus.draw_text(output, 20 + self.view_left, SCREEN_HEIGHT - 20 + self.view_bottom, arcadeplus.color.WHITE, 12)
 
         output = f"Drawing time: {self.draw_time:.3f}"
-        arcade.draw_text(output, 20 + self.view_left, SCREEN_HEIGHT - 40 + self.view_bottom, arcade.color.WHITE, 12)
+        arcadeplus.draw_text(output, 20 + self.view_left, SCREEN_HEIGHT - 40 + self.view_bottom, arcadeplus.color.WHITE, 12)
 
         # Display instructions
         output = "Use the mouse to move boxes, space to punch, hold G to grab an item to the right."
-        arcade.draw_text(output, 20 + self.view_left, SCREEN_HEIGHT - 60 + self.view_bottom, arcade.color.WHITE, 12)
+        arcadeplus.draw_text(output, 20 + self.view_left, SCREEN_HEIGHT - 60 + self.view_bottom, arcadeplus.color.WHITE, 12)
 
         self.draw_time = timeit.default_timer() - draw_start_time
 
     def on_mouse_press(self, x, y, button, modifiers):
         """ Handle mouse down events """
 
-        if button == arcade.MOUSE_BUTTON_LEFT:
+        if button == arcadeplus.MOUSE_BUTTON_LEFT:
 
             # Store where the mouse is clicked. Adjust accordingly if we've
             # scrolled the viewport.
@@ -126,7 +126,7 @@ class MyGame(arcade.Window):
     def on_mouse_release(self, x, y, button, modifiers):
         """ Handle mouse up events """
 
-        if button == arcade.MOUSE_BUTTON_LEFT:
+        if button == arcadeplus.MOUSE_BUTTON_LEFT:
             # Release the item we are holding (if any)
             self.shape_being_dragged = None
 
@@ -170,7 +170,7 @@ class MyGame(arcade.Window):
             changed = True
 
         if changed:
-            arcade.set_viewport(self.view_left,
+            arcadeplus.set_viewport(self.view_left,
                                 SCREEN_WIDTH + self.view_left,
                                 self.view_bottom,
                                 SCREEN_HEIGHT + self.view_bottom)
@@ -265,44 +265,44 @@ class MyGame(arcade.Window):
 
     def on_key_press(self, symbol: int, modifiers: int):
         """ Handle keyboard presses. """
-        if symbol == arcade.key.RIGHT:
+        if symbol == arcadeplus.key.RIGHT:
             # Add force to the player, and set the player friction to zero
             self.force = (PLAYER_MOVE_FORCE, 0)
             self.player.shape.friction = 0
-        elif symbol == arcade.key.LEFT:
+        elif symbol == arcadeplus.key.LEFT:
             # Add force to the player, and set the player friction to zero
             self.force = (-PLAYER_MOVE_FORCE, 0)
             self.player.shape.friction = 0
-        elif symbol == arcade.key.UP:
+        elif symbol == arcadeplus.key.UP:
             # find out if player is standing on ground
             grounding = check_grounding(self.player)
             if grounding['body'] is not None and abs(
                     grounding['normal'].x / grounding['normal'].y) < self.player.shape.friction:
                 # She is! Go ahead and jump
                 self.player.body.apply_impulse_at_local_point((0, PLAYER_JUMP_IMPULSE))
-        elif symbol == arcade.key.SPACE:
+        elif symbol == arcadeplus.key.SPACE:
             self.punch()
-        elif symbol == arcade.key.G:
+        elif symbol == arcadeplus.key.G:
             self.grab()
 
     def on_key_release(self, symbol: int, modifiers: int):
         """ Handle keyboard releases. """
-        if symbol == arcade.key.RIGHT:
+        if symbol == arcadeplus.key.RIGHT:
             # Remove force from the player, and set the player friction to a high number so she stops
             self.force = (0, 0)
             self.player.shape.friction = 15
-        elif symbol == arcade.key.LEFT:
+        elif symbol == arcadeplus.key.LEFT:
             # Remove force from the player, and set the player friction to a high number so she stops
             self.force = (0, 0)
             self.player.shape.friction = 15
-        elif symbol == arcade.key.G:
+        elif symbol == arcadeplus.key.G:
             self.let_go()
 
 
 def main():
     MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 
-    arcade.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

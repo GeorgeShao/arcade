@@ -1,10 +1,10 @@
-import arcade
+import arcadeplus
 import sys
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 500
-TITLE = 'Arcade cx_Freeze Sample'
-BACKGROUND_COLOR = arcade.color.WHITE
+TITLE = 'arcadeplus cx_Freeze Sample'
+BACKGROUND_COLOR = arcadeplus.color.WHITE
 
 
 def resource_path(file):
@@ -17,18 +17,18 @@ def resource_path(file):
 
 
 def main():
-    arcade.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)
-    arcade.set_background_color(BACKGROUND_COLOR)
-    arcade.start_render()
-    arcade.draw_circle_filled(400, 250, 100, arcade.color.BLACK)
+    arcadeplus.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)
+    arcadeplus.set_background_color(BACKGROUND_COLOR)
+    arcadeplus.start_render()
+    arcadeplus.draw_circle_filled(400, 250, 100, arcadeplus.color.BLACK)
     # load image
-    image = arcade.load_texture(resource_path('character.png'))
-    arcade.draw_texture_rectangle(200, 250, image.width, image.height, image)
+    image = arcadeplus.load_texture(resource_path('character.png'))
+    arcadeplus.draw_texture_rectangle(200, 250, image.width, image.height, image)
     # load sound
-    sound = arcade.sound.load_sound(resource_path('cat-meow.wav'))
-    arcade.sound.play_sound(sound)
-    arcade.finish_render()
-    arcade.run()
+    sound = arcadeplus.sound.load_sound(resource_path('cat-meow.wav'))
+    arcadeplus.sound.play_sound(sound)
+    arcadeplus.finish_render()
+    arcadeplus.run()
     return
 
 
