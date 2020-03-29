@@ -17,7 +17,7 @@ def execfile(filepath, globals=None, locals=None):
 
 
 # execute the file
-execfile("arcade/version.py", locals=locals())
+execfile("arcadeplus/version.py", locals=locals())
 
 RELEASE = VERSION
 
@@ -48,8 +48,8 @@ if __name__ == "__main__":
           version=RELEASE,
           description="Arcade Game Development Library",
           long_description=long_desc,
-          author="Paul Vincent Craven",
-          author_email="paul.craven@simpson.edu",
+          author="George Shao",
+          author_email="georgeshao123@gmail.com",
           license="MIT",
           url="http://arcade.academy",
           download_url="http://arcade.academy",
