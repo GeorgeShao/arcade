@@ -1,8 +1,0 @@
-[run]
-source = arcade
-omit =
-    ./arcade/examples/*
-    ./env/*
-    ./tests/*
-    ./doc/*
-    ./Win*/*
