@@ -231,7 +231,7 @@ def draw_text(text: str,
         text_sprite.width = image.width
         text_sprite.height = image.height
 
-        from arcade.sprite_list import SpriteList
+        from arcadeplus.sprite_list import SpriteList
         label.text_sprite_list = SpriteList()
         label.text_sprite_list.append(text_sprite)
 

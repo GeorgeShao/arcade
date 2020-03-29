@@ -5,12 +5,12 @@ Simple program to show basic sprite usage.
 
 Artwork from http://kenney.nl
 
-If Python and arcadeplusplus are installed, this example can be run from the command line with:
-python -m arcadeplusplus.examples.sprite_collect_coins_move_circle
+If Python and arcadeplus are installed, this example can be run from the command line with:
+python -m arcadeplus.examples.sprite_collect_coins_move_circle
 """
 
 import random
-import arcadeplusplus
+import arcadeplus
 import math
 import os
 
@@ -21,7 +21,7 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprite Collect Coins Moving in Circles Example"
 
 
-class Coin(arcadeplusplus.Sprite):
+class Coin(arcadeplus.Sprite):
 
     def __init__(self, filename, sprite_scaling):
         """ Constructor. """
@@ -54,7 +54,7 @@ class Coin(arcadeplusplus.Sprite):
         self.circle_angle += self.circle_speed
 
 
-class MyGame(arcadeplusplus.Window):
+class MyGame(arcadeplus.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
@@ -80,13 +80,13 @@ class MyGame(arcadeplusplus.Window):
         """ Set up the game and initialize the variables. """
 
         # Sprite lists
-        self.all_sprites_list = arcadeplusplus.SpriteList()
-        self.coin_list = arcadeplusplus.SpriteList()
+        self.all_sprites_list = arcadeplus.SpriteList()
+        self.coin_list = arcadeplus.SpriteList()
 
         # Set up the player
         self.score = 0
         # Character image from kenney.nl
-        self.player_sprite = arcadeplusplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING)
+        self.player_sprite = arcadeplus.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 70
         self.all_sprites_list.append(self.player_sprite)
@@ -115,19 +115,19 @@ class MyGame(arcadeplusplus.Window):
         self.set_mouse_visible(False)
 
         # Set the background color
-        arcadeplusplus.set_background_color(arcadeplusplus.color.AMAZON)
+        arcadeplus.set_background_color(arcadeplus.color.AMAZON)
 
     def on_draw(self):
 
         # This command has to happen before we start drawing
-        arcadeplusplus.start_render()
+        arcadeplus.start_render()
 
         # Draw all the sprites.
         self.all_sprites_list.draw()
 
         # Put the text on the screen.
         output = "Score: " + str(self.score)
-        arcadeplusplus.draw_text(output, 10, 20, arcadeplusplus.color.WHITE, 14)
+        arcadeplus.draw_text(output, 10, 20, arcadeplus.color.WHITE, 14)
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.player_sprite.center_x = x
@@ -141,7 +141,7 @@ class MyGame(arcadeplusplus.Window):
         self.all_sprites_list.update()
 
         # Generate a list of all sprites that collided with the player.
-        hit_list = arcadeplusplus.check_for_collision_with_list(self.player_sprite,
+        hit_list = arcadeplus.check_for_collision_with_list(self.player_sprite,
                                                         self.coin_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
@@ -153,7 +153,7 @@ class MyGame(arcadeplusplus.Window):
 def main():
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.start_new_game()
-    arcadeplusplus.run()
+    arcadeplus.run()
 
 
 if __name__ == "__main__":

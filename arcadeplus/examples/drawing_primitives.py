@@ -5,8 +5,6 @@ This example shows the drawing primitives and how they are used.
 It does not assume the programmer knows how to define functions or classes
 yet.
 
-API documentation for the draw commands can be found here:
-http://arcadeplus.academy/quick_index.html#id1
 
 A video explaining this example can be found here:
 https://vimeo.com/167158158

@@ -7,7 +7,7 @@ grid on-screen.
 If Python and arcadeplus are installed, this example can be run from the command line with:
 python -m arcadeplus.examples.array_backed_grid_buffered
 """
-import arcadeplus=
+import arcadeplus
 
 # Set how many rows and columns we will have
 ROW_COUNT = 15
