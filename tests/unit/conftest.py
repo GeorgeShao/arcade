@@ -21,7 +21,7 @@ class MockWindow:
 def mock_window(monkeypatch):
     sys.is_pyglet_docgen = True
     monkeypatch.setattr('pyglet.window.Window', MockWindow)
-    from arcade import Window
+    from arcadeplus import Window
     return Window
 
 

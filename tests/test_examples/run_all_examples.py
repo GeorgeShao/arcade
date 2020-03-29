@@ -8,7 +8,7 @@ import subprocess
 import os
 import glob
 
-EXAMPLE_SUBDIR = "../../arcade/examples"
+EXAMPLE_SUBDIR = "../../arcadeplus/examples"
 
 
 def _get_short_name(fullpath):
@@ -21,12 +21,12 @@ def _get_examples(start_path):
     examples = [_get_short_name(e) for e in examples]
     examples = [e for e in examples if e != "run_all_examples"]
     examples = [e for e in examples if not e.startswith('_')]
-    examples = ["arcade.examples." + e for e in examples if not e.startswith('_')]
+    examples = ["arcadeplus.examples." + e for e in examples if not e.startswith('_')]
     return examples
 
 
 def run_examples(indices_in_range, index_skip_list):
-    """Run all examples in the arcade/examples directory"""
+    """Run all examples in the arcadeplus/examples directory"""
     examples = _get_examples(EXAMPLE_SUBDIR)
     print("Found {} examples in {}".format(len(examples), EXAMPLE_SUBDIR))
 
