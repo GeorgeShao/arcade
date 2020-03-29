@@ -18,13 +18,13 @@ import pytiled_parser
 import os
 from pathlib import Path
 
-from arcade import Sprite
-from arcade import AnimatedTimeBasedSprite
-from arcade import AnimationKeyframe
-from arcade import SpriteList
-from arcade import load_texture
-from arcade import Texture
-from arcade.arcade_types import Point
+from arcadeplus import Sprite
+from arcadeplus import AnimatedTimeBasedSprite
+from arcadeplus import AnimationKeyframe
+from arcadeplus import SpriteList
+from arcadeplus import load_texture
+from arcadeplus import Texture
+from arcadeplus.arcade_types import Point
 
 _FLIPPED_HORIZONTALLY_FLAG = 0x80000000
 _FLIPPED_VERTICALLY_FLAG = 0x40000000

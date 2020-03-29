@@ -17,13 +17,13 @@ from typing import TypeVar
 from typing import Generic
 from typing import cast
 
-from arcade import Color
-from arcade import rotate_point
-from arcade import Point, PointList
-from arcade import get_four_byte_color
-from arcade import get_projection
-from arcade import get_points_for_thick_line
-from arcade import shader
+from arcadeplus import Color
+from arcadeplus import rotate_point
+from arcadeplus import Point, PointList
+from arcadeplus import get_four_byte_color
+from arcadeplus import get_projection
+from arcadeplus import get_points_for_thick_line
+from arcadeplus import shader
 
 
 class VertexBuffer:

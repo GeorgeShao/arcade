@@ -6,8 +6,8 @@ import math
 
 from typing import List, Tuple, cast
 
-from arcade import Color
-from arcade import RGBA
+from arcadeplus import Color
+from arcadeplus import RGBA
 
 
 def get_points_for_thick_line(start_x: float, start_y: float,

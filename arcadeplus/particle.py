@@ -2,10 +2,10 @@
 Particle - Object produced by an Emitter.  Often used in large quantity to produce visual effects effects
 """
 
-from arcade.sprite import Sprite
-from arcade.draw_commands import Texture
-import arcade.utils
-from arcade.arcade_types import Point, Vector
+from arcadeplus.sprite import Sprite
+from arcadeplus.draw_commands import Texture
+import arcadeplus.utils
+from arcadeplus.arcade_types import Point, Vector
 from typing import Union
 
 FilenameOrTexture = Union[str, Texture]
@@ -138,7 +138,7 @@ class FadeParticle(LifetimeParticle):
     def update(self):
         """Advance the Particle's simulation"""
         super().update()
-        a = arcade.utils.lerp(self.start_alpha,
+        a = arcadeplus.utils.lerp(self.start_alpha,
                               self.end_alpha,
                               self.lifetime_elapsed / self.lifetime_original)
         self.alpha = clamp(a, 0, 255)

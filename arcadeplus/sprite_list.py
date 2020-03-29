@@ -18,16 +18,16 @@ import array
 
 from PIL import Image
 
-from arcade import Matrix3x3
-from arcade import Sprite
-from arcade import get_distance_between_sprites
-from arcade import are_polygons_intersecting
-from arcade import is_point_in_polygon
+from arcadeplus import Matrix3x3
+from arcadeplus import Sprite
+from arcadeplus import get_distance_between_sprites
+from arcadeplus import are_polygons_intersecting
+from arcadeplus import is_point_in_polygon
 
-from arcade import rotate_point
-from arcade import get_projection
-from arcade import shader
-from arcade import Point
+from arcadeplus import rotate_point
+from arcadeplus import get_projection
+from arcadeplus import shader
+from arcadeplus import Point
 
 _VERTEX_SHADER = """
 #version 330

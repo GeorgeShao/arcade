@@ -3,11 +3,11 @@ Emitter - Invisible object that determines when Particles are emitted, actually 
 over their lifetime
 """
 
-import arcade
-from arcade.particle import Particle
+import arcadeplus
+from arcadeplus.particle import Particle
 from typing import Callable, cast
-from arcade.utils import _Vec2
-from arcade.arcade_types import Point, Vector
+from arcadeplus.utils import _Vec2
+from arcadeplus.arcade_types import Point, Vector
 
 
 ##########
@@ -125,7 +125,7 @@ class Emitter:
         self.particle_factory = particle_factory
         self._emit_done_cb = emit_done_cb
         self._reap_cb = reap_cb
-        self._particles: arcade.SpriteList = arcade.SpriteList(use_spatial_hash=False)
+        self._particles: arcadeplus.SpriteList = arcadeplus.SpriteList(use_spatial_hash=False)
 
     def _emit(self):
         """Emit one particle, its initial position and velocity are relative to the position and angle of the emitter"""

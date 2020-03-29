@@ -12,10 +12,10 @@ import PIL.ImageDraw
 from typing import Optional
 from typing import List
 
-from arcade import lerp
-from arcade import RectList
-from arcade import Color
-from arcade import calculate_points
+from arcadeplus import lerp
+from arcadeplus import RectList
+from arcadeplus import Color
+from arcadeplus import calculate_points
 
 def _lerp_color(start_color: Color, end_color: Color, u: float) -> Color:
     return (
@@ -75,8 +75,8 @@ class Texture:
     """
 
     def __init__(self, name: str, image: PIL.Image.Image = None):
-        from arcade.sprite import Sprite
-        from arcade.sprite_list import SpriteList
+        from arcadeplus.sprite import Sprite
+        from arcadeplus.sprite_list import SpriteList
 
         if image:
             assert isinstance(image, PIL.Image.Image)
@@ -107,8 +107,8 @@ class Texture:
             return 0
 
     def _create_cached_sprite(self):
-        from arcade.sprite import Sprite
-        from arcade.sprite_list import SpriteList
+        from arcadeplus.sprite import Sprite
+        from arcadeplus.sprite_list import SpriteList
 
         if self._sprite is None:
             self._sprite = Sprite()

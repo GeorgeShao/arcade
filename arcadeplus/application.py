@@ -10,15 +10,15 @@ from typing import Tuple, List, Optional, TYPE_CHECKING
 import pyglet.gl as gl
 import pyglet
 
-from arcade import get_viewport
-from arcade import set_viewport
-from arcade import set_window
+from arcadeplus import get_viewport
+from arcadeplus import set_viewport
+from arcadeplus import set_window
 
 if TYPE_CHECKING:
-    from arcade import TextBox
-    from arcade import TextButton
-    from arcade import DialogueBox
-    from arcade import TextLabel
+    from arcadeplus import TextBox
+    from arcadeplus import TextButton
+    from arcadeplus import DialogueBox
+    from arcadeplus import TextLabel
 
 MOUSE_BUTTON_LEFT = 1
 MOUSE_BUTTON_MIDDLE = 2

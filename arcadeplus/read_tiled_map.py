@@ -11,9 +11,9 @@ import typing
 
 from pathlib import Path
 
-from arcade.isometric import isometric_grid_to_screen
-from arcade import Sprite
-from arcade import SpriteList
+from arcadeplus.isometric import isometric_grid_to_screen
+from arcadeplus import Sprite
+from arcadeplus import SpriteList
 
 
 class TiledMap:

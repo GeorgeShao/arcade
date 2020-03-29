@@ -17,7 +17,7 @@ from typing import Tuple
 from typing import Callable
 from typing import Union
 from typing import cast
-from arcade.arcade_types import Color
+from arcadeplus.arcade_types import Color
 
 _left = -1.0
 _right = 1.0

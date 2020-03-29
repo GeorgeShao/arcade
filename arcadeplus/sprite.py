@@ -22,17 +22,17 @@ from typing import cast
 
 import PIL.Image
 
-from arcade import load_texture
-from arcade import Texture
-from arcade import Matrix3x3
-from arcade import rotate_point
-from arcade import draw_polygon_outline
-from arcade import Color
-from arcade.color import BLACK
+from arcadeplus import load_texture
+from arcadeplus import Texture
+from arcadeplus import Matrix3x3
+from arcadeplus import rotate_point
+from arcadeplus import draw_polygon_outline
+from arcadeplus import Color
+from arcadeplus.color import BLACK
 
-from arcade.arcade_types import RGB, Point
+from arcadeplus.arcade_types import RGB, Point
 if TYPE_CHECKING:  # handle import cycle caused by type hinting
-    from arcade.sprite_list import SpriteList
+    from arcadeplus.sprite_list import SpriteList
 
 FACE_RIGHT = 1
 FACE_LEFT = 2
@@ -773,7 +773,7 @@ Points will be scaled with get_adjusted_hit_box.
         """ Draw the sprite. """
 
         if self._sprite_list is None:
-            from arcade import SpriteList
+            from arcadeplus import SpriteList
             self._sprite_list = SpriteList()
             self._sprite_list.append(self)
 
@@ -835,7 +835,7 @@ Points will be scaled with get_adjusted_hit_box.
         Returns:
             True if the point is contained within the sprite's boundary.
         """
-        from arcade.geometry import is_point_in_polygon
+        from arcadeplus.geometry import is_point_in_polygon
 
         x, y = point
         return is_point_in_polygon(x, y, self.get_adjusted_hit_box())
@@ -850,7 +850,7 @@ Points will be scaled with get_adjusted_hit_box.
         Returns:
             True or False, whether or not they are overlapping.
         """
-        from arcade import check_for_collision
+        from arcadeplus import check_for_collision
         return check_for_collision(self, other)
 
     def collides_with_list(self, sprite_list: 'SpriteList') -> list:
@@ -863,7 +863,7 @@ Points will be scaled with get_adjusted_hit_box.
         Returns:
             SpriteList of all overlapping Sprites from the original SpriteList
         """
-        from arcade import check_for_collision_with_list
+        from arcadeplus import check_for_collision_with_list
         # noinspection PyTypeChecker
         return check_for_collision_with_list(self, sprite_list)
 

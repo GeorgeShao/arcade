@@ -3,10 +3,10 @@ Physics engines for top-down or platformers.
 """
 # pylint: disable=too-many-arguments, too-many-locals, too-few-public-methods
 
-from arcade import check_for_collision_with_list
-from arcade import check_for_collision
-from arcade import Sprite
-from arcade import SpriteList
+from arcadeplus import check_for_collision_with_list
+from arcadeplus import check_for_collision
+from arcadeplus import Sprite
+from arcadeplus import SpriteList
 
 
 def _circular_check(player, walls):

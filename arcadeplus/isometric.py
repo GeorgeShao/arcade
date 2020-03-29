@@ -1,6 +1,6 @@
 
-from arcade import ShapeElementList
-from arcade.buffered_draw_commands import create_line
+from arcadeplus import ShapeElementList
+from arcadeplus.buffered_draw_commands import create_line
 
 
 def isometric_grid_to_screen(tile_x, tile_y, width, height, tile_width, tile_height):

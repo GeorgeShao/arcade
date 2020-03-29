@@ -1,6 +1,6 @@
 import math
 import random
-from arcade.arcade_types import Point, Vector
+from arcadeplus.arcade_types import Point, Vector
 
 
 def lerp(v1: float, v2: float, u: float) -> float:

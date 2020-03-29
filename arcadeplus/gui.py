@@ -1,5 +1,5 @@
 from typing import Tuple, Dict, Optional, Union
-import arcade
+import arcadeplus
 # from abc import ABC, abstractmethod
 
 
@@ -10,9 +10,9 @@ class TextButton:
                  width, height,
                  text,
                  font_size=18, font_face: Union[str, Tuple[str, ...]] = "Arial", font_color=None,
-                 face_color=arcade.color.LIGHT_GRAY,
-                 highlight_color=arcade.color.WHITE,
-                 shadow_color=arcade.color.GRAY,
+                 face_color=arcadeplus.color.LIGHT_GRAY,
+                 highlight_color=arcadeplus.color.WHITE,
+                 shadow_color=arcadeplus.color.GRAY,
                  button_height=2,
                  theme=None):
         self.center_x = center_x

@@ -8,9 +8,9 @@ import PIL.ImageDraw
 import PIL.ImageFont
 import pyglet
 
-from arcade.arcade_types import RGBA, Color
-from arcade.draw_commands import Texture, get_four_byte_color
-from arcade.sprite import Sprite
+from arcadeplus.arcade_types import RGBA, Color
+from arcadeplus.draw_commands import Texture, get_four_byte_color
+from arcadeplus.sprite import Sprite
 
 DEFAULT_FONT_NAMES = (
     "arial.ttf",
