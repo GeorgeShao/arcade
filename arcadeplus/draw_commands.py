@@ -280,7 +280,7 @@ def draw_line_loop(point_list: PointList,
         end_y = point_list[i][1]
         color1 = color
         color2 = color
-        id = f"linestrip-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        id = f"lineloop-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
         if id not in buffered_shapes.keys():
             points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
             new_color_list += color1, color2, color1, color2
@@ -315,11 +315,10 @@ def draw_lines(point_list: PointList,
             triangle_point_list = points[1], points[0], points[2], points[3]
             shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
             buffered_shapes[id] = shape
-            print("CREATED" + id)
         buffered_shapes[id].draw()
 
 
-def create_polygon(point_list: PointList,
+def draw_polygon(point_list: PointList,
                    color: Color):
     """
     Draw a convex polygon. This will NOT draw a concave polygon.
@@ -341,7 +340,11 @@ def create_polygon(point_list: PointList,
         itertools.zip_longest(point_list[:half], reversed(point_list[half:]))
     )
     point_list = [p for p in interleaved if p is not None]
-    return _create_line_generic(point_list, color, gl.GL_TRIANGLE_STRIP, 1)
+    id = f"polygon-{point_list}-{color}"
+    if id not in buffered_shapes.keys():
+        shape = _create_line_generic(point_list, color, gl.GL_TRIANGLE_STRIP, 1)
+        buffered_shapes[id] = shape
+    buffered_shapes[id].draw()
 
 
 def create_rectangle_filled(center_x: float, center_y: float, width: float,
@@ -1272,21 +1275,6 @@ def draw_points(point_list: PointList,
 # --- END POINT FUNCTIONS # # #
 
 # --- BEGIN POLYGON FUNCTIONS # # #
-
-
-def draw_polygon_filled(point_list: PointList,
-                        color: Color):
-    """
-    Draw a polygon that is filled in.
-
-    :param PointList point_list: List of points making up the lines. Each point is
-         in a list. So it is a list of lists.
-    :param Color color: The color, specified in RGB or RGBA format.
-    """
-
-    triangle_points = earclip(point_list)
-    flattened_list = [i for g in triangle_points for i in g]
-    _generic_draw_line_strip(flattened_list, color, gl.GL_TRIANGLES)
 
 
 def draw_polygon_outline(point_list: PointList,

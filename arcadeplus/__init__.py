@@ -130,7 +130,6 @@ from .draw_commands import create_ellipse
 from .draw_commands import create_ellipse_filled
 from .draw_commands import create_ellipse_filled_with_colors
 from .draw_commands import create_ellipse_outline
-from .draw_commands import create_polygon
 from .draw_commands import create_rectangle
 from .draw_commands import create_rectangle_filled
 from .draw_commands import create_rectangle_filled_with_colors
@@ -154,7 +153,7 @@ from .draw_commands import draw_parabola_filled
 from .draw_commands import draw_parabola_outline
 from .draw_commands import draw_point
 from .draw_commands import draw_points
-from .draw_commands import draw_polygon_filled
+from .draw_commands import draw_polygon
 from .draw_commands import draw_polygon_outline
 from .draw_commands import draw_rectangle_filled
 from .draw_commands import draw_rectangle_outline
@@ -358,7 +357,6 @@ __all__ = ['AnimatedTimeBasedSprite',
            'create_lines_with_colors',
            'create_orthogonal_projection',
            'create_polygon',
-           'create_polygon',
            'create_rectangle',
            'create_rectangle',
            'create_rectangle_filled',
@@ -389,7 +387,7 @@ __all__ = ['AnimatedTimeBasedSprite',
            'draw_parabola_outline',
            'draw_point',
            'draw_points',
-           'draw_polygon_filled',
+           'draw_polygon',
            'draw_polygon_outline',
            'draw_rectangle_filled',
            'draw_rectangle_outline',
