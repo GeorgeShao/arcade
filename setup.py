@@ -33,12 +33,6 @@ if __name__ == "__main__":
     if sys.version_info[0] == 3 and sys.version_info[1] == 6:
         install_requires.append('dataclasses')
 
-    if "--format=msi" in sys.argv or "bdist_msi" in sys.argv:
-        # hack the version name to a format msi doesn't have trouble with
-        VERSION = VERSION.replace("-alpha", "a")
-        VERSION = VERSION.replace("-beta", "b")
-        VERSION = VERSION.replace("-rc", "r")
-
     fname = path.join(path.dirname(path.abspath(__file__)), "README.rst")
     with open(fname, "r") as f:
         long_desc = f.read()
@@ -51,7 +45,7 @@ if __name__ == "__main__":
           author="George Shao",
           author_email="georgeshao123@gmail.com",
           license="MIT",
-          url="http://arcade.academy",
+          url="https://github.com/GeorgeShao/arcadeplus",
           download_url="http://arcade.academy",
           install_requires=install_requires,
           packages=["arcade",
