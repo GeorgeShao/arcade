@@ -130,6 +130,7 @@ from .draw_commands import draw_ellipse_filled
 from .draw_commands import draw_ellipse_outline
 from .draw_commands import draw_line
 from .draw_commands import draw_line_strip
+from .draw_commands import draw_line_loop
 from .draw_commands import draw_lines
 from .draw_commands import draw_lrtb_rectangle_filled
 from .draw_commands import draw_lrtb_rectangle_outline

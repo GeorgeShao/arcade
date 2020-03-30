@@ -239,30 +239,26 @@ def draw_line_strip(point_list: PointList,
     :Returns Shape:
 
     """
-    if line_width == 1:
-        return create_line_generic(point_list, color, gl.GL_LINE_STRIP, line_width)
-    else:
-        triangle_point_list: List[Point] = []
-        new_color_list: List[Color] = []
-        for i in range(1, len(point_list)):
-            start_x = point_list[i - 1][0]
-            start_y = point_list[i - 1][1]
-            end_x = point_list[i][0]
-            end_y = point_list[i][1]
-            color1 = color
-            color2 = color
-            id = f"linestrip-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
-            if id not in buffered_shapes.keys():
-                points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
-                new_color_list += color1, color2, color1, color2
-                triangle_point_list += points[1], points[0], points[2], points[3]
-                shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
-                buffered_shapes[id] = shape
-                print("CREATED" + id)
-            buffered_shapes[id].draw()
+    triangle_point_list: List[Point] = []
+    new_color_list: List[Color] = []
+    for i in range(1, len(point_list)):
+        start_x = point_list[i - 1][0]
+        start_y = point_list[i - 1][1]
+        end_x = point_list[i][0]
+        end_y = point_list[i][1]
+        color1 = color
+        color2 = color
+        id = f"linestrip-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        if id not in buffered_shapes.keys():
+            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
+            new_color_list += color1, color2, color1, color2
+            triangle_point_list += points[1], points[0], points[2], points[3]
+            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
+            buffered_shapes[id] = shape
+        buffered_shapes[id].draw()
 
 
-def create_line_loop(point_list: PointList,
+def draw_line_loop(point_list: PointList,
                      color: Color, line_width: float = 1):
     """
     Create a multi-point line loop to be rendered later. This works faster than draw_line because
@@ -276,7 +272,23 @@ def create_line_loop(point_list: PointList,
 
     """
     point_list = list(point_list) + [point_list[0]]
-    return create_line_generic(point_list, color, gl.GL_LINE_STRIP, line_width)
+    triangle_point_list: List[Point] = []
+    new_color_list: List[Color] = []
+    for i in range(1, len(point_list)):
+        start_x = point_list[i - 1][0]
+        start_y = point_list[i - 1][1]
+        end_x = point_list[i][0]
+        end_y = point_list[i][1]
+        color1 = color
+        color2 = color
+        id = f"linestrip-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        if id not in buffered_shapes.keys():
+            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
+            new_color_list += color1, color2, color1, color2
+            triangle_point_list += points[1], points[0], points[2], points[3]
+            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
+            buffered_shapes[id] = shape
+        buffered_shapes[id].draw()
 
 
 def create_lines(point_list: PointList,
