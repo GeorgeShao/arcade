@@ -7,7 +7,7 @@ A simple, easy to use Python module for creating 2D games.
 # Note: DO NOT EDIT arcadeplus/__init__.py
 # Instead look at util/init_template.py and update_init.py
 
-# Error out if we import ArcadePlus with an incompatible version of Python.
+# Error out if we import arcadeplus with an incompatible version of Python.
 import sys
 
 if sys.version_info[0] < 3 or (sys.version_info[0] == 3 and sys.version_info[1] < 6):
@@ -31,7 +31,6 @@ from arcadeplus import csscolor
 from arcadeplus import key
 # noinspection PyPep8
 from arcadeplus import resources
-
 from .window_commands import close_window
 from .window_commands import create_orthogonal_projection
 from .window_commands import finish_render
@@ -122,6 +121,26 @@ from .buffered_draw_commands import create_rectangles_filled_with_colors
 from .buffered_draw_commands import create_triangles_filled_with_colors
 from .buffered_draw_commands import get_rectangle_points
 
+from .draw_commands import TShape
+from .draw_commands import buffered_shapes
+from .draw_commands import Shape
+from .draw_commands import ShapeElementList
+from .draw_commands import VertexBuffer
+from .draw_commands import create_ellipse
+from .draw_commands import create_ellipse_filled
+from .draw_commands import create_ellipse_filled_with_colors
+from .draw_commands import create_ellipse_outline
+from .draw_commands import create_line_generic
+from .draw_commands import create_line_generic_with_colors
+from .draw_commands import create_lines
+from .draw_commands import create_lines_with_colors
+from .draw_commands import create_polygon
+from .draw_commands import create_rectangle
+from .draw_commands import create_rectangle_filled
+from .draw_commands import create_rectangle_filled_with_colors
+from .draw_commands import create_rectangle_outline
+from .draw_commands import create_rectangles_filled_with_colors
+from .draw_commands import create_triangles_filled_with_colors
 from .draw_commands import draw_arc_filled
 from .draw_commands import draw_arc_outline
 from .draw_commands import draw_circle_filled
@@ -129,8 +148,8 @@ from .draw_commands import draw_circle_outline
 from .draw_commands import draw_ellipse_filled
 from .draw_commands import draw_ellipse_outline
 from .draw_commands import draw_line
-from .draw_commands import draw_line_strip
 from .draw_commands import draw_line_loop
+from .draw_commands import draw_line_strip
 from .draw_commands import draw_lines
 from .draw_commands import draw_lrtb_rectangle_filled
 from .draw_commands import draw_lrtb_rectangle_outline
@@ -151,6 +170,7 @@ from .draw_commands import draw_xywh_rectangle_filled
 from .draw_commands import draw_xywh_rectangle_outline
 from .draw_commands import get_image
 from .draw_commands import get_pixel
+from .draw_commands import get_rectangle_points
 
 from .geometry import are_polygons_intersecting
 from .geometry import is_point_in_polygon
@@ -290,12 +310,15 @@ __all__ = ['AnimatedTimeBasedSprite',
            'Rect',
            'RectList',
            'Shape',
+           'Shape',
+           'ShapeElementList',
            'ShapeElementList',
            'Sound',
            'Sprite',
            'SpriteList',
            'SpriteSolidColor',
            'SubmitButton',
+           'TShape',
            'TShape',
            'Text',
            'TextBox',
@@ -310,9 +333,11 @@ __all__ = ['AnimatedTimeBasedSprite',
            'VERSION',
            'Vector',
            'VertexBuffer',
+           'VertexBuffer',
            'View',
            'Window',
            'are_polygons_intersecting',
+           'buffered_shapes',
            'calculate_points',
            'check_for_collision',
            'check_for_collision_with_list',
@@ -320,25 +345,40 @@ __all__ = ['AnimatedTimeBasedSprite',
            'cleanup_texture_cache',
            'close_window',
            'create_ellipse',
+           'create_ellipse',
+           'create_ellipse_filled',
            'create_ellipse_filled',
            'create_ellipse_filled_with_colors',
+           'create_ellipse_filled_with_colors',
+           'create_ellipse_outline',
            'create_ellipse_outline',
            'create_isometric_grid_lines',
            'create_line',
            'create_line_generic',
+           'create_line_generic',
+           'create_line_generic_with_colors',
            'create_line_generic_with_colors',
            'create_line_loop',
            'create_line_strip',
            'create_lines',
+           'create_lines',
+           'create_lines_with_colors',
            'create_lines_with_colors',
            'create_orthogonal_projection',
            'create_polygon',
+           'create_polygon',
+           'create_rectangle',
            'create_rectangle',
            'create_rectangle_filled',
+           'create_rectangle_filled',
+           'create_rectangle_filled_with_colors',
            'create_rectangle_filled_with_colors',
            'create_rectangle_outline',
+           'create_rectangle_outline',
+           'create_rectangles_filled_with_colors',
            'create_rectangles_filled_with_colors',
            'create_text',
+           'create_triangles_filled_with_colors',
            'create_triangles_filled_with_colors',
            'draw_arc_filled',
            'draw_arc_outline',
@@ -347,6 +387,7 @@ __all__ = ['AnimatedTimeBasedSprite',
            'draw_ellipse_filled',
            'draw_ellipse_outline',
            'draw_line',
+           'draw_line_loop',
            'draw_line_strip',
            'draw_lines',
            'draw_lrtb_rectangle_filled',
@@ -381,6 +422,7 @@ __all__ = ['AnimatedTimeBasedSprite',
            'get_pixel',
            'get_points_for_thick_line',
            'get_projection',
+           'get_rectangle_points',
            'get_rectangle_points',
            'get_scaling_factor',
            'get_sprites_at_exact_point',
