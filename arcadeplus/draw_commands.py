@@ -63,33 +63,7 @@ _line_fragment_shader = '''
     }
 '''
 
-"""
-Drawing commands that use vertex buffer objects (VBOs).
-
-This module contains commands for basic graphics drawing commands,
-but uses Vertex Buffer Objects. This keeps the vertices loaded on
-the graphics card for much faster render times.
-"""
-
-import math
-import itertools
-from collections import defaultdict
-import pyglet.gl as gl
-import numpy as np
-
-from typing import List, Iterable, Sequence
-from typing import TypeVar
-from typing import Generic
-from typing import cast
-
-from arcadeplus import Color
-from arcadeplus import rotate_point
-from arcadeplus import Point, PointList
-from arcadeplus import get_four_byte_color
-from arcadeplus import get_projection
-from arcadeplus import get_points_for_thick_line
-from arcadeplus import shader
-
+buffered_shapes = dict()
 
 class VertexBuffer:
     """
@@ -143,8 +117,8 @@ class Shape:
             self.vao.render(mode=self.mode)
 
 
-def create_line(start_x: float, start_y: float, end_x: float, end_y: float,
-                color: Color, line_width: float = 1) -> Shape:
+def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
+                color: Color, line_width: float = 1):
     """
     Create a line to be rendered later. This works faster than draw_line because
     the vertexes are only loaded to the graphics card once, rather than each frame.
@@ -159,12 +133,16 @@ def create_line(start_x: float, start_y: float, end_x: float, end_y: float,
     :Returns Shape:
 
     """
-
-    points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
-    color_list = [color, color, color, color]
-    triangle_point_list = points[1], points[0], points[2], points[3]
-    shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
-    return shape
+    id = f"line-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+    if id not in buffered_shapes.keys():
+        points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
+        color_list = [color, color, color, color]
+        triangle_point_list = points[1], points[0], points[2], points[3]
+        shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
+        buffered_shapes[id] = shape
+        print("CREATED" + id)
+    buffered_shapes[id].draw()
+    print("drawing")
 
 
 def create_line_generic_with_colors(point_list: PointList,
@@ -1266,26 +1244,6 @@ def draw_line_strip(point_list: PointList,
                 triangle_point_list.extend(reordered_points)
             last_point = point
         _generic_draw_line_strip(triangle_point_list, color, gl.GL_TRIANGLE_STRIP)
-
-
-def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
-              color: Color, line_width: float = 1):
-    """
-    Draw a line.
-
-    :param float start_x: x position of line starting point.
-    :param float start_y: y position of line starting point.
-    :param float end_x: x position of line ending point.
-    :param float end_y: y position of line ending point.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param float line_width: Width of the line in pixels.
-    """
-
-    # points = (start_x, start_y), (end_x, end_y)
-    points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
-    triangle_point_list = points[1], points[0], points[2], points[3]
-    _generic_draw_line_strip(triangle_point_list, color, gl.GL_TRIANGLE_STRIP)
 
 
 def draw_lines(point_list: PointList,
