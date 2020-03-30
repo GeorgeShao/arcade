@@ -11,11 +11,11 @@ The ArcadePlus Python library is made by George Shao.
 ArcadePlus was forked from Arcade, a Python library made by Paul Vincent Craven.
 ArcadePlus is intended to be a simpler, more performant Python graphics library than Arcade.
 
-.. image:: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
+.. image:: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat
     :target: http://makeapullrequest.com
     :alt: Pull Requests Welcome
 
-.. image:: https://pepy.tech/badge/arcadeplus)
+.. image:: https://pepy.tech/badge/arcadeplus
     :target: https://pepy.tech/project/arcadeplus
     :alt: Downloads
 
