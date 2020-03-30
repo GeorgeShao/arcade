@@ -115,535 +115,7 @@ class Shape:
 
             self.vao.render(mode=self.mode)
 
-
-def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
-                color: Color, line_width: float = 1):
-    """
-    Create a line to be rendered later. This works faster than draw_line because
-    the vertexes are only loaded to the graphics card once, rather than each frame.
-
-    :param float start_x:
-    :param float start_y:
-    :param float end_x:
-    :param float end_y:
-    :param Color color:
-    :param float line_width:
-
-    :Returns Shape:
-
-    """
-    id = f"line-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
-    if id not in buffered_shapes.keys():
-        points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
-        color_list = [color, color, color, color]
-        triangle_point_list = points[1], points[0], points[2], points[3]
-        shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
-        buffered_shapes[id] = shape
-    buffered_shapes[id].draw()
-
-
-def _create_line_generic_with_colors(point_list: PointList,
-                                    color_list: Iterable[Color],
-                                    shape_mode: int,
-                                    line_width: float = 1) -> Shape:
-    """
-    This function is used by ``create_line_strip`` and ``create_line_loop``,
-    just changing the OpenGL type for the line drawing.
-
-    :param PointList point_list:
-    :param Iterable[Color] color_list:
-    :param float shape_mode:
-    :param float line_width:
-
-    :Returns Shape:
-    """
-    program = shader.program(
-        vertex_shader='''
-            #version 330
-            uniform mat4 Projection;
-            in vec2 in_vert;
-            in vec4 in_color;
-            out vec4 v_color;
-            void main() {
-               gl_Position = Projection * vec4(in_vert, 0.0, 1.0);
-               v_color = in_color;
-            }
-        ''',
-        fragment_shader='''
-            #version 330
-            in vec4 v_color;
-            out vec4 f_color;
-            void main() {
-                f_color = v_color;
-            }
-        ''',
-    )
-
-    buffer_type = np.dtype([('vertex', '2f4'), ('color', '4B')])
-    data = np.zeros(len(point_list), dtype=buffer_type)
-    data['vertex'] = point_list
-    data['color'] = [get_four_byte_color(color) for color in color_list]
-
-    vbo = shader.buffer(data.tobytes())
-    vao_content = [
-        shader.BufferDescription(
-            vbo,
-            '2f 4B',
-            ('in_vert', 'in_color'),
-            normalized=['in_color']
-        )
-    ]
-
-    vao = shader.vertex_array(program, vao_content)
-    with vao:
-        program['Projection'] = get_projection().flatten()
-
-    shape = Shape()
-    shape.vao = vao
-    shape.vbo = vbo
-    shape.program = program
-    shape.mode = shape_mode
-    shape.line_width = line_width
-
-    return shape
-
-
-def _create_line_generic(point_list: PointList,
-                        color: Color,
-                        shape_mode: int, line_width: float = 1) -> Shape:
-    """
-    This function is used by ``create_line_strip`` and ``create_line_loop``,
-    just changing the OpenGL type for the line drawing.
-    """
-    colors = [get_four_byte_color(color)] * len(point_list)
-    shape = _create_line_generic_with_colors(
-        point_list,
-        colors,
-        shape_mode,
-        line_width)
-
-    return shape
-
-
-def draw_line_strip(point_list: PointList,
-                      color: Color, line_width: float = 1):
-    """
-    Create a multi-point line to be rendered later. This works faster than draw_line because
-    the vertexes are only loaded to the graphics card once, rather than each frame.
-
-    :param PointList point_list:
-    :param Color color:
-    :param PointList line_width:
-
-    :Returns Shape:
-
-    """
-    triangle_point_list: List[Point] = []
-    new_color_list: List[Color] = []
-    for i in range(1, len(point_list)):
-        start_x = point_list[i - 1][0]
-        start_y = point_list[i - 1][1]
-        end_x = point_list[i][0]
-        end_y = point_list[i][1]
-        color1 = color
-        color2 = color
-        id = f"linestrip-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
-        if id not in buffered_shapes.keys():
-            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
-            new_color_list += color1, color2, color1, color2
-            triangle_point_list += points[1], points[0], points[2], points[3]
-            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
-            buffered_shapes[id] = shape
-        buffered_shapes[id].draw()
-
-
-def draw_line_loop(point_list: PointList,
-                     color: Color, line_width: float = 1):
-    """
-    Create a multi-point line loop to be rendered later. This works faster than draw_line because
-    the vertexes are only loaded to the graphics card once, rather than each frame.
-
-    :param PointList point_list:
-    :param Color color:
-    :param float line_width:
-
-    :Returns Shape:
-
-    """
-    point_list = list(point_list) + [point_list[0]]
-    triangle_point_list: List[Point] = []
-    new_color_list: List[Color] = []
-    for i in range(1, len(point_list)):
-        start_x = point_list[i - 1][0]
-        start_y = point_list[i - 1][1]
-        end_x = point_list[i][0]
-        end_y = point_list[i][1]
-        color1 = color
-        color2 = color
-        id = f"lineloop-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
-        if id not in buffered_shapes.keys():
-            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
-            new_color_list += color1, color2, color1, color2
-            triangle_point_list += points[1], points[0], points[2], points[3]
-            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
-            buffered_shapes[id] = shape
-        buffered_shapes[id].draw()
-
-
-def draw_lines(point_list: PointList,
-                 color: Color, line_width: float = 1):
-    """
-    Create a multi-point line loop to be rendered later. This works faster than draw_line because
-    the vertexes are only loaded to the graphics card once, rather than each frame.
-
-    :param PointList point_list:
-    :param Color color:
-    :param float line_width:
-
-    :Returns Shape:
-
-    """
-    for i in range(1, len(point_list), 2):
-        start_x = point_list[i-1][0]
-        start_y = point_list[i-1][1]
-        end_x = point_list[i][0]
-        end_y = point_list[i][1]
-        id = f"line-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
-        if id not in buffered_shapes.keys():
-            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
-            color_list = [color, color, color, color]
-            triangle_point_list = points[1], points[0], points[2], points[3]
-            shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
-            buffered_shapes[id] = shape
-        buffered_shapes[id].draw()
-
-
-def draw_polygon(point_list: PointList,
-                   color: Color):
-    """
-    Draw a convex polygon. This will NOT draw a concave polygon.
-    Because of this, you might not want to use this function.
-
-    :param PointList point_list:
-    :param color:
-
-    :Returns Shape:
-
-    """
-    # We assume points were given in order, either clockwise or counter clockwise.
-    # Polygon is assumed to be monotone.
-    # To fill the polygon, we start by one vertex, and we chain triangle strips
-    # alternating with vertices to the left and vertices to the right of the
-    # initial vertex.
-    half = len(point_list) // 2
-    interleaved = itertools.chain.from_iterable(
-        itertools.zip_longest(point_list[:half], reversed(point_list[half:]))
-    )
-    point_list = [p for p in interleaved if p is not None]
-    id = f"polygon-{point_list}-{color}"
-    if id not in buffered_shapes.keys():
-        shape = _create_line_generic(point_list, color, gl.GL_TRIANGLE_STRIP, 1)
-        buffered_shapes[id] = shape
-    buffered_shapes[id].draw()
-
-
-def create_rectangle_filled(center_x: float, center_y: float, width: float,
-                            height: float, color: Color,
-                            tilt_angle: float = 0) -> Shape:
-    """
-    Create a filled rectangle.
-
-    :param float center_x:
-    :param float center_y:
-    :param float width:
-    :param float height:
-    :param Color color:
-    :param float tilt_angle:
-
-    :Returns Shape:
-
-    """
-    return create_rectangle(center_x, center_y, width, height,
-                            color, tilt_angle=tilt_angle)
-
-
-def create_rectangle_outline(center_x: float, center_y: float, width: float,
-                             height: float, color: Color,
-                             border_width: float = 1, tilt_angle: float = 0) -> Shape:
-    """
-    Create a rectangle outline.
-
-    Args:
-        center_x:
-        center_y:
-        width:
-        height:
-        color:
-        border_width:
-        tilt_angle:
-
-    Returns:
-
-    """
-    return create_rectangle(center_x, center_y, width, height,
-                            color, border_width, tilt_angle, filled=False)
-
-
-def get_rectangle_points(center_x: float, center_y: float, width: float,
-                         height: float, tilt_angle: float = 0) -> PointList:
-    """
-    Utility function that will return all four coordinate points of a
-    rectangle given the x, y center, width, height, and rotation.
-
-    Args:
-        center_x:
-        center_y:
-        width:
-        height:
-        tilt_angle:
-
-    Returns:
-
-    """
-    x1 = -width / 2 + center_x
-    y1 = -height / 2 + center_y
-
-    x2 = -width / 2 + center_x
-    y2 = height / 2 + center_y
-
-    x3 = width / 2 + center_x
-    y3 = height / 2 + center_y
-
-    x4 = width / 2 + center_x
-    y4 = -height / 2 + center_y
-
-    if tilt_angle:
-        x1, y1 = rotate_point(x1, y1, center_x, center_y, tilt_angle)
-        x2, y2 = rotate_point(x2, y2, center_x, center_y, tilt_angle)
-        x3, y3 = rotate_point(x3, y3, center_x, center_y, tilt_angle)
-        x4, y4 = rotate_point(x4, y4, center_x, center_y, tilt_angle)
-
-    data = [(x1, y1),
-            (x2, y2),
-            (x3, y3),
-            (x4, y4)]
-
-    return data
-
-
-def create_rectangle(center_x: float, center_y: float, width: float,
-                     height: float, color: Color,
-                     border_width: float = 1, tilt_angle: float = 0,
-                     filled=True) -> Shape:
-    """
-    This function creates a rectangle using a vertex buffer object.
-    Creating the rectangle, and then later drawing it with ``render_rectangle``
-    is faster than calling ``draw_rectangle``.
-
-    Args:
-        center_x:
-        center_y:
-        width:
-        height:
-        color:
-        border_width:
-        tilt_angle:
-        filled:
-
-    Returns:
-
-    """
-    data: List[Point] = cast(List[Point], get_rectangle_points(center_x, center_y, width, height, tilt_angle))
-
-    if filled:
-        shape_mode = gl.GL_TRIANGLE_STRIP
-        data[-2:] = reversed(data[-2:])
-    else:
-
-        i_lb = center_x - width / 2 + border_width / 2, center_y - height / 2 + border_width / 2
-        i_rb = center_x + width / 2 - border_width / 2, center_y - height / 2 + border_width / 2
-        i_rt = center_x + width / 2 - border_width / 2, center_y + height / 2 - border_width / 2
-        i_lt = center_x - width / 2 + border_width / 2, center_y + height / 2 - border_width / 2
-
-        o_lb = center_x - width / 2 - border_width / 2, center_y - height / 2 - border_width / 2
-        o_rb = center_x + width / 2 + border_width / 2, center_y - height / 2 - border_width / 2
-        o_rt = center_x + width / 2 + border_width / 2, center_y + height / 2 + border_width / 2
-        o_lt = center_x - width / 2 - border_width / 2, center_y + height / 2 + border_width / 2
-
-        data = [o_lt, i_lt, o_rt, i_rt, o_rb, i_rb, o_lb, i_lb, o_lt, i_lt]
-
-        if tilt_angle != 0:
-            point_list_2: List[Point] = []
-            for point in data:
-                new_point = rotate_point(point[0], point[1], center_x, center_y, tilt_angle)
-                point_list_2.append(new_point)
-            data = point_list_2
-
-        border_width = 1
-        shape_mode = gl.GL_TRIANGLE_STRIP
-
-        # _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLE_STRIP)
-
-        # shape_mode = gl.GL_LINE_STRIP
-        # data.append(data[0])
-
-    shape = _create_line_generic(data, color, shape_mode, border_width)
-    return shape
-
-
-def create_rectangle_filled_with_colors(point_list, color_list) -> Shape:
-    """
-    This function creates one rectangle/quad using a vertex buffer object.
-    Creating the rectangles, and then later drawing it with ``render``
-    is faster than calling ``draw_rectangle``.
-    """
-
-    shape_mode = gl.GL_TRIANGLE_STRIP
-    new_point_list = [point_list[0], point_list[1], point_list[3], point_list[2]]
-    new_color_list = [color_list[0], color_list[1], color_list[3], color_list[2]]
-    return _create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
-
-
-def create_rectangles_filled_with_colors(point_list, color_list) -> Shape:
-    """
-    This function creates multiple rectangle/quads using a vertex buffer object.
-    Creating the rectangles, and then later drawing it with ``render``
-    is faster than calling ``draw_rectangle``.
-    """
-
-    shape_mode = gl.GL_TRIANGLES
-    new_point_list: List[Point] = []
-    new_color_list: List[Color] = []
-    for i in range(0, len(point_list), 4):
-        new_point_list += [point_list[0 + i], point_list[1 + i], point_list[3 + i]]
-        new_point_list += [point_list[1 + i], point_list[3 + i], point_list[2 + i]]
-
-        new_color_list += [color_list[0 + i], color_list[1 + i], color_list[3 + i]]
-        new_color_list += [color_list[1 + i], color_list[3 + i], color_list[2 + i]]
-
-    return _create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
-
-
-def create_triangles_filled_with_colors(point_list, color_list) -> Shape:
-    """
-    This function creates multiple rectangle/quads using a vertex buffer object.
-    Creating the rectangles, and then later drawing it with ``render``
-    is faster than calling ``draw_rectangle``.
-    """
-
-    shape_mode = gl.GL_TRIANGLE_STRIP
-    return _create_line_generic_with_colors(point_list, color_list, shape_mode)
-
-
-def create_ellipse_filled(center_x: float, center_y: float,
-                          width: float, height: float, color: Color,
-                          tilt_angle: float = 0, num_segments: int = 128) -> Shape:
-    """
-    Create a filled ellipse. Or circle if you use the same width and height.
-    """
-
-    border_width = 1
-    return create_ellipse(center_x, center_y, width, height, color,
-                          border_width, tilt_angle, num_segments, filled=True)
-
-
-def create_ellipse_outline(center_x: float, center_y: float,
-                           width: float, height: float, color: Color,
-                           border_width: float = 1,
-                           tilt_angle: float = 0, num_segments: int = 128) -> Shape:
-    """
-    Create an outline of an ellipse.
-    """
-
-    return create_ellipse(center_x, center_y, width, height, color,
-                          border_width, tilt_angle, num_segments, filled=False)
-
-
-def create_ellipse(center_x: float, center_y: float,
-                   width: float, height: float, color: Color,
-                   border_width: float = 1,
-                   tilt_angle: float = 0, num_segments: int = 32,
-                   filled=True) -> Shape:
-
-    """
-    This creates an ellipse vertex buffer object (VBO). It can later be
-    drawn with ``render_ellipse_filled``. This method of drawing an ellipse
-    is much faster than calling ``draw_ellipse_filled`` each frame.
-
-    Note: This can't be unit tested on Appveyor because its support for OpenGL is
-    poor.
-    """
-    # Create an array with the vertex point_list
-    point_list = []
-
-    for segment in range(num_segments):
-        theta = 2.0 * 3.1415926 * segment / num_segments
-
-        x = width * math.cos(theta) + center_x
-        y = height * math.sin(theta) + center_y
-
-        if tilt_angle:
-            x, y = rotate_point(x, y, center_x, center_y, tilt_angle)
-
-        point_list.append((x, y))
-
-    if filled:
-        half = len(point_list) // 2
-        interleaved = itertools.chain.from_iterable(
-            itertools.zip_longest(point_list[:half], reversed(point_list[half:]))
-        )
-        point_list = [p for p in interleaved if p is not None]
-        shape_mode = gl.GL_TRIANGLE_STRIP
-    else:
-        point_list.append(point_list[0])
-        shape_mode = gl.GL_LINE_STRIP
-
-    return _create_line_generic(point_list, color, shape_mode, border_width)
-
-
-def create_ellipse_filled_with_colors(center_x: float, center_y: float,
-                                      width: float, height: float,
-                                      outside_color: Color, inside_color: Color,
-                                      tilt_angle: float = 0, num_segments: int = 32) -> Shape:
-    """
-    Draw an ellipse, and specify inside/outside color. Used for doing gradients.
-
-    :param float center_x:
-    :param float center_y:
-    :param float width:
-    :param float height:
-    :param Color outside_color:
-    :param float inside_color:
-    :param float tilt_angle:
-    :param int num_segments:
-
-    :Returns Shape:
-
-    """
-
-    # Create an array with the vertex data
-    # Create an array with the vertex point_list
-    point_list = [(center_x, center_y)]
-
-    for segment in range(num_segments):
-        theta = 2.0 * 3.1415926 * segment / num_segments
-
-        x = width * math.cos(theta) + center_x
-        y = height * math.sin(theta) + center_y
-
-        if tilt_angle:
-            x, y = rotate_point(x, y, center_x, center_y, tilt_angle)
-
-        point_list.append((x, y))
-    point_list.append(point_list[1])
-
-    color_list = [inside_color] + [outside_color] * (num_segments + 1)
-    return _create_line_generic_with_colors(point_list, color_list, gl.GL_TRIANGLE_FAN)
-
-
 TShape = TypeVar('TShape', bound=Shape)
-
-
 class ShapeElementList(Generic[TShape]):
     """
     A program can put multiple drawing primitives in a ShapeElementList, and then
@@ -838,6 +310,584 @@ class _Batch(Generic[TShape]):
         self.shape = Shape()
         self.items = []
 
+
+def _create_line_generic_with_colors(point_list: PointList,
+                                    color_list: Iterable[Color],
+                                    shape_mode: int,
+                                    line_width: float = 1) -> Shape:
+    """
+    This function is used by ``create_line_strip`` and ``create_line_loop``,
+    just changing the OpenGL type for the line drawing.
+
+    :param PointList point_list:
+    :param Iterable[Color] color_list:
+    :param float shape_mode:
+    :param float line_width:
+
+    :Returns Shape:
+    """
+    program = shader.program(
+        vertex_shader='''
+            #version 330
+            uniform mat4 Projection;
+            in vec2 in_vert;
+            in vec4 in_color;
+            out vec4 v_color;
+            void main() {
+               gl_Position = Projection * vec4(in_vert, 0.0, 1.0);
+               v_color = in_color;
+            }
+        ''',
+        fragment_shader='''
+            #version 330
+            in vec4 v_color;
+            out vec4 f_color;
+            void main() {
+                f_color = v_color;
+            }
+        ''',
+    )
+
+    buffer_type = np.dtype([('vertex', '2f4'), ('color', '4B')])
+    data = np.zeros(len(point_list), dtype=buffer_type)
+    data['vertex'] = point_list
+    data['color'] = [get_four_byte_color(color) for color in color_list]
+
+    vbo = shader.buffer(data.tobytes())
+    vao_content = [
+        shader.BufferDescription(
+            vbo,
+            '2f 4B',
+            ('in_vert', 'in_color'),
+            normalized=['in_color']
+        )
+    ]
+
+    vao = shader.vertex_array(program, vao_content)
+    with vao:
+        program['Projection'] = get_projection().flatten()
+
+    shape = Shape()
+    shape.vao = vao
+    shape.vbo = vbo
+    shape.program = program
+    shape.mode = shape_mode
+    shape.line_width = line_width
+
+    return shape
+
+
+def _create_line_generic(point_list: PointList,
+                        color: Color,
+                        shape_mode: int, line_width: float = 1) -> Shape:
+    """
+    This function is used by ``create_line_strip`` and ``create_line_loop``,
+    just changing the OpenGL type for the line drawing.
+    """
+    colors = [get_four_byte_color(color)] * len(point_list)
+    shape = _create_line_generic_with_colors(
+        point_list,
+        colors,
+        shape_mode,
+        line_width)
+
+    return shape
+
+
+def _generic_draw_line_strip(point_list: PointList,
+                             color: Color,
+                             mode: int = gl.GL_LINE_STRIP):
+    """
+    Draw a line strip. A line strip is a set of continuously connected
+    line segments.
+
+    :param point_list: List of points making up the line. Each point is
+         in a list. So it is a list of lists.
+    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
+         RGBA format.
+    """
+    # Cache the program. But not on linux because it fails unit tests for some reason.
+    # if not _generic_draw_line_strip.program or sys.platform == "linux":
+
+    program = shader.program(
+        vertex_shader=_line_vertex_shader,
+        fragment_shader=_line_fragment_shader,
+    )
+
+    c4 = get_four_byte_color(color)
+    c4e = c4 * len(point_list)
+    a = array.array('B', c4e)
+    color_buf = shader.buffer(a.tobytes())
+    color_buf_desc = shader.BufferDescription(
+        color_buf,
+        '4B',
+        ['in_color'],
+        normalized=['in_color'],
+    )
+
+    def gen_flatten(my_list):
+        return [item for sublist in my_list for item in sublist]
+
+    vertices = array.array('f', gen_flatten(point_list))
+
+    vbo_buf = shader.buffer(vertices.tobytes())
+    vbo_buf_desc = shader.BufferDescription(
+        vbo_buf,
+        '2f',
+        ['in_vert']
+    )
+
+    vao_content = [vbo_buf_desc, color_buf_desc]
+
+    vao = shader.vertex_array(program, vao_content)
+    with vao:
+        program['Projection'] = get_projection().flatten()
+        vao.render(mode=mode)
+
+
+def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
+                color: Color, line_width: float = 1):
+    """
+    Create a line to be rendered later. This works faster than draw_line because
+    the vertexes are only loaded to the graphics card once, rather than each frame.
+
+    :param float start_x:
+    :param float start_y:
+    :param float end_x:
+    :param float end_y:
+    :param Color color:
+    :param float line_width:
+
+    :Returns Shape:
+
+    """
+    id = f"line-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+    if id not in buffered_shapes.keys():
+        points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
+        color_list = [color, color, color, color]
+        triangle_point_list = points[1], points[0], points[2], points[3]
+        shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
+        buffered_shapes[id] = shape
+    buffered_shapes[id].draw()
+
+
+def draw_line_strip(point_list: PointList,
+                      color: Color, line_width: float = 1):
+    """
+    Create a multi-point line to be rendered later. This works faster than draw_line because
+    the vertexes are only loaded to the graphics card once, rather than each frame.
+
+    :param PointList point_list:
+    :param Color color:
+    :param PointList line_width:
+
+    :Returns Shape:
+
+    """
+    triangle_point_list: List[Point] = []
+    new_color_list: List[Color] = []
+    for i in range(1, len(point_list)):
+        start_x = point_list[i - 1][0]
+        start_y = point_list[i - 1][1]
+        end_x = point_list[i][0]
+        end_y = point_list[i][1]
+        color1 = color
+        color2 = color
+        id = f"linestrip-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        if id not in buffered_shapes.keys():
+            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
+            new_color_list += color1, color2, color1, color2
+            triangle_point_list += points[1], points[0], points[2], points[3]
+            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
+            buffered_shapes[id] = shape
+        buffered_shapes[id].draw()
+
+
+def draw_line_loop(point_list: PointList,
+                     color: Color, line_width: float = 1):
+    """
+    Create a multi-point line loop to be rendered later. This works faster than draw_line because
+    the vertexes are only loaded to the graphics card once, rather than each frame.
+
+    :param PointList point_list:
+    :param Color color:
+    :param float line_width:
+
+    :Returns Shape:
+
+    """
+    point_list = list(point_list) + [point_list[0]]
+    triangle_point_list: List[Point] = []
+    new_color_list: List[Color] = []
+    for i in range(1, len(point_list)):
+        start_x = point_list[i - 1][0]
+        start_y = point_list[i - 1][1]
+        end_x = point_list[i][0]
+        end_y = point_list[i][1]
+        color1 = color
+        color2 = color
+        id = f"lineloop-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        if id not in buffered_shapes.keys():
+            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
+            new_color_list += color1, color2, color1, color2
+            triangle_point_list += points[1], points[0], points[2], points[3]
+            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
+            buffered_shapes[id] = shape
+        buffered_shapes[id].draw()
+
+
+def draw_lines(point_list: PointList,
+                 color: Color, line_width: float = 1):
+    """
+    Create a multi-point line loop to be rendered later. This works faster than draw_line because
+    the vertexes are only loaded to the graphics card once, rather than each frame.
+
+    :param PointList point_list:
+    :param Color color:
+    :param float line_width:
+
+    :Returns Shape:
+
+    """
+    for i in range(1, len(point_list), 2):
+        start_x = point_list[i-1][0]
+        start_y = point_list[i-1][1]
+        end_x = point_list[i][0]
+        end_y = point_list[i][1]
+        id = f"line-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        if id not in buffered_shapes.keys():
+            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
+            color_list = [color, color, color, color]
+            triangle_point_list = points[1], points[0], points[2], points[3]
+            shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
+            buffered_shapes[id] = shape
+        buffered_shapes[id].draw()
+
+
+def draw_polygon(point_list: PointList,
+                   color: Color):
+    """
+    Draw a convex polygon. This will NOT draw a concave polygon.
+    Because of this, you might not want to use this function.
+
+    :param PointList point_list:
+    :param color:
+
+    :Returns Shape:
+
+    """
+    # We assume points were given in order, either clockwise or counter clockwise.
+    # Polygon is assumed to be monotone.
+    # To fill the polygon, we start by one vertex, and we chain triangle strips
+    # alternating with vertices to the left and vertices to the right of the
+    # initial vertex.
+    half = len(point_list) // 2
+    interleaved = itertools.chain.from_iterable(
+        itertools.zip_longest(point_list[:half], reversed(point_list[half:]))
+    )
+    point_list = [p for p in interleaved if p is not None]
+    id = f"polygon-{point_list}-{color}"
+    if id not in buffered_shapes.keys():
+        shape = _create_line_generic(point_list, color, gl.GL_TRIANGLE_STRIP, 1)
+        buffered_shapes[id] = shape
+    buffered_shapes[id].draw()
+
+
+def get_rectangle_points(center_x: float, center_y: float, width: float,
+                         height: float, tilt_angle: float = 0):
+    """
+    Utility function that will return all four coordinate points of a
+    rectangle given the center_x, center_y, width, height, and rotation.
+
+    Args:
+        center_x:
+        center_y:
+        width:
+        height:
+        tilt_angle:
+
+    Returns:
+
+    """
+    x1 = -width / 2 + center_x
+    y1 = -height / 2 + center_y
+
+    x2 = -width / 2 + center_x
+    y2 = height / 2 + center_y
+
+    x3 = width / 2 + center_x
+    y3 = height / 2 + center_y
+
+    x4 = width / 2 + center_x
+    y4 = -height / 2 + center_y
+
+    if tilt_angle:
+        x1, y1 = rotate_point(x1, y1, center_x, center_y, tilt_angle)
+        x2, y2 = rotate_point(x2, y2, center_x, center_y, tilt_angle)
+        x3, y3 = rotate_point(x3, y3, center_x, center_y, tilt_angle)
+        x4, y4 = rotate_point(x4, y4, center_x, center_y, tilt_angle)
+
+    data = [(x1, y1),
+            (x2, y2),
+            (x3, y3),
+            (x4, y4)]
+
+    return data
+
+
+# CODE ABOVE IS VBO-OPTIMIZED, CODE BELOW STILL NEEDS TO BE WORKED ON
+
+
+def create_rectangle(center_x: float, center_y: float, width: float,
+                     height: float, color: Color,
+                     border_width: float = 1, tilt_angle: float = 0,
+                     filled=True):
+    """
+    This function creates a rectangle using a vertex buffer object.
+    Creating the rectangle, and then later drawing it with ``render_rectangle``
+    is faster than calling ``draw_rectangle``.
+
+    Args:
+        center_x:
+        center_y:
+        width:
+        height:
+        color:
+        border_width:
+        tilt_angle:
+        filled:
+
+    Returns:
+
+    """
+    data: List[Point] = cast(List[Point], get_rectangle_points(center_x, center_y, width, height, tilt_angle))
+
+    if filled:
+        shape_mode = gl.GL_TRIANGLE_STRIP
+        data[-2:] = reversed(data[-2:])
+    else:
+
+        i_lb = center_x - width / 2 + border_width / 2, center_y - height / 2 + border_width / 2
+        i_rb = center_x + width / 2 - border_width / 2, center_y - height / 2 + border_width / 2
+        i_rt = center_x + width / 2 - border_width / 2, center_y + height / 2 - border_width / 2
+        i_lt = center_x - width / 2 + border_width / 2, center_y + height / 2 - border_width / 2
+
+        o_lb = center_x - width / 2 - border_width / 2, center_y - height / 2 - border_width / 2
+        o_rb = center_x + width / 2 + border_width / 2, center_y - height / 2 - border_width / 2
+        o_rt = center_x + width / 2 + border_width / 2, center_y + height / 2 + border_width / 2
+        o_lt = center_x - width / 2 - border_width / 2, center_y + height / 2 + border_width / 2
+
+        data = [o_lt, i_lt, o_rt, i_rt, o_rb, i_rb, o_lb, i_lb, o_lt, i_lt]
+
+        if tilt_angle != 0:
+            point_list_2: List[Point] = []
+            for point in data:
+                new_point = rotate_point(point[0], point[1], center_x, center_y, tilt_angle)
+                point_list_2.append(new_point)
+            data = point_list_2
+
+        border_width = 1
+        shape_mode = gl.GL_TRIANGLE_STRIP
+
+        # _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLE_STRIP)
+
+        # shape_mode = gl.GL_LINE_STRIP
+        # data.append(data[0])
+
+    shape = _create_line_generic(data, color, shape_mode, border_width)
+    return shape
+
+
+def create_rectangle_filled(center_x: float, center_y: float, width: float,
+                            height: float, color: Color,
+                            tilt_angle: float = 0):
+    """
+    Create a filled rectangle.
+
+    :param float center_x:
+    :param float center_y:
+    :param float width:
+    :param float height:
+    :param Color color:
+    :param float tilt_angle:
+
+    :Returns Shape:
+
+    """
+    return create_rectangle(center_x, center_y, width, height,
+                            color, tilt_angle=tilt_angle)
+
+
+def create_rectangle_outline(center_x: float, center_y: float, width: float,
+                             height: float, color: Color,
+                             border_width: float = 1, tilt_angle: float = 0):
+    """
+    Create a rectangle outline.
+
+    Args:
+        center_x:
+        center_y:
+        width:
+        height:
+        color:
+        border_width:
+        tilt_angle:
+
+    Returns:
+
+    """
+    return create_rectangle(center_x, center_y, width, height,
+                            color, border_width, tilt_angle, filled=False)
+
+
+def create_rectangle_filled_with_colors(point_list, color_list):
+    """
+    This function creates one rectangle/quad using a vertex buffer object.
+    Creating the rectangles, and then later drawing it with ``render``
+    is faster than calling ``draw_rectangle``.
+    """
+
+    shape_mode = gl.GL_TRIANGLE_STRIP
+    new_point_list = [point_list[0], point_list[1], point_list[3], point_list[2]]
+    new_color_list = [color_list[0], color_list[1], color_list[3], color_list[2]]
+    return _create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
+
+
+def create_rectangles_filled_with_colors(point_list, color_list):
+    """
+    This function creates multiple rectangle/quads using a vertex buffer object.
+    Creating the rectangles, and then later drawing it with ``render``
+    is faster than calling ``draw_rectangle``.
+    """
+
+    shape_mode = gl.GL_TRIANGLES
+    new_point_list: List[Point] = []
+    new_color_list: List[Color] = []
+    for i in range(0, len(point_list), 4):
+        new_point_list += [point_list[0 + i], point_list[1 + i], point_list[3 + i]]
+        new_point_list += [point_list[1 + i], point_list[3 + i], point_list[2 + i]]
+
+        new_color_list += [color_list[0 + i], color_list[1 + i], color_list[3 + i]]
+        new_color_list += [color_list[1 + i], color_list[3 + i], color_list[2 + i]]
+
+    return _create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
+
+
+def create_triangles_filled_with_colors(point_list, color_list):
+    """
+    This function creates multiple rectangle/quads using a vertex buffer object.
+    Creating the rectangles, and then later drawing it with ``render``
+    is faster than calling ``draw_rectangle``.
+    """
+
+    shape_mode = gl.GL_TRIANGLE_STRIP
+    return _create_line_generic_with_colors(point_list, color_list, shape_mode)
+
+
+def create_ellipse(center_x: float, center_y: float,
+                   width: float, height: float, color: Color,
+                   border_width: float = 1,
+                   tilt_angle: float = 0, num_segments: int = 32,
+                   filled=True):
+
+    """
+    This creates an ellipse vertex buffer object (VBO). It can later be
+    drawn with ``render_ellipse_filled``. This method of drawing an ellipse
+    is much faster than calling ``draw_ellipse_filled`` each frame.
+
+    Note: This can't be unit tested on Appveyor because its support for OpenGL is
+    poor.
+    """
+    # Create an array with the vertex point_list
+    point_list = []
+
+    for segment in range(num_segments):
+        theta = 2.0 * 3.1415926 * segment / num_segments
+
+        x = width * math.cos(theta) + center_x
+        y = height * math.sin(theta) + center_y
+
+        if tilt_angle:
+            x, y = rotate_point(x, y, center_x, center_y, tilt_angle)
+
+        point_list.append((x, y))
+
+    if filled:
+        half = len(point_list) // 2
+        interleaved = itertools.chain.from_iterable(
+            itertools.zip_longest(point_list[:half], reversed(point_list[half:]))
+        )
+        point_list = [p for p in interleaved if p is not None]
+        shape_mode = gl.GL_TRIANGLE_STRIP
+    else:
+        point_list.append(point_list[0])
+        shape_mode = gl.GL_LINE_STRIP
+
+    return _create_line_generic(point_list, color, shape_mode, border_width)
+
+
+def create_ellipse_filled(center_x: float, center_y: float,
+                          width: float, height: float, color: Color,
+                          tilt_angle: float = 0, num_segments: int = 128):
+    """
+    Create a filled ellipse. Or circle if you use the same width and height.
+    """
+
+    border_width = 1
+    return create_ellipse(center_x, center_y, width, height, color,
+                          border_width, tilt_angle, num_segments, filled=True)
+
+
+def create_ellipse_outline(center_x: float, center_y: float,
+                           width: float, height: float, color: Color,
+                           border_width: float = 1,
+                           tilt_angle: float = 0, num_segments: int = 128):
+    """
+    Create an outline of an ellipse.
+    """
+
+    return create_ellipse(center_x, center_y, width, height, color,
+                          border_width, tilt_angle, num_segments, filled=False)
+
+
+def create_ellipse_filled_with_colors(center_x: float, center_y: float,
+                                      width: float, height: float,
+                                      outside_color: Color, inside_color: Color,
+                                      tilt_angle: float = 0, num_segments: int = 32):
+    """
+    Draw an ellipse, and specify inside/outside color. Used for doing gradients.
+
+    :param float center_x:
+    :param float center_y:
+    :param float width:
+    :param float height:
+    :param Color outside_color:
+    :param float inside_color:
+    :param float tilt_angle:
+    :param int num_segments:
+
+    :Returns Shape:
+
+    """
+
+    # Create an array with the vertex data
+    # Create an array with the vertex point_list
+    point_list = [(center_x, center_y)]
+
+    for segment in range(num_segments):
+        theta = 2.0 * 3.1415926 * segment / num_segments
+
+        x = width * math.cos(theta) + center_x
+        y = height * math.sin(theta) + center_y
+
+        if tilt_angle:
+            x, y = rotate_point(x, y, center_x, center_y, tilt_angle)
+
+        point_list.append((x, y))
+    point_list.append(point_list[1])
+
+    color_list = [inside_color] + [outside_color] * (num_segments + 1)
+    return _create_line_generic_with_colors(point_list, color_list, gl.GL_TRIANGLE_FAN)
 
 # --- BEGIN ARC FUNCTIONS # # #
 
@@ -1168,60 +1218,6 @@ def draw_ellipse_outline(center_x: float, center_y: float, width: float,
 
 
 # --- END ELLIPSE FUNCTIONS # # #
-
-
-# --- BEGIN LINE FUNCTIONS # # #
-
-
-def _generic_draw_line_strip(point_list: PointList,
-                             color: Color,
-                             mode: int = gl.GL_LINE_STRIP):
-    """
-    Draw a line strip. A line strip is a set of continuously connected
-    line segments.
-
-    :param point_list: List of points making up the line. Each point is
-         in a list. So it is a list of lists.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    """
-    # Cache the program. But not on linux because it fails unit tests for some reason.
-    # if not _generic_draw_line_strip.program or sys.platform == "linux":
-
-    program = shader.program(
-        vertex_shader=_line_vertex_shader,
-        fragment_shader=_line_fragment_shader,
-    )
-
-    c4 = get_four_byte_color(color)
-    c4e = c4 * len(point_list)
-    a = array.array('B', c4e)
-    color_buf = shader.buffer(a.tobytes())
-    color_buf_desc = shader.BufferDescription(
-        color_buf,
-        '4B',
-        ['in_color'],
-        normalized=['in_color'],
-    )
-
-    def gen_flatten(my_list):
-        return [item for sublist in my_list for item in sublist]
-
-    vertices = array.array('f', gen_flatten(point_list))
-
-    vbo_buf = shader.buffer(vertices.tobytes())
-    vbo_buf_desc = shader.BufferDescription(
-        vbo_buf,
-        '2f',
-        ['in_vert']
-    )
-
-    vao_content = [vbo_buf_desc, color_buf_desc]
-
-    vao = shader.vertex_array(program, vao_content)
-    with vao:
-        program['Projection'] = get_projection().flatten()
-        vao.render(mode=mode)
 
 
 # --- BEGIN POINT FUNCTIONS # # #
