@@ -44,9 +44,9 @@ if __name__ == "__main__":
         long_desc = f.read()
 
     setup(
-          name="arcade",
+          name="arcadeplus",
           version=RELEASE,
-          description="Arcade Game Development Library",
+          description="ArcadePlus Graphics Library",
           long_description=long_desc,
           author="George Shao",
           author_email="georgeshao123@gmail.com",
@@ -62,18 +62,19 @@ if __name__ == "__main__":
                     ],
           python_requires='>=3.6',
           classifiers=[
-              "Development Status :: 5 - Production/Stable",
+              "Development Status :: 3 - Alpha", # Choose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable"
               "Intended Audience :: Developers",
-              "License :: OSI Approved :: MIT License",
+              "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
               "Operating System :: OS Independent",
               "Programming Language :: Python",
               "Programming Language :: Python :: 3.6",
               "Programming Language :: Python :: 3.7",
+              "Programming Language :: Python :: 3.8",
               "Programming Language :: Python :: Implementation :: CPython",
               "Topic :: Software Development :: Libraries :: Python Modules",
               ],
           test_suite="tests",
-          package_data={'arcade': ['resources/gui_themes/Fantasy/Buttons/*',
+          package_data={'arcadeplus': ['resources/gui_themes/Fantasy/Buttons/*',
                                    'resources/gui_themes/Fantasy/DialogueBox/*',
                                    'resources/gui_themes/Fantasy/Menu/*',
                                    'resources/gui_themes/Fantasy/TextBox/*',
@@ -98,11 +99,4 @@ if __name__ == "__main__":
                                    'resources/sounds/*',
                                    'resources/tmx_maps/*',
                                    'py.typed']},
-          project_urls={
-                        'Documentation': 'https://arcade.academy/',
-                        'Example Code ': 'http://arcade.academy/examples/index.html',
-                        'Issue Tracker': 'https://github.com/pvcraven/arcade/issues',
-                        'Source': 'https://github.com/pvcraven/arcade',
-                        'On-line Book': 'http://learn.arcade.academy/',
-          },
          )
