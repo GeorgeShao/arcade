@@ -1,5 +1,5 @@
 """
-The ArcadePLus Library
+The ArcadePlus Library
 
 A simple, easy to use Python module for creating 2D games.
 """
