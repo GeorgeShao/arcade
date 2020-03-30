@@ -140,9 +140,7 @@ def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
         triangle_point_list = points[1], points[0], points[2], points[3]
         shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
         buffered_shapes[id] = shape
-        print("CREATED" + id)
     buffered_shapes[id].draw()
-    print("drawing")
 
 
 def create_line_generic_with_colors(point_list: PointList,
