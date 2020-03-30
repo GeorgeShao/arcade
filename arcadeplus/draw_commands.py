@@ -226,7 +226,7 @@ def create_line_generic(point_list: PointList,
     return shape
 
 
-def create_line_strip(point_list: PointList,
+def draw_line_strip(point_list: PointList,
                       color: Color, line_width: float = 1):
     """
     Create a multi-point line to be rendered later. This works faster than draw_line because
@@ -251,12 +251,15 @@ def create_line_strip(point_list: PointList,
             end_y = point_list[i][1]
             color1 = color
             color2 = color
-            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
-            new_color_list += color1, color2, color1, color2
-            triangle_point_list += points[1], points[0], points[2], points[3]
-
-            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
-            return shape
+            id = f"linestrip-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+            if id not in buffered_shapes.keys():
+                points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
+                new_color_list += color1, color2, color1, color2
+                triangle_point_list += points[1], points[0], points[2], points[3]
+                shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
+                buffered_shapes[id] = shape
+                print("CREATED" + id)
+            buffered_shapes[id].draw()
 
 
 def create_line_loop(point_list: PointList,
@@ -1217,31 +1220,6 @@ def _generic_draw_line_strip(point_list: PointList,
     with vao:
         program['Projection'] = get_projection().flatten()
         vao.render(mode=mode)
-
-
-def draw_line_strip(point_list: PointList,
-                    color: Color, line_width: float = 1):
-    """
-    Draw a multi-point line.
-
-    :param PointList point_list: List of x, y points that make up this strip
-    :param Color color: Color of line strip
-    :param float line_width: Width of the line
-    """
-    if line_width == 1:
-        _generic_draw_line_strip(point_list, color, gl.GL_LINE_STRIP)
-    else:
-        triangle_point_list: PointList = []
-        # This needs a lot of improvement
-        last_point = None
-        for point in point_list:
-            if last_point is not None:
-                points = get_points_for_thick_line(last_point[0], last_point[1], point[0], point[1], line_width)
-                reordered_points = points[1], points[0], points[2], points[3]
-                # noinspection PyUnresolvedReferences
-                triangle_point_list.extend(reordered_points)
-            last_point = point
-        _generic_draw_line_strip(triangle_point_list, color, gl.GL_TRIANGLE_STRIP)
 
 
 def draw_lines(point_list: PointList,
