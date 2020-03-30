@@ -48,11 +48,11 @@ if __name__ == "__main__":
           url="https://github.com/GeorgeShao/arcadeplus",
           download_url="https://github.com/GeorgeShao/arcadeplus/archive/v0.0.1-alpha.tar.gz",
           install_requires=install_requires,
-          packages=["arcade",
-                    "arcade.key",
-                    "arcade.color",
-                    "arcade.csscolor",
-                    "arcade.examples"
+          packages=["arcadeplus",
+                    "arcadeplus.key",
+                    "arcadeplus.color",
+                    "arcadeplus.csscolor",
+                    "arcadeplus.examples"
                     ],
           python_requires='>=3.6',
           classifiers=[
