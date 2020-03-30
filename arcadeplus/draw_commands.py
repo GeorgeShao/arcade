@@ -90,7 +90,6 @@ class VertexBuffer:
         self.color = None
         self.line_width = 0
 
-
 class Shape:
     def __init__(self):
         self.vao = None
@@ -143,7 +142,7 @@ def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
     buffered_shapes[id].draw()
 
 
-def create_line_generic_with_colors(point_list: PointList,
+def _create_line_generic_with_colors(point_list: PointList,
                                     color_list: Iterable[Color],
                                     shape_mode: int,
                                     line_width: float = 1) -> Shape:
@@ -209,7 +208,7 @@ def create_line_generic_with_colors(point_list: PointList,
     return shape
 
 
-def create_line_generic(point_list: PointList,
+def _create_line_generic(point_list: PointList,
                         color: Color,
                         shape_mode: int, line_width: float = 1) -> Shape:
     """
@@ -217,7 +216,7 @@ def create_line_generic(point_list: PointList,
     just changing the OpenGL type for the line drawing.
     """
     colors = [get_four_byte_color(color)] * len(point_list)
-    shape = create_line_generic_with_colors(
+    shape = _create_line_generic_with_colors(
         point_list,
         colors,
         shape_mode,
@@ -291,7 +290,7 @@ def draw_line_loop(point_list: PointList,
         buffered_shapes[id].draw()
 
 
-def create_lines(point_list: PointList,
+def draw_lines(point_list: PointList,
                  color: Color, line_width: float = 1):
     """
     Create a multi-point line loop to be rendered later. This works faster than draw_line because
@@ -304,32 +303,20 @@ def create_lines(point_list: PointList,
     :Returns Shape:
 
     """
-    return create_line_generic(point_list, color, gl.GL_LINES, line_width)
-
-
-def create_lines_with_colors(point_list: PointList,
-                             color_list: Sequence[Color],
-                             line_width: float = 1):
-
-    if line_width == 1:
-        return create_line_generic_with_colors(point_list, color_list, gl.GL_LINES, line_width)
-    else:
-
-        triangle_point_list: List[Point] = []
-        new_color_list: List[Color] = []
-        for i in range(1, len(point_list), 2):
-            start_x = point_list[i-1][0]
-            start_y = point_list[i-1][1]
-            end_x = point_list[i][0]
-            end_y = point_list[i][1]
-            color1 = color_list[i-1]
-            color2 = color_list[i]
+    for i in range(1, len(point_list), 2):
+        start_x = point_list[i-1][0]
+        start_y = point_list[i-1][1]
+        end_x = point_list[i][0]
+        end_y = point_list[i][1]
+        id = f"line-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        if id not in buffered_shapes.keys():
             points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
-            new_color_list += color1, color1, color2, color2
-            triangle_point_list += points[1], points[0], points[2], points[3]
-
-            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
-            return shape
+            color_list = [color, color, color, color]
+            triangle_point_list = points[1], points[0], points[2], points[3]
+            shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
+            buffered_shapes[id] = shape
+            print("CREATED" + id)
+        buffered_shapes[id].draw()
 
 
 def create_polygon(point_list: PointList,
@@ -354,7 +341,7 @@ def create_polygon(point_list: PointList,
         itertools.zip_longest(point_list[:half], reversed(point_list[half:]))
     )
     point_list = [p for p in interleaved if p is not None]
-    return create_line_generic(point_list, color, gl.GL_TRIANGLE_STRIP, 1)
+    return _create_line_generic(point_list, color, gl.GL_TRIANGLE_STRIP, 1)
 
 
 def create_rectangle_filled(center_x: float, center_y: float, width: float,
@@ -497,7 +484,7 @@ def create_rectangle(center_x: float, center_y: float, width: float,
         # shape_mode = gl.GL_LINE_STRIP
         # data.append(data[0])
 
-    shape = create_line_generic(data, color, shape_mode, border_width)
+    shape = _create_line_generic(data, color, shape_mode, border_width)
     return shape
 
 
@@ -511,7 +498,7 @@ def create_rectangle_filled_with_colors(point_list, color_list) -> Shape:
     shape_mode = gl.GL_TRIANGLE_STRIP
     new_point_list = [point_list[0], point_list[1], point_list[3], point_list[2]]
     new_color_list = [color_list[0], color_list[1], color_list[3], color_list[2]]
-    return create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
+    return _create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
 
 
 def create_rectangles_filled_with_colors(point_list, color_list) -> Shape:
@@ -531,7 +518,7 @@ def create_rectangles_filled_with_colors(point_list, color_list) -> Shape:
         new_color_list += [color_list[0 + i], color_list[1 + i], color_list[3 + i]]
         new_color_list += [color_list[1 + i], color_list[3 + i], color_list[2 + i]]
 
-    return create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
+    return _create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
 
 
 def create_triangles_filled_with_colors(point_list, color_list) -> Shape:
@@ -542,7 +529,7 @@ def create_triangles_filled_with_colors(point_list, color_list) -> Shape:
     """
 
     shape_mode = gl.GL_TRIANGLE_STRIP
-    return create_line_generic_with_colors(point_list, color_list, shape_mode)
+    return _create_line_generic_with_colors(point_list, color_list, shape_mode)
 
 
 def create_ellipse_filled(center_x: float, center_y: float,
@@ -608,7 +595,7 @@ def create_ellipse(center_x: float, center_y: float,
         point_list.append(point_list[0])
         shape_mode = gl.GL_LINE_STRIP
 
-    return create_line_generic(point_list, color, shape_mode, border_width)
+    return _create_line_generic(point_list, color, shape_mode, border_width)
 
 
 def create_ellipse_filled_with_colors(center_x: float, center_y: float,
@@ -648,7 +635,7 @@ def create_ellipse_filled_with_colors(center_x: float, center_y: float,
     point_list.append(point_list[1])
 
     color_list = [inside_color] + [outside_color] * (num_segments + 1)
-    return create_line_generic_with_colors(point_list, color_list, gl.GL_TRIANGLE_FAN)
+    return _create_line_generic_with_colors(point_list, color_list, gl.GL_TRIANGLE_FAN)
 
 
 TShape = TypeVar('TShape', bound=Shape)
@@ -1232,35 +1219,6 @@ def _generic_draw_line_strip(point_list: PointList,
     with vao:
         program['Projection'] = get_projection().flatten()
         vao.render(mode=mode)
-
-
-def draw_lines(point_list: PointList,
-               color: Color,
-               line_width: float = 1):
-    """
-    Draw a set of lines.
-
-    Draw a line between each pair of points specified.
-
-    :param PointList point_list: List of points making up the lines. Each point is
-         in a list. So it is a list of lists.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param float line_width: Width of the line in pixels.
-    """
-
-    triangle_point_list: PointList = []
-    last_point = None
-    for point in point_list:
-        if last_point is not None:
-            points = get_points_for_thick_line(last_point[0], last_point[1], point[0], point[1], line_width)
-            reordered_points = points[1], points[0], points[2], points[0], points[2], points[3]
-            # noinspection PyUnresolvedReferences
-            triangle_point_list.extend(reordered_points)
-            _generic_draw_line_strip(triangle_point_list, color, gl.GL_TRIANGLES)
-            last_point = None
-        else:
-            last_point = point
 
 
 # --- BEGIN POINT FUNCTIONS # # #

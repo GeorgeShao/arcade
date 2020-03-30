@@ -132,8 +132,6 @@ from .draw_commands import create_ellipse_filled_with_colors
 from .draw_commands import create_ellipse_outline
 from .draw_commands import create_line_generic
 from .draw_commands import create_line_generic_with_colors
-from .draw_commands import create_lines
-from .draw_commands import create_lines_with_colors
 from .draw_commands import create_polygon
 from .draw_commands import create_rectangle
 from .draw_commands import create_rectangle_filled
@@ -361,8 +359,6 @@ __all__ = ['AnimatedTimeBasedSprite',
            'create_line_loop',
            'create_line_strip',
            'create_lines',
-           'create_lines',
-           'create_lines_with_colors',
            'create_lines_with_colors',
            'create_orthogonal_projection',
            'create_polygon',
