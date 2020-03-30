@@ -31,6 +31,7 @@ from arcadeplus import csscolor
 from arcadeplus import key
 # noinspection PyPep8
 from arcadeplus import resources
+
 from .window_commands import close_window
 from .window_commands import create_orthogonal_projection
 from .window_commands import finish_render
