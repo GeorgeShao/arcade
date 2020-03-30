@@ -19,6 +19,5 @@ ArcadePlus is intended to be a simpler, more performant Python graphics library 
     :target: https://pepy.tech/project/arcadeplus
     :alt: Downloads
 
-
 .. image:: https://img.shields.io/pypi/l/arcadeplus
     :alt: PyPI - License
