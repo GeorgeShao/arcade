@@ -126,15 +126,13 @@ from .draw_commands import buffered_shapes
 from .draw_commands import Shape
 from .draw_commands import ShapeElementList
 from .draw_commands import VertexBuffer
-from .draw_commands import create_ellipse
-from .draw_commands import create_ellipse_filled
-from .draw_commands import create_ellipse_filled_with_colors
-from .draw_commands import create_ellipse_outline
 from .draw_commands import draw_arc_filled
 from .draw_commands import draw_arc_outline
 from .draw_commands import draw_circle_filled
 from .draw_commands import draw_circle_outline
+from .draw_commands import draw_ellipse
 from .draw_commands import draw_ellipse_filled
+from .draw_commands import draw_ellipse_filled_with_colors
 from .draw_commands import draw_ellipse_outline
 from .draw_commands import draw_line
 from .draw_commands import draw_line_loop
@@ -335,12 +333,8 @@ __all__ = ['AnimatedTimeBasedSprite',
            'cleanup_texture_cache',
            'close_window',
            'create_ellipse',
-           'create_ellipse',
-           'create_ellipse_filled',
            'create_ellipse_filled',
            'create_ellipse_filled_with_colors',
-           'create_ellipse_filled_with_colors',
-           'create_ellipse_outline',
            'create_ellipse_outline',
            'create_isometric_grid_lines',
            'create_line',
@@ -363,7 +357,9 @@ __all__ = ['AnimatedTimeBasedSprite',
            'draw_arc_outline',
            'draw_circle_filled',
            'draw_circle_outline',
+           'draw_ellipse',
            'draw_ellipse_filled',
+           'draw_ellipse_filled_with_colors',
            'draw_ellipse_outline',
            'draw_line',
            'draw_line_loop',

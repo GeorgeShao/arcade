@@ -117,6 +117,7 @@ class Shape:
 
             self.vao.render(mode=self.mode)
 
+
 TShape = TypeVar('TShape', bound=Shape)
 class ShapeElementList(Generic[TShape]):
     """
@@ -1030,10 +1031,7 @@ def draw_triangle_outline(x1: float, y1: float,
     draw_polygon_outline(point_list, color, border_width)
 
 
-# CODE ABOVE IS VBO-OPTIMIZED, CODE BELOW STILL NEEDS TO BE WORKED ON
-
-
-def create_ellipse(center_x: float, center_y: float,
+def draw_ellipse(center_x: float, center_y: float,
                    width: float, height: float, color: Color,
                    border_width: float = 1,
                    tilt_angle: float = 0, num_segments: int = 32,
@@ -1062,20 +1060,28 @@ def create_ellipse(center_x: float, center_y: float,
         point_list.append((x, y))
 
     if filled:
-        half = len(point_list) // 2
-        interleaved = itertools.chain.from_iterable(
-            itertools.zip_longest(point_list[:half], reversed(point_list[half:]))
-        )
-        point_list = [p for p in interleaved if p is not None]
-        shape_mode = gl.GL_TRIANGLE_STRIP
+        id = f"ellipse-filled-{center_x}-{center_y}-{width}-{height}-{color}-{border_width}-{tilt_angle}-{num_segments}"
+        if id not in buffered_shapes.keys():
+            half = len(point_list) // 2
+            interleaved = itertools.chain.from_iterable(
+                itertools.zip_longest(point_list[:half], reversed(point_list[half:]))
+            )
+            point_list = [p for p in interleaved if p is not None]
+            shape_mode = gl.GL_TRIANGLE_STRIP
+            shape = _create_line_generic(point_list, color, shape_mode, border_width)
+            buffered_shapes[id] = shape
+        buffered_shapes[id].draw()
     else:
-        point_list.append(point_list[0])
-        shape_mode = gl.GL_LINE_STRIP
+        id = f"ellipse-empty-{center_x}-{center_y}-{width}-{height}-{color}-{border_width}-{tilt_angle}-{num_segments}"
+        if id not in buffered_shapes.keys():
+            point_list.append(point_list[0])
+            shape_mode = gl.GL_LINE_STRIP
+            shape = _create_line_generic(point_list, color, shape_mode, border_width)
+            buffered_shapes[id] = shape
+        buffered_shapes[id].draw()
 
-    return _create_line_generic(point_list, color, shape_mode, border_width)
 
-
-def create_ellipse_filled(center_x: float, center_y: float,
+def draw_ellipse_filled(center_x: float, center_y: float,
                           width: float, height: float, color: Color,
                           tilt_angle: float = 0, num_segments: int = 128):
     """
@@ -1083,11 +1089,11 @@ def create_ellipse_filled(center_x: float, center_y: float,
     """
 
     border_width = 1
-    return create_ellipse(center_x, center_y, width, height, color,
+    draw_ellipse(center_x, center_y, width, height, color,
                           border_width, tilt_angle, num_segments, filled=True)
 
 
-def create_ellipse_outline(center_x: float, center_y: float,
+def draw_ellipse_outline(center_x: float, center_y: float,
                            width: float, height: float, color: Color,
                            border_width: float = 1,
                            tilt_angle: float = 0, num_segments: int = 128):
@@ -1095,11 +1101,11 @@ def create_ellipse_outline(center_x: float, center_y: float,
     Create an outline of an ellipse.
     """
 
-    return create_ellipse(center_x, center_y, width, height, color,
+    draw_ellipse(center_x, center_y, width, height, color,
                           border_width, tilt_angle, num_segments, filled=False)
 
 
-def create_ellipse_filled_with_colors(center_x: float, center_y: float,
+def draw_ellipse_filled_with_colors(center_x: float, center_y: float,
                                       width: float, height: float,
                                       outside_color: Color, inside_color: Color,
                                       tilt_angle: float = 0, num_segments: int = 32):
@@ -1136,7 +1142,54 @@ def create_ellipse_filled_with_colors(center_x: float, center_y: float,
     point_list.append(point_list[1])
 
     color_list = [inside_color] + [outside_color] * (num_segments + 1)
-    return _create_line_generic_with_colors(point_list, color_list, gl.GL_TRIANGLE_FAN)
+    id = f"ellipse-filled-with-colors-{point_list}-{color_list}"
+    if id not in buffered_shapes.keys():
+        shape = _create_line_generic_with_colors(point_list, color_list, gl.GL_TRIANGLE_FAN)
+        buffered_shapes[id] = shape
+    buffered_shapes[id].draw()
+
+
+def draw_circle_filled(center_x: float, center_y: float, radius: float,
+                       color: Color,
+                       num_segments: int = 128):
+    """
+    Draw a filled-in circle.
+
+    :param float center_x: x position that is the center of the circle.
+    :param float center_y: y position that is the center of the circle.
+    :param float radius: width of the circle.
+    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
+         RGBA format.
+    :param int num_segments: float of triangle segments that make up this
+         circle. Higher is better quality, but slower render time.
+    """
+    width = radius * 2
+    height = radius * 2
+    draw_ellipse_filled(center_x, center_y, width, height, color, num_segments=num_segments)
+
+
+def draw_circle_outline(center_x: float, center_y: float, radius: float,
+                        color: Color, border_width: float = 1,
+                        num_segments: int = 128):
+    """
+    Draw the outline of a circle.
+
+    :param float center_x: x position that is the center of the circle.
+    :param float center_y: y position that is the center of the circle.
+    :param float radius: width of the circle.
+    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
+         RGBA format.
+    :param float border_width: Width of the circle outline in pixels.
+    :param int num_segments: Int of triangle segments that make up this
+         circle. Higher is better quality, but slower render time.
+    """
+    width = radius * 2
+    height = radius * 2
+    draw_ellipse_outline(center_x, center_y, width, height,
+                         color, border_width, num_segments=num_segments)
+
+
+# CODE ABOVE IS VBO-OPTIMIZED, CODE BELOW STILL NEEDS TO BE WORKED ON
 
 
 def draw_arc_filled(center_x: float, center_y: float,
@@ -1287,166 +1340,6 @@ def draw_parabola_outline(start_x: float, start_y: float, end_x: float,
     width = (start_x - end_x)
     draw_arc_outline(center_x, center_y, width, height, color,
                      start_angle, end_angle, border_width, tilt_angle)
-
-
-def draw_circle_filled(center_x: float, center_y: float, radius: float,
-                       color: Color,
-                       num_segments: int = 128):
-    """
-    Draw a filled-in circle.
-
-    :param float center_x: x position that is the center of the circle.
-    :param float center_y: y position that is the center of the circle.
-    :param float radius: width of the circle.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param int num_segments: float of triangle segments that make up this
-         circle. Higher is better quality, but slower render time.
-    """
-    width = radius * 2
-    height = radius * 2
-    draw_ellipse_filled(center_x, center_y, width, height, color, num_segments=num_segments)
-
-
-def draw_circle_outline(center_x: float, center_y: float, radius: float,
-                        color: Color, border_width: float = 1,
-                        num_segments: int = 128):
-    """
-    Draw the outline of a circle.
-
-    :param float center_x: x position that is the center of the circle.
-    :param float center_y: y position that is the center of the circle.
-    :param float radius: width of the circle.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param float border_width: Width of the circle outline in pixels.
-    :param int num_segments: Int of triangle segments that make up this
-         circle. Higher is better quality, but slower render time.
-    """
-    width = radius * 2
-    height = radius * 2
-    draw_ellipse_outline(center_x, center_y, width, height,
-                         color, border_width, num_segments=num_segments)
-
-
-def draw_ellipse_filled(center_x: float, center_y: float,
-                        width: float, height: float, color: Color,
-                        tilt_angle: float = 0, num_segments: int = 128):
-    """
-    Draw a filled in ellipse.
-
-    :param float center_x: x position that is the center of the circle.
-    :param float center_y: y position that is the center of the circle.
-    :param float width: width of the ellipse.
-    :param float height: height of the ellipse.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param float tilt_angle: Angle in degrees to tilt the ellipse.
-    :param int num_segments: float of triangle segments that make up this
-         circle. Higher is better quality, but slower render time.
-    """
-
-    unrotated_point_list = []
-
-    for segment in range(num_segments):
-        theta = 2.0 * 3.1415926 * segment / num_segments
-
-        x = (width / 2) * math.cos(theta)
-        y = (height / 2) * math.sin(theta)
-
-        unrotated_point_list.append([x, y])
-
-    if tilt_angle == 0:
-        uncentered_point_list = unrotated_point_list
-    else:
-        uncentered_point_list = []
-        for point in unrotated_point_list:
-            uncentered_point_list.append(rotate_point(point[0], point[1], 0, 0, tilt_angle))
-
-    point_list = []
-    for point in uncentered_point_list:
-        point_list.append((point[0] + center_x, point[1] + center_y))
-
-    _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLE_FAN)
-
-
-def draw_ellipse_outline(center_x: float, center_y: float, width: float,
-                         height: float, color: Color,
-                         border_width: float = 1, tilt_angle: float = 0,
-                         num_segments: int = 128):
-    """
-    Draw the outline of an ellipse.
-
-    :param float center_x: x position that is the center of the circle.
-    :param float center_y: y position that is the center of the circle.
-    :param float width: width of the ellipse.
-    :param float height: height of the ellipse.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param float border_width: Width of the circle outline in pixels.
-    :param float tilt_angle: Angle in degrees to tilt the ellipse.
-    :param int num_segments: Number of line segments used to make the ellipse
-    """
-
-    if border_width == 1:
-        unrotated_point_list = []
-
-        for segment in range(num_segments):
-            theta = 2.0 * 3.1415926 * segment / num_segments
-
-            x = (width / 2) * math.cos(theta)
-            y = (height / 2) * math.sin(theta)
-
-            unrotated_point_list.append([x, y])
-
-        if tilt_angle == 0:
-            uncentered_point_list = unrotated_point_list
-        else:
-            uncentered_point_list = []
-            for point in unrotated_point_list:
-                uncentered_point_list.append(rotate_point(point[0], point[1], 0, 0, tilt_angle))
-
-        point_list = []
-        for point in uncentered_point_list:
-            point_list.append((point[0] + center_x, point[1] + center_y))
-
-        _generic_draw_line_strip(point_list, color, gl.GL_LINE_LOOP)
-    else:
-
-        unrotated_point_list = []
-
-        start_segment = 0
-        end_segment = num_segments
-
-        inside_width = (width / 2) - border_width / 2
-        outside_width = (width / 2) + border_width / 2
-        inside_height = (height / 2) - border_width / 2
-        outside_height = (height / 2) + border_width / 2
-
-        for segment in range(start_segment, end_segment + 1):
-            theta = 2.0 * math.pi * segment / num_segments
-
-            x1 = inside_width * math.cos(theta)
-            y1 = inside_height * math.sin(theta)
-
-            x2 = outside_width * math.cos(theta)
-            y2 = outside_height * math.sin(theta)
-
-            unrotated_point_list.append([x1, y1])
-            unrotated_point_list.append([x2, y2])
-
-        if tilt_angle == 0:
-            uncentered_point_list = unrotated_point_list
-        else:
-            uncentered_point_list = []
-            for point in unrotated_point_list:
-                uncentered_point_list.append(rotate_point(point[0], point[1], 0, 0, tilt_angle))
-
-        point_list = []
-        for point in uncentered_point_list:
-            point_list.append((point[0] + center_x, point[1] + center_y))
-
-        _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLE_STRIP)
 
 
 def draw_point(x: float, y: float, color: Color, size: float):
