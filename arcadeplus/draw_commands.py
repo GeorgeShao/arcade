@@ -1137,9 +1137,7 @@ def draw_circle_filled(center_x: float, center_y: float, radius: float,
     :param int num_segments: float of triangle segments that make up this
          circle. Higher is better quality, but slower render time.
     """
-    width = radius * 2
-    height = radius * 2
-    draw_ellipse_filled(center_x, center_y, width, height, color, num_segments=num_segments)
+    draw_ellipse_filled(center_x, center_y, radius, radius, color, num_segments=num_segments)
 
 
 def draw_circle_outline(center_x: float, center_y: float, radius: float,
@@ -1157,9 +1155,7 @@ def draw_circle_outline(center_x: float, center_y: float, radius: float,
     :param int num_segments: Int of triangle segments that make up this
          circle. Higher is better quality, but slower render time.
     """
-    width = radius * 2
-    height = radius * 2
-    draw_ellipse_outline(center_x, center_y, width, height,
+    draw_ellipse_outline(center_x, center_y, radius, radius,
                          color, border_width, num_segments=num_segments)
 
 
