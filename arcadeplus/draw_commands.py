@@ -399,7 +399,7 @@ def _create_line_generic(point_list: PointList,
 
 def _generic_draw_line_strip(point_list: PointList,
                              color: Color,
-                             mode: int = gl.GL_LINE_STRIP):
+                             mode: int = gl.GL_LINE_STRIP) -> Shape:
     """
     Draw a line strip. A line strip is a set of continuously connected
     line segments.
@@ -448,7 +448,7 @@ def _generic_draw_line_strip(point_list: PointList,
         vao.render(mode=mode)
 
 
-def _get_points_for_points(point_list, size):
+def _get_points_for_points(point_list, size) -> Shape:
     new_point_list = []
     hs = size / 2
     for point in point_list:
@@ -463,6 +463,17 @@ def _get_points_for_points(point_list, size):
         new_point_list.append((x - hs, y + hs))
 
     return new_point_list
+
+
+def _create_triangles_filled_with_colors(point_list, color_list) -> Shape:
+    """
+    This function creates multiple rectangle/quads using a vertex buffer object.
+    Creating the rectangles, and then later drawing it with ``render``
+    is faster than calling ``draw_rectangle``.
+    """
+
+    shape_mode = gl.GL_TRIANGLE_STRIP
+    return _create_line_generic_with_colors(point_list, color_list, shape_mode)
 
 
 # Utility Functions
@@ -601,7 +612,7 @@ def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
         points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
         color_list = [color, color, color, color]
         triangle_point_list = points[1], points[0], points[2], points[3]
-        shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
+        shape = _create_triangles_filled_with_colors(triangle_point_list, color_list)
         buffered_shapes[id] = shape
     buffered_shapes[id].draw()
 
@@ -633,7 +644,7 @@ def draw_line_strip(point_list: PointList,
             points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
             new_color_list += color1, color2, color1, color2
             triangle_point_list += points[1], points[0], points[2], points[3]
-            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
+            shape = _create_triangles_filled_with_colors(triangle_point_list, new_color_list)
             buffered_shapes[id] = shape
         buffered_shapes[id].draw()
 
@@ -666,7 +677,7 @@ def draw_line_loop(point_list: PointList,
             points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
             new_color_list += color1, color2, color1, color2
             triangle_point_list += points[1], points[0], points[2], points[3]
-            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
+            shape = _create_triangles_filled_with_colors(triangle_point_list, new_color_list)
             buffered_shapes[id] = shape
         buffered_shapes[id].draw()
 
@@ -694,7 +705,7 @@ def draw_lines(point_list: PointList,
             points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
             color_list = [color, color, color, color]
             triangle_point_list = points[1], points[0], points[2], points[3]
-            shape = create_triangles_filled_with_colors(triangle_point_list, color_list)
+            shape = _create_triangles_filled_with_colors(triangle_point_list, color_list)
             buffered_shapes[id] = shape
         buffered_shapes[id].draw()
 
@@ -754,7 +765,7 @@ def draw_polygon_outline(point_list: PointList,
             points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
             new_color_list += color1, color2, color1, color2
             triangle_point_list += points[1], points[0], points[2], points[3]
-            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
+            shape = _create_triangles_filled_with_colors(triangle_point_list, new_color_list)
             buffered_shapes[id] = shape
         buffered_shapes[id].draw()
 
@@ -967,18 +978,57 @@ def draw_xywh_rectangle_outline(bottom_left_x: float, bottom_left_y: float, widt
                             color, tilt_angle=tilt_angle, filled=False, border_width=border_width)
 
 
+def draw_triangle_filled(x1: float, y1: float,
+                         x2: float, y2: float,
+                         x3: float, y3: float, color: Color):
+    """
+    Draw a filled in triangle.
+
+    :param float x1: x value of first coordinate.
+    :param float y1: y value of first coordinate.
+    :param float x2: x value of second coordinate.
+    :param float y2: y value of second coordinate.
+    :param float x3: x value of third coordinate.
+    :param float y3: y value of third coordinate.
+    :param Color color: Color of triangle.
+    """
+
+    first_point = (x1, y1)
+    second_point = (x2, y2)
+    third_point = (x3, y3)
+    point_list = (first_point, second_point, third_point)
+    id = f"triangle-{point_list}-{color}"
+    if id not in buffered_shapes.keys():
+        shape = _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLES)
+        buffered_shapes[id] = shape
+    buffered_shapes[id].draw()
+
+
+def draw_triangle_outline(x1: float, y1: float,
+                          x2: float, y2: float,
+                          x3: float, y3: float,
+                          color: Color,
+                          border_width: float = 1):
+    """
+    Draw a the outline of a triangle.
+
+    :param float x1: x value of first coordinate.
+    :param float y1: y value of first coordinate.
+    :param float x2: x value of second coordinate.
+    :param float y2: y value of second coordinate.
+    :param float x3: x value of third coordinate.
+    :param float y3: y value of third coordinate.
+    :param Color color: Color of triangle.
+    :param float border_width: Width of the border in pixels. Defaults to 1.
+    """
+    first_point = [x1, y1]
+    second_point = [x2, y2]
+    third_point = [x3, y3]
+    point_list = (first_point, second_point, third_point)
+    draw_polygon_outline(point_list, color, border_width)
+
+
 # CODE ABOVE IS VBO-OPTIMIZED, CODE BELOW STILL NEEDS TO BE WORKED ON
-
-
-def create_triangles_filled_with_colors(point_list, color_list):
-    """
-    This function creates multiple rectangle/quads using a vertex buffer object.
-    Creating the rectangles, and then later drawing it with ``render``
-    is faster than calling ``draw_rectangle``.
-    """
-
-    shape_mode = gl.GL_TRIANGLE_STRIP
-    return _create_line_generic_with_colors(point_list, color_list, shape_mode)
 
 
 def create_ellipse(center_x: float, center_y: float,
@@ -1425,50 +1475,6 @@ def draw_points(point_list: PointList,
     _generic_draw_line_strip(new_point_list, color, gl.GL_TRIANGLES)
 
 
-def draw_triangle_filled(x1: float, y1: float,
-                         x2: float, y2: float,
-                         x3: float, y3: float, color: Color):
-    """
-    Draw a filled in triangle.
-
-    :param float x1: x value of first coordinate.
-    :param float y1: y value of first coordinate.
-    :param float x2: x value of second coordinate.
-    :param float y2: y value of second coordinate.
-    :param float x3: x value of third coordinate.
-    :param float y3: y value of third coordinate.
-    :param Color color: Color of triangle.
-    """
-
-    first_point = (x1, y1)
-    second_point = (x2, y2)
-    third_point = (x3, y3)
-    point_list = (first_point, second_point, third_point)
-    _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLES)
-
-
-def draw_triangle_outline(x1: float, y1: float,
-                          x2: float, y2: float,
-                          x3: float, y3: float,
-                          color: Color,
-                          border_width: float = 1):
-    """
-    Draw a the outline of a triangle.
-
-    :param float x1: x value of first coordinate.
-    :param float y1: y value of first coordinate.
-    :param float x2: x value of second coordinate.
-    :param float y2: y value of second coordinate.
-    :param float x3: x value of third coordinate.
-    :param float y3: y value of third coordinate.
-    :param Color color: Color of triangle.
-    :param float border_width: Width of the border in pixels. Defaults to 1.
-    """
-    first_point = [x1, y1]
-    second_point = [x2, y2]
-    third_point = [x3, y3]
-    point_list = (first_point, second_point, third_point)
-    draw_polygon_outline(point_list, color, border_width)
 
 
 def draw_scaled_texture_rectangle(center_x: float, center_y: float,

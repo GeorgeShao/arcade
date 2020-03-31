@@ -130,9 +130,6 @@ from .draw_commands import create_ellipse
 from .draw_commands import create_ellipse_filled
 from .draw_commands import create_ellipse_filled_with_colors
 from .draw_commands import create_ellipse_outline
-from .draw_commands import create_rectangle_filled_with_colors
-from .draw_commands import create_rectangles_filled_with_colors
-from .draw_commands import create_triangles_filled_with_colors
 from .draw_commands import draw_arc_filled
 from .draw_commands import draw_arc_outline
 from .draw_commands import draw_circle_filled
@@ -358,12 +355,9 @@ __all__ = ['AnimatedTimeBasedSprite',
            'create_rectangle',
            'create_rectangle_filled',
            'create_rectangle_filled_with_colors',
-           'create_rectangle_filled_with_colors',
            'create_rectangle_outline',
            'create_rectangles_filled_with_colors',
-           'create_rectangles_filled_with_colors',
            'create_text',
-           'create_triangles_filled_with_colors',
            'create_triangles_filled_with_colors',
            'draw_arc_filled',
            'draw_arc_outline',
