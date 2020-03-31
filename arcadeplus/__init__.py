@@ -125,7 +125,6 @@ from .draw_commands import TShape
 from .draw_commands import buffered_shapes
 from .draw_commands import Shape
 from .draw_commands import ShapeElementList
-from .draw_commands import VertexBuffer
 from .draw_commands import draw_arc_filled
 from .draw_commands import draw_arc_outline
 from .draw_commands import draw_circle_filled
@@ -320,7 +319,6 @@ __all__ = ['AnimatedTimeBasedSprite',
            'TiledMap',
            'VERSION',
            'Vector',
-           'VertexBuffer',
            'VertexBuffer',
            'View',
            'Window',

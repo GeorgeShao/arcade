@@ -66,32 +66,6 @@ _line_fragment_shader = '''
 buffered_shapes = dict()
 
 
-class VertexBuffer:
-    """
-    This class represents a `vertex buffer object`_ for internal library use. Clients
-    of the library probably don't need to use this.
-
-    Attributes:
-        :vbo_id: ID of the vertex buffer as assigned by OpenGL
-        :size:
-        :width:
-        :height:
-        :color:
-
-
-    .. _vertex buffer object:
-       https://en.wikipedia.org/wiki/Vertex_Buffer_Object
-
-    """
-    def __init__(self, vbo_vertex_id: gl.GLuint, size: float, draw_mode: int, vbo_color_id: gl.GLuint = None):
-        self.vbo_vertex_id = vbo_vertex_id
-        self.vbo_color_id = vbo_color_id
-        self.size = size
-        self.draw_mode = draw_mode
-        self.color = None
-        self.line_width = 0
-
-
 class Shape:
     def __init__(self):
         self.vao = None
@@ -451,7 +425,7 @@ def _generic_draw_line_strip(point_list: PointList,
         vao.render(mode=mode)
 
 
-def _get_points_for_points(point_list, size) -> Shape:
+def _get_points_for_points(point_list, size):
     new_point_list = []
     hs = size / 2
     for point in point_list:
@@ -1189,7 +1163,20 @@ def draw_circle_outline(center_x: float, center_y: float, radius: float,
                          color, border_width, num_segments=num_segments)
 
 
-# CODE ABOVE IS VBO-OPTIMIZED, CODE BELOW STILL NEEDS TO BE WORKED ON
+def draw_point(x: float, y: float, color: Color, size: float):
+    """
+    Draw a point.
+
+    :param float x: x position of point.
+    :param float y: y position of point.
+    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
+         RGBA format.
+    :param float size: Size of the point in pixels.
+    """
+    draw_rectangle_filled(x, y, size / 2, size / 2, color)
+
+
+# VBO-Unoptimized Functions
 
 
 def draw_arc_filled(center_x: float, center_y: float,
@@ -1340,19 +1327,6 @@ def draw_parabola_outline(start_x: float, start_y: float, end_x: float,
     width = (start_x - end_x)
     draw_arc_outline(center_x, center_y, width, height, color,
                      start_angle, end_angle, border_width, tilt_angle)
-
-
-def draw_point(x: float, y: float, color: Color, size: float):
-    """
-    Draw a point.
-
-    :param float x: x position of point.
-    :param float y: y position of point.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param float size: Size of the point in pixels.
-    """
-    draw_rectangle_filled(x, y, size / 2, size / 2, color)
 
 
 def draw_points(point_list: PointList,
