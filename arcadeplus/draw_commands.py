@@ -834,7 +834,7 @@ def draw_rectangle_filled(center_x: float, center_y: float, width: float,
 
     """
     draw_rectangle(center_x, center_y, width, height,
-                            color, tilt_angle=tilt_angle, filled=True, border_width=border_width)
+                            color, border_width=border_width, tilt_angle=tilt_angle, filled=True)
 
 
 def draw_rectangle_outline(center_x: float, center_y: float, width: float,
@@ -860,7 +860,7 @@ def draw_rectangle_outline(center_x: float, center_y: float, width: float,
 
     """
     draw_rectangle(center_x, center_y, width, height,
-                            color, tilt_angle=tilt_angle, filled=False, border_width=border_width)
+                            color, border_width=border_width, tilt_angle=tilt_angle, filled=False, )
 
 
 def draw_lrtb_rectangle_filled(left: float, right: float, top: float,
@@ -888,8 +888,8 @@ def draw_lrtb_rectangle_filled(left: float, right: float, top: float,
 
 
 def draw_xywh_rectangle_filled(bottom_left_x: float, bottom_left_y: float, width: float,
-                            height: float, color: Color,
-                            tilt_angle: float = 0, border_width: float = 1):
+                            height: float, color: Color, border_width: float = 1,
+                            tilt_angle: float = 0):
     """
     Create a filled rectangle.
 
@@ -906,12 +906,12 @@ def draw_xywh_rectangle_filled(bottom_left_x: float, bottom_left_y: float, width
     center_x = bottom_left_x + (width / 2)
     center_y = bottom_left_y + (height / 2)
     draw_rectangle(center_x, center_y, width, height,
-                            color, tilt_angle=tilt_angle, filled=True, border_width=border_width)
+                            color, border_width=border_width, tilt_angle=tilt_angle, filled=True)
 
 
 def draw_lrtb_rectangle_outline(left: float, right: float, top: float,
-                            bottom: float, color: Color,
-                            tilt_angle: float = 0, border_width: float = 1):
+                            bottom: float, color: Color, border_width: float = 1,
+                            tilt_angle: float = 0):
     """
     Create a filled rectangle.
 
@@ -930,12 +930,12 @@ def draw_lrtb_rectangle_outline(left: float, right: float, top: float,
     width = right - left
     height = top - bottom
     draw_rectangle(center_x, center_y, width, height,
-                            color, tilt_angle=tilt_angle, filled=False, border_width=border_width)
+                            color, border_width=border_width, tilt_angle=tilt_angle, filled=False)
 
 
 def draw_xywh_rectangle_outline(bottom_left_x: float, bottom_left_y: float, width: float,
-                            height: float, color: Color,
-                            tilt_angle: float = 0, border_width: float = 1):
+                            height: float, color: Color, border_width: float = 1,
+                            tilt_angle: float = 0):
     """
     Create a filled rectangle.
 
@@ -952,7 +952,7 @@ def draw_xywh_rectangle_outline(bottom_left_x: float, bottom_left_y: float, widt
     center_x = bottom_left_x + (width / 2)
     center_y = bottom_left_y + (height / 2)
     draw_rectangle(center_x, center_y, width, height,
-                            color, tilt_angle=tilt_angle, filled=False, border_width=border_width)
+                            color, border_width=border_width, tilt_angle=tilt_angle, filled=False)
 
 
 def draw_triangle_filled(x1: float, y1: float,
