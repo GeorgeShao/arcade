@@ -510,6 +510,73 @@ def get_rectangle_points(center_x: float, center_y: float, width: float,
     return data
 
 
+def get_pixel(x: int, y: int) -> Tuple[int, int, int]:
+    """
+    Given an x, y, will return RGB color value of that point.
+
+    :param int x: x location
+    :param int y: y location
+    :returns: Color
+    """
+    # noinspection PyCallingNonCallable,PyTypeChecker
+
+    # The window may be 'scaled' on hi-res displays. Particularly Macs. OpenGL
+    # won't account for this, so we need to.
+    window = get_window()
+    if not window:
+        raise ValueError("No window is available to get pixel data from.")
+
+    pixel_ratio = window.get_pixel_ratio()
+    x = int(pixel_ratio * x)
+    y = int(pixel_ratio * y)
+
+    a = (gl.GLubyte * 3)(0)
+    gl.glReadPixels(x, y, 1, 1, gl.GL_RGB, gl.GL_UNSIGNED_BYTE, a)
+    red = a[0]
+    green = a[1]
+    blue = a[2]
+    return red, green, blue
+
+
+def get_image(x: int = 0, y: int = 0, width: int = None, height: int = None):
+    """
+    Get an image from the screen.
+
+    :param int x: Start (left) x location
+    :param int y: Start (top) y location
+    :param int width: Width of image. Leave blank for grabbing the 'rest' of the image
+    :param int height: Height of image. Leave blank for grabbing the 'rest' of the image
+
+    You can save the image like:
+
+    .. highlight:: python
+    .. code-block:: python
+
+        image = get_image()
+        image.save('screenshot.png', 'PNG')
+    """
+
+    # Get the dimensions
+    window = get_window()
+    if window is None:
+        raise RuntimeError("Handle to the current window is None")
+    if width is None:
+        width = window.width - x
+    if height is None:
+        height = window.height - y
+
+    # Create an image buffer
+    # noinspection PyTypeChecker
+    image_buffer = (gl.GLubyte * (4 * width * height))(0)
+
+    gl.glReadPixels(x, y, width, height, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, image_buffer)
+    image = PIL.Image.frombytes("RGBA", (width, height), image_buffer)
+    image = PIL.ImageOps.flip(image)
+
+    # image.save('glutout.png', 'PNG')
+    return image
+
+
 # VBO-Optimized Functions
 
 
@@ -561,7 +628,7 @@ def draw_line_strip(point_list: PointList,
         end_y = point_list[i][1]
         color1 = color
         color2 = color
-        id = f"linestrip-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        id = f"line-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
         if id not in buffered_shapes.keys():
             points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
             new_color_list += color1, color2, color1, color2
@@ -594,7 +661,7 @@ def draw_line_loop(point_list: PointList,
         end_y = point_list[i][1]
         color1 = color
         color2 = color
-        id = f"lineloop-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        id = f"line-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
         if id not in buffered_shapes.keys():
             points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
             new_color_list += color1, color2, color1, color2
@@ -682,7 +749,7 @@ def draw_polygon_outline(point_list: PointList,
         end_y = point_list[i][1]
         color1 = color
         color2 = color
-        id = f"lineloop-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        id = f"line-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
         if id not in buffered_shapes.keys():
             points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
             new_color_list += color1, color2, color1, color2
@@ -901,39 +968,6 @@ def draw_xywh_rectangle_outline(bottom_left_x: float, bottom_left_y: float, widt
 
 
 # CODE ABOVE IS VBO-OPTIMIZED, CODE BELOW STILL NEEDS TO BE WORKED ON
-
-
-def create_rectangle_filled_with_colors(point_list, color_list):
-    """
-    This function creates one rectangle/quad using a vertex buffer object.
-    Creating the rectangles, and then later drawing it with ``render``
-    is faster than calling ``draw_rectangle``.
-    """
-
-    shape_mode = gl.GL_TRIANGLE_STRIP
-    new_point_list = [point_list[0], point_list[1], point_list[3], point_list[2]]
-    new_color_list = [color_list[0], color_list[1], color_list[3], color_list[2]]
-    return _create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
-
-
-def create_rectangles_filled_with_colors(point_list, color_list):
-    """
-    This function creates multiple rectangle/quads using a vertex buffer object.
-    Creating the rectangles, and then later drawing it with ``render``
-    is faster than calling ``draw_rectangle``.
-    """
-
-    shape_mode = gl.GL_TRIANGLES
-    new_point_list: List[Point] = []
-    new_color_list: List[Color] = []
-    for i in range(0, len(point_list), 4):
-        new_point_list += [point_list[0 + i], point_list[1 + i], point_list[3 + i]]
-        new_point_list += [point_list[1 + i], point_list[3 + i], point_list[2 + i]]
-
-        new_color_list += [color_list[0 + i], color_list[1 + i], color_list[3 + i]]
-        new_color_list += [color_list[1 + i], color_list[3 + i], color_list[2 + i]]
-
-    return _create_line_generic_with_colors(new_point_list, new_color_list, shape_mode)
 
 
 def create_triangles_filled_with_colors(point_list, color_list):
@@ -1499,68 +1533,3 @@ def draw_lrwh_rectangle_textured(bottom_left_x: float, bottom_left_y: float,
     texture.draw_sized(center_x, center_y, width, height, angle=angle, alpha=alpha)
 
 
-def get_pixel(x: int, y: int) -> Tuple[int, int, int]:
-    """
-    Given an x, y, will return RGB color value of that point.
-
-    :param int x: x location
-    :param int y: y location
-    :returns: Color
-    """
-    # noinspection PyCallingNonCallable,PyTypeChecker
-
-    # The window may be 'scaled' on hi-res displays. Particularly Macs. OpenGL
-    # won't account for this, so we need to.
-    window = get_window()
-    if not window:
-        raise ValueError("No window is available to get pixel data from.")
-
-    pixel_ratio = window.get_pixel_ratio()
-    x = int(pixel_ratio * x)
-    y = int(pixel_ratio * y)
-
-    a = (gl.GLubyte * 3)(0)
-    gl.glReadPixels(x, y, 1, 1, gl.GL_RGB, gl.GL_UNSIGNED_BYTE, a)
-    red = a[0]
-    green = a[1]
-    blue = a[2]
-    return red, green, blue
-
-
-def get_image(x: int = 0, y: int = 0, width: int = None, height: int = None):
-    """
-    Get an image from the screen.
-
-    :param int x: Start (left) x location
-    :param int y: Start (top) y location
-    :param int width: Width of image. Leave blank for grabbing the 'rest' of the image
-    :param int height: Height of image. Leave blank for grabbing the 'rest' of the image
-
-    You can save the image like:
-
-    .. highlight:: python
-    .. code-block:: python
-
-        image = get_image()
-        image.save('screenshot.png', 'PNG')
-    """
-
-    # Get the dimensions
-    window = get_window()
-    if window is None:
-        raise RuntimeError("Handle to the current window is None")
-    if width is None:
-        width = window.width - x
-    if height is None:
-        height = window.height - y
-
-    # Create an image buffer
-    # noinspection PyTypeChecker
-    image_buffer = (gl.GLubyte * (4 * width * height))(0)
-
-    gl.glReadPixels(x, y, width, height, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE, image_buffer)
-    image = PIL.Image.frombytes("RGBA", (width, height), image_buffer)
-    image = PIL.ImageOps.flip(image)
-
-    # image.save('glutout.png', 'PNG')
-    return image
