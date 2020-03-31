@@ -65,6 +65,7 @@ _line_fragment_shader = '''
 
 buffered_shapes = dict()
 
+
 class VertexBuffer:
     """
     This class represents a `vertex buffer object`_ for internal library use. Clients
@@ -89,6 +90,7 @@ class VertexBuffer:
         self.draw_mode = draw_mode
         self.color = None
         self.line_width = 0
+
 
 class Shape:
     def __init__(self):
@@ -1473,8 +1475,6 @@ def draw_points(point_list: PointList,
     """
     new_point_list = _get_points_for_points(point_list, size)
     _generic_draw_line_strip(new_point_list, color, gl.GL_TRIANGLES)
-
-
 
 
 def draw_scaled_texture_rectangle(center_x: float, center_y: float,
