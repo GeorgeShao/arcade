@@ -5,7 +5,7 @@ A simple, easy to use Python module for creating 2D games.
 """
 
 # Note: DO NOT EDIT arcadeplus/__init__.py
-# Instead look at util/init_template.py and update_init.py
+# Instead look at util/template_init.py and update_init.py
 
 # Error out if we import arcadeplus with an incompatible version of Python.
 import sys
@@ -130,10 +130,7 @@ from .draw_commands import create_ellipse
 from .draw_commands import create_ellipse_filled
 from .draw_commands import create_ellipse_filled_with_colors
 from .draw_commands import create_ellipse_outline
-from .draw_commands import create_rectangle
-from .draw_commands import create_rectangle_filled
 from .draw_commands import create_rectangle_filled_with_colors
-from .draw_commands import create_rectangle_outline
 from .draw_commands import create_rectangles_filled_with_colors
 from .draw_commands import create_triangles_filled_with_colors
 from .draw_commands import draw_arc_filled
@@ -153,8 +150,9 @@ from .draw_commands import draw_parabola_filled
 from .draw_commands import draw_parabola_outline
 from .draw_commands import draw_point
 from .draw_commands import draw_points
-from .draw_commands import draw_polygon
+from .draw_commands import draw_polygon_filled
 from .draw_commands import draw_polygon_outline
+from .draw_commands import draw_rectangle
 from .draw_commands import draw_rectangle_filled
 from .draw_commands import draw_rectangle_outline
 from .draw_commands import draw_scaled_texture_rectangle
@@ -358,12 +356,9 @@ __all__ = ['AnimatedTimeBasedSprite',
            'create_orthogonal_projection',
            'create_polygon',
            'create_rectangle',
-           'create_rectangle',
-           'create_rectangle_filled',
            'create_rectangle_filled',
            'create_rectangle_filled_with_colors',
            'create_rectangle_filled_with_colors',
-           'create_rectangle_outline',
            'create_rectangle_outline',
            'create_rectangles_filled_with_colors',
            'create_rectangles_filled_with_colors',
@@ -387,8 +382,9 @@ __all__ = ['AnimatedTimeBasedSprite',
            'draw_parabola_outline',
            'draw_point',
            'draw_points',
-           'draw_polygon',
+           'draw_polygon_filled',
            'draw_polygon_outline',
+           'draw_rectangle',
            'draw_rectangle_filled',
            'draw_rectangle_outline',
            'draw_scaled_texture_rectangle',

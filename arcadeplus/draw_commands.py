@@ -102,7 +102,7 @@ class Shape:
         # program['Projection'].write(get_projection().tobytes())
 
         with self.vao:
-            assert(self.line_width == 1)
+            # assert(self.line_width == 1)
             gl.glLineWidth(self.line_width)
 
             gl.glEnable(gl.GL_BLEND)
@@ -311,6 +311,9 @@ class _Batch(Generic[TShape]):
         self.items = []
 
 
+# Internal-Use-Only functions
+
+
 def _create_line_generic_with_colors(point_list: PointList,
                                     color_list: Iterable[Color],
                                     shape_mode: int,
@@ -445,6 +448,71 @@ def _generic_draw_line_strip(point_list: PointList,
         vao.render(mode=mode)
 
 
+def _get_points_for_points(point_list, size):
+    new_point_list = []
+    hs = size / 2
+    for point in point_list:
+        x = point[0]
+        y = point[1]
+        new_point_list.append((x - hs, y - hs))
+        new_point_list.append((x + hs, y - hs))
+        new_point_list.append((x + hs, y + hs))
+
+        new_point_list.append((x + hs, y + hs))
+        new_point_list.append((x - hs, y - hs))
+        new_point_list.append((x - hs, y + hs))
+
+    return new_point_list
+
+
+# Utility Functions
+
+
+def get_rectangle_points(center_x: float, center_y: float, width: float,
+                         height: float, tilt_angle: float = 0):
+    """
+    Utility function that will return all four coordinate points of a
+    rectangle given the center_x, center_y, width, height, and rotation.
+
+    Args:
+        center_x:
+        center_y:
+        width:
+        height:
+        tilt_angle:
+
+    Returns:
+
+    """
+    x1 = -width / 2 + center_x
+    y1 = -height / 2 + center_y
+
+    x2 = -width / 2 + center_x
+    y2 = height / 2 + center_y
+
+    x3 = width / 2 + center_x
+    y3 = height / 2 + center_y
+
+    x4 = width / 2 + center_x
+    y4 = -height / 2 + center_y
+
+    if tilt_angle:
+        x1, y1 = rotate_point(x1, y1, center_x, center_y, tilt_angle)
+        x2, y2 = rotate_point(x2, y2, center_x, center_y, tilt_angle)
+        x3, y3 = rotate_point(x3, y3, center_x, center_y, tilt_angle)
+        x4, y4 = rotate_point(x4, y4, center_x, center_y, tilt_angle)
+
+    data = [(x1, y1),
+            (x2, y2),
+            (x3, y3),
+            (x4, y4)]
+
+    return data
+
+
+# VBO-Optimized Functions
+
+
 def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
                 color: Color, line_width: float = 1):
     """
@@ -564,7 +632,7 @@ def draw_lines(point_list: PointList,
         buffered_shapes[id].draw()
 
 
-def draw_polygon(point_list: PointList,
+def draw_polygon_filled(point_list: PointList,
                    color: Color):
     """
     Draw a convex polygon. This will NOT draw a concave polygon.
@@ -586,59 +654,45 @@ def draw_polygon(point_list: PointList,
         itertools.zip_longest(point_list[:half], reversed(point_list[half:]))
     )
     point_list = [p for p in interleaved if p is not None]
-    id = f"polygon-{point_list}-{color}"
+    id = f"polygon-filled-{point_list}-{color}"
     if id not in buffered_shapes.keys():
         shape = _create_line_generic(point_list, color, gl.GL_TRIANGLE_STRIP, 1)
         buffered_shapes[id] = shape
     buffered_shapes[id].draw()
 
 
-def get_rectangle_points(center_x: float, center_y: float, width: float,
-                         height: float, tilt_angle: float = 0):
+def draw_polygon_outline(point_list: PointList,
+                         color: Color, line_width: float = 1):
     """
-    Utility function that will return all four coordinate points of a
-    rectangle given the center_x, center_y, width, height, and rotation.
+    Draw a polygon outline. Also known as a "line loop."
 
-    Args:
-        center_x:
-        center_y:
-        width:
-        height:
-        tilt_angle:
-
-    Returns:
-
+    :param PointList point_list: List of points making up the lines. Each point is
+         in a list. So it is a list of lists.
+    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
+         RGBA format.
+    :param int line_width: Width of the line in pixels.
     """
-    x1 = -width / 2 + center_x
-    y1 = -height / 2 + center_y
-
-    x2 = -width / 2 + center_x
-    y2 = height / 2 + center_y
-
-    x3 = width / 2 + center_x
-    y3 = height / 2 + center_y
-
-    x4 = width / 2 + center_x
-    y4 = -height / 2 + center_y
-
-    if tilt_angle:
-        x1, y1 = rotate_point(x1, y1, center_x, center_y, tilt_angle)
-        x2, y2 = rotate_point(x2, y2, center_x, center_y, tilt_angle)
-        x3, y3 = rotate_point(x3, y3, center_x, center_y, tilt_angle)
-        x4, y4 = rotate_point(x4, y4, center_x, center_y, tilt_angle)
-
-    data = [(x1, y1),
-            (x2, y2),
-            (x3, y3),
-            (x4, y4)]
-
-    return data
+    point_list = list(point_list) + [point_list[0]]
+    triangle_point_list: List[Point] = []
+    new_color_list: List[Color] = []
+    for i in range(1, len(point_list)):
+        start_x = point_list[i - 1][0]
+        start_y = point_list[i - 1][1]
+        end_x = point_list[i][0]
+        end_y = point_list[i][1]
+        color1 = color
+        color2 = color
+        id = f"lineloop-{start_x}-{start_y}-{end_x}-{end_y}-{color}-{line_width}"
+        if id not in buffered_shapes.keys():
+            points = get_points_for_thick_line(start_x, start_y, end_x, end_y, line_width)
+            new_color_list += color1, color2, color1, color2
+            triangle_point_list += points[1], points[0], points[2], points[3]
+            shape = create_triangles_filled_with_colors(triangle_point_list, new_color_list)
+            buffered_shapes[id] = shape
+        buffered_shapes[id].draw()
 
 
-# CODE ABOVE IS VBO-OPTIMIZED, CODE BELOW STILL NEEDS TO BE WORKED ON
-
-
-def create_rectangle(center_x: float, center_y: float, width: float,
+def draw_rectangle(center_x: float, center_y: float, width: float,
                      height: float, color: Color,
                      border_width: float = 1, tilt_angle: float = 0,
                      filled=True):
@@ -665,8 +719,8 @@ def create_rectangle(center_x: float, center_y: float, width: float,
     if filled:
         shape_mode = gl.GL_TRIANGLE_STRIP
         data[-2:] = reversed(data[-2:])
+        id = f"rect-filled-{data}-{color}-{border_width}"
     else:
-
         i_lb = center_x - width / 2 + border_width / 2, center_y - height / 2 + border_width / 2
         i_rb = center_x + width / 2 - border_width / 2, center_y - height / 2 + border_width / 2
         i_rt = center_x + width / 2 - border_width / 2, center_y + height / 2 - border_width / 2
@@ -690,39 +744,26 @@ def create_rectangle(center_x: float, center_y: float, width: float,
         shape_mode = gl.GL_TRIANGLE_STRIP
 
         # _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLE_STRIP)
-
+        
         # shape_mode = gl.GL_LINE_STRIP
-        # data.append(data[0])
+        # data.append(data[0])s
 
-    shape = _create_line_generic(data, color, shape_mode, border_width)
-    return shape
+        id = f"rect-empty-{data}-{color}-{border_width}"
+
+    if id not in buffered_shapes.keys():
+        shape = _create_line_generic(data, color, shape_mode, border_width)
+        buffered_shapes[id] = shape
+    buffered_shapes[id].draw()
 
 
-def create_rectangle_filled(center_x: float, center_y: float, width: float,
-                            height: float, color: Color,
-                            tilt_angle: float = 0):
+def draw_rectangle_filled(center_x: float, center_y: float, width: float,
+                     height: float, color: Color,
+                     border_width: float = 1, tilt_angle: float = 0,
+                     filled=True):
     """
-    Create a filled rectangle.
-
-    :param float center_x:
-    :param float center_y:
-    :param float width:
-    :param float height:
-    :param Color color:
-    :param float tilt_angle:
-
-    :Returns Shape:
-
-    """
-    return create_rectangle(center_x, center_y, width, height,
-                            color, tilt_angle=tilt_angle)
-
-
-def create_rectangle_outline(center_x: float, center_y: float, width: float,
-                             height: float, color: Color,
-                             border_width: float = 1, tilt_angle: float = 0):
-    """
-    Create a rectangle outline.
+    This function creates a rectangle using a vertex buffer object.
+    Creating the rectangle, and then later drawing it with ``render_rectangle``
+    is faster than calling ``draw_rectangle``.
 
     Args:
         center_x:
@@ -732,12 +773,134 @@ def create_rectangle_outline(center_x: float, center_y: float, width: float,
         color:
         border_width:
         tilt_angle:
+        filled:
 
     Returns:
 
     """
-    return create_rectangle(center_x, center_y, width, height,
-                            color, border_width, tilt_angle, filled=False)
+    draw_rectangle(center_x, center_y, width, height,
+                            color, tilt_angle=tilt_angle, filled=True, border_width=border_width)
+
+
+def draw_rectangle_outline(center_x: float, center_y: float, width: float,
+                     height: float, color: Color,
+                     border_width: float = 1, tilt_angle: float = 0,
+                     filled=False):
+    """
+    This function creates a rectangle using a vertex buffer object.
+    Creating the rectangle, and then later drawing it with ``render_rectangle``
+    is faster than calling ``draw_rectangle``.
+
+    Args:
+        center_x:
+        center_y:
+        width:
+        height:
+        color:
+        border_width:
+        tilt_angle:
+        filled:
+
+    Returns:
+
+    """
+    draw_rectangle(center_x, center_y, width, height,
+                            color, tilt_angle=tilt_angle, filled=False, border_width=border_width)
+
+
+def draw_lrtb_rectangle_filled(left: float, right: float, top: float,
+                            bottom: float, color: Color,
+                            tilt_angle: float = 0, border_width: float = 1):
+    """
+    Create a filled rectangle.
+
+    :param float left:
+    :param float right:
+    :param float top:
+    :param float bottom:
+    :param Color color:
+    :param float tilt_angle:
+
+    :Returns Shape:
+
+    """
+    center_x = (left + right) / 2
+    center_y = (top + bottom) / 2
+    width = right - left
+    height = top - bottom
+    draw_rectangle(center_x, center_y, width, height,
+                            color, tilt_angle=tilt_angle, filled=True, border_width=border_width)
+
+
+def draw_xywh_rectangle_filled(bottom_left_x: float, bottom_left_y: float, width: float,
+                            height: float, color: Color,
+                            tilt_angle: float = 0, border_width: float = 1):
+    """
+    Create a filled rectangle.
+
+    :param float bottom_left_x:
+    :param float bottom_left_y:
+    :param float width:
+    :param float height:
+    :param Color color:
+    :param float tilt_angle:
+
+    :Returns Shape:
+
+    """
+    center_x = bottom_left_x + (width / 2)
+    center_y = bottom_left_y + (height / 2)
+    draw_rectangle(center_x, center_y, width, height,
+                            color, tilt_angle=tilt_angle, filled=True, border_width=border_width)
+
+
+def draw_lrtb_rectangle_outline(left: float, right: float, top: float,
+                            bottom: float, color: Color,
+                            tilt_angle: float = 0, border_width: float = 1):
+    """
+    Create a filled rectangle.
+
+    :param float left:
+    :param float right:
+    :param float top:
+    :param float bottom:
+    :param Color color:
+    :param float tilt_angle:
+
+    :Returns Shape:
+
+    """
+    center_x = (left + right) / 2
+    center_y = (top + bottom) / 2
+    width = right - left
+    height = top - bottom
+    draw_rectangle(center_x, center_y, width, height,
+                            color, tilt_angle=tilt_angle, filled=False, border_width=border_width)
+
+
+def draw_xywh_rectangle_outline(bottom_left_x: float, bottom_left_y: float, width: float,
+                            height: float, color: Color,
+                            tilt_angle: float = 0, border_width: float = 1):
+    """
+    Create a filled rectangle.
+
+    :param float bottom_left_x:
+    :param float bottom_left_y:
+    :param float width:
+    :param float height:
+    :param Color color:
+    :param float tilt_angle:
+
+    :Returns Shape:
+
+    """
+    center_x = bottom_left_x + (width / 2)
+    center_y = bottom_left_y + (height / 2)
+    draw_rectangle(center_x, center_y, width, height,
+                            color, tilt_angle=tilt_angle, filled=False, border_width=border_width)
+
+
+# CODE ABOVE IS VBO-OPTIMIZED, CODE BELOW STILL NEEDS TO BE WORKED ON
 
 
 def create_rectangle_filled_with_colors(point_list, color_list):
@@ -889,8 +1052,6 @@ def create_ellipse_filled_with_colors(center_x: float, center_y: float,
     color_list = [inside_color] + [outside_color] * (num_segments + 1)
     return _create_line_generic_with_colors(point_list, color_list, gl.GL_TRIANGLE_FAN)
 
-# --- BEGIN ARC FUNCTIONS # # #
-
 
 def draw_arc_filled(center_x: float, center_y: float,
                     width: float, height: float,
@@ -996,11 +1157,6 @@ def draw_arc_outline(center_x: float, center_y: float, width: float,
     _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLE_STRIP)
 
 
-# --- END ARC FUNCTIONS # # #
-
-
-# --- BEGIN PARABOLA FUNCTIONS # # #
-
 def draw_parabola_filled(start_x: float, start_y: float, end_x: float,
                          height: float, color: Color,
                          tilt_angle: float = 0):
@@ -1047,11 +1203,6 @@ def draw_parabola_outline(start_x: float, start_y: float, end_x: float,
                      start_angle, end_angle, border_width, tilt_angle)
 
 
-# --- END PARABOLA FUNCTIONS # # #
-
-
-# --- BEGIN CIRCLE FUNCTIONS # # #
-
 def draw_circle_filled(center_x: float, center_y: float, radius: float,
                        color: Color,
                        num_segments: int = 128):
@@ -1091,11 +1242,6 @@ def draw_circle_outline(center_x: float, center_y: float, radius: float,
     draw_ellipse_outline(center_x, center_y, width, height,
                          color, border_width, num_segments=num_segments)
 
-
-# --- END CIRCLE FUNCTIONS # # #
-
-
-# --- BEGIN ELLIPSE FUNCTIONS # # #
 
 def draw_ellipse_filled(center_x: float, center_y: float,
                         width: float, height: float, color: Color,
@@ -1217,12 +1363,6 @@ def draw_ellipse_outline(center_x: float, center_y: float, width: float,
         _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLE_STRIP)
 
 
-# --- END ELLIPSE FUNCTIONS # # #
-
-
-# --- BEGIN POINT FUNCTIONS # # #
-
-
 def draw_point(x: float, y: float, color: Color, size: float):
     """
     Draw a point.
@@ -1234,23 +1374,6 @@ def draw_point(x: float, y: float, color: Color, size: float):
     :param float size: Size of the point in pixels.
     """
     draw_rectangle_filled(x, y, size / 2, size / 2, color)
-
-
-def _get_points_for_points(point_list, size):
-    new_point_list = []
-    hs = size / 2
-    for point in point_list:
-        x = point[0]
-        y = point[1]
-        new_point_list.append((x - hs, y - hs))
-        new_point_list.append((x + hs, y - hs))
-        new_point_list.append((x + hs, y + hs))
-
-        new_point_list.append((x + hs, y + hs))
-        new_point_list.append((x - hs, y - hs))
-        new_point_list.append((x - hs, y + hs))
-
-    return new_point_list
 
 
 def draw_points(point_list: PointList,
@@ -1266,41 +1389,6 @@ def draw_points(point_list: PointList,
     """
     new_point_list = _get_points_for_points(point_list, size)
     _generic_draw_line_strip(new_point_list, color, gl.GL_TRIANGLES)
-
-
-# --- END POINT FUNCTIONS # # #
-
-# --- BEGIN POLYGON FUNCTIONS # # #
-
-
-def draw_polygon_outline(point_list: PointList,
-                         color: Color, line_width: float = 1):
-    """
-    Draw a polygon outline. Also known as a "line loop."
-
-    :param PointList point_list: List of points making up the lines. Each point is
-         in a list. So it is a list of lists.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param int line_width: Width of the line in pixels.
-    """
-    new_point_list = [point for point in point_list]
-    new_point_list.append(point_list[0])
-
-    triangle_point_list = []
-    # This needs a lot of improvement
-    last_point = None
-    for point in new_point_list:
-        if last_point is not None:
-            points = get_points_for_thick_line(last_point[0], last_point[1], point[0], point[1], line_width)
-            reordered_points = points[1], points[0], points[2], points[3]
-            triangle_point_list.extend(reordered_points)
-        last_point = point
-
-    points = get_points_for_thick_line(new_point_list[0][0], new_point_list[0][1], new_point_list[1][0],
-                                       new_point_list[1][1], line_width)
-    triangle_point_list.append(points[1])
-    _generic_draw_line_strip(triangle_point_list, color, gl.GL_TRIANGLE_STRIP)
 
 
 def draw_triangle_filled(x1: float, y1: float,
@@ -1347,176 +1435,6 @@ def draw_triangle_outline(x1: float, y1: float,
     third_point = [x3, y3]
     point_list = (first_point, second_point, third_point)
     draw_polygon_outline(point_list, color, border_width)
-
-
-# --- END POLYGON FUNCTIONS # # #
-
-
-# --- BEGIN RECTANGLE FUNCTIONS # # #
-
-
-def draw_lrtb_rectangle_outline(left: float, right: float, top: float,
-                                bottom: float, color: Color,
-                                border_width: float = 1):
-    """
-    Draw a rectangle by specifying left, right, top, and bottom edges.
-
-    :param float left: The x coordinate of the left edge of the rectangle.
-    :param float right: The x coordinate of the right edge of the rectangle.
-    :param float top: The y coordinate of the top of the rectangle.
-    :param float bottom: The y coordinate of the rectangle bottom.
-    :param Color color: The color of the rectangle.
-    :param float border_width: The width of the border in pixels. Defaults to one.
-    :Raises AttributeError: Raised if left > right or top < bottom.
-
-    """
-
-    if left > right:
-        raise AttributeError("Left coordinate must be less than or equal to "
-                             "the right coordinate")
-
-    if bottom > top:
-        raise AttributeError("Bottom coordinate must be less than or equal to "
-                             "the top coordinate")
-
-    center_x = (left + right) / 2
-    center_y = (top + bottom) / 2
-    width = right - left
-    height = top - bottom
-    draw_rectangle_outline(center_x, center_y, width, height, color,
-                           border_width)
-
-
-def draw_xywh_rectangle_outline(bottom_left_x: float, bottom_left_y: float,
-                                width: float, height: float,
-                                color: Color,
-                                border_width: float = 1):
-    """
-    Draw a rectangle extending from bottom left to top right
-
-    :param float bottom_left_x: The x coordinate of the left edge of the rectangle.
-    :param float bottom_left_y: The y coordinate of the bottom of the rectangle.
-    :param float width: The width of the rectangle.
-    :param float height: The height of the rectangle.
-    :param Color color: The color of the rectangle.
-    :param float border_width: The width of the border in pixels. Defaults to one.
-    """
-    center_x = bottom_left_x + (width / 2)
-    center_y = bottom_left_y + (height / 2)
-    draw_rectangle_outline(center_x, center_y, width, height, color,
-                           border_width)
-
-
-def draw_rectangle_outline(center_x: float, center_y: float, width: float,
-                           height: float, color: Color,
-                           border_width: float = 1, tilt_angle: float = 0):
-    """
-    Draw a rectangle outline.
-
-    :param float center_x: x coordinate of top left rectangle point.
-    :param float center_y: y coordinate of top left rectangle point.
-    :param float width: width of the rectangle.
-    :param float height: height of the rectangle.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param float border_width: width of the lines, in pixels.
-    :param float tilt_angle: rotation of the rectangle. Defaults to zero.
-    """
-
-    i_lb = center_x - width / 2 + border_width / 2, center_y - height / 2 + border_width / 2
-    i_rb = center_x + width / 2 - border_width / 2, center_y - height / 2 + border_width / 2
-    i_rt = center_x + width / 2 - border_width / 2, center_y + height / 2 - border_width / 2
-    i_lt = center_x - width / 2 + border_width / 2, center_y + height / 2 - border_width / 2
-
-    o_lb = center_x - width / 2 - border_width / 2, center_y - height / 2 - border_width / 2
-    o_rb = center_x + width / 2 + border_width / 2, center_y - height / 2 - border_width / 2
-    o_rt = center_x + width / 2 + border_width / 2, center_y + height / 2 + border_width / 2
-    o_lt = center_x - width / 2 - border_width / 2, center_y + height / 2 + border_width / 2
-
-    point_list: List[Point] = [o_lt, i_lt, o_rt, i_rt, o_rb, i_rb, o_lb, i_lb, o_lt, i_lt]
-
-    if tilt_angle != 0:
-        point_list_2: List[Point] = []
-        for point in point_list:
-            new_point = rotate_point(point[0], point[1], center_x, center_y, tilt_angle)
-            point_list_2.append(new_point)
-        point_list = point_list_2
-
-    _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLE_STRIP)
-
-
-def draw_lrtb_rectangle_filled(left: float, right: float, top: float,
-                               bottom: float, color: Color):
-    """
-    Draw a rectangle by specifying left, right, top, and bottom edges.
-
-    :param float left: The x coordinate of the left edge of the rectangle.
-    :param float right: The x coordinate of the right edge of the rectangle.
-    :param float top: The y coordinate of the top of the rectangle.
-    :param float bottom: The y coordinate of the rectangle bottom.
-    :param Color color: The color of the rectangle.
-    :Raises AttributeError: Raised if left > right or top < bottom.
-
-    """
-    if left > right:
-        raise AttributeError("Left coordinate {} must be less than or equal "
-                             "to the right coordinate {}".format(left, right))
-
-    if bottom > top:
-        raise AttributeError("Bottom coordinate {} must be less than or equal "
-                             "to the top coordinate {}".format(bottom, top))
-
-    center_x = (left + right) / 2
-    center_y = (top + bottom) / 2
-    width = right - left + 1
-    height = top - bottom + 1
-    draw_rectangle_filled(center_x, center_y, width, height, color)
-
-
-def draw_xywh_rectangle_filled(bottom_left_x: float, bottom_left_y: float,
-                               width: float, height: float,
-                               color: Color):
-    """
-    Draw a filled rectangle extending from bottom left to top right
-
-    :param float bottom_left_x: The x coordinate of the left edge of the rectangle.
-    :param float bottom_left_y: The y coordinate of the bottom of the rectangle.
-    :param float width: The width of the rectangle.
-    :param float height: The height of the rectangle.
-    :param Color color: The color of the rectangle.
-    """
-
-    center_x = bottom_left_x + (width / 2)
-    center_y = bottom_left_y + (height / 2)
-    draw_rectangle_filled(center_x, center_y, width, height, color)
-
-
-def draw_rectangle_filled(center_x: float, center_y: float, width: float,
-                          height: float, color: Color,
-                          tilt_angle: float = 0):
-    """
-    Draw a filled-in rectangle.
-
-    :param float center_x: x coordinate of rectangle center.
-    :param float center_y: y coordinate of rectangle center.
-    :param float width: width of the rectangle.
-    :param float height: height of the rectangle.
-    :param Color color: color, specified in a list of 3 or 4 bytes in RGB or
-         RGBA format.
-    :param float tilt_angle: rotation of the rectangle. Defaults to zero.
-    """
-    p1 = [-width // 2 + center_x, -height // 2 + center_y]
-    p2 = [width // 2 + center_x, -height // 2 + center_y]
-    p3 = [width // 2 + center_x, height // 2 + center_y]
-    p4 = [-width // 2 + center_x, height // 2 + center_y]
-
-    if tilt_angle != 0:
-        p1 = rotate_point(p1[0], p1[1], center_x, center_y, tilt_angle)
-        p2 = rotate_point(p2[0], p2[1], center_x, center_y, tilt_angle)
-        p3 = rotate_point(p3[0], p3[1], center_x, center_y, tilt_angle)
-        p4 = rotate_point(p4[0], p4[1], center_x, center_y, tilt_angle)
-
-    _generic_draw_line_strip((p1, p2, p4, p3), color, gl.GL_TRIANGLE_STRIP)
 
 
 def draw_scaled_texture_rectangle(center_x: float, center_y: float,
