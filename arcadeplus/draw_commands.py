@@ -1,12 +1,14 @@
 """
-This module contains commands for basic graphics drawing commands.
-(Drawing primitives.)
+Drawing commands, some which use vertex buffer objects (VBOs), some which don't.
 
-Many of these commands are slow, because they load everything to the
-graphics card each time a shape is drawn. For faster drawing, see the
-Buffered Draw Commands.
+This module contains commands for basic graphics drawing commands,
+but uses Vertex Buffer Objects. This keeps the vertices loaded on
+the graphics card for much faster render times.
+
+This module also contains commands for basic graphics drawing commands
+that don't use Vertex Buffer Objects
+for those primitives/shapes which cannot be easily VBO-optimized.
 """
-# pylint: disable=too-many-arguments, too-many-locals, too-few-public-methods
 
 import math
 import array
@@ -294,9 +296,9 @@ class _Batch(Generic[TShape]):
 def _create_line_generic_with_colors(point_list: PointList,
                                     color_list: Iterable[Color],
                                     shape_mode: int,
-                                    line_width: float = 1) -> Shape:
+                                    line_width: float = 1):
     """
-    This function is used by ``create_line_strip`` and ``create_line_loop``,
+    This function is used by ``draw_line_strip`` and ``draw_line_loop``,
     just changing the OpenGL type for the line drawing.
 
     :param PointList point_list:
@@ -359,9 +361,9 @@ def _create_line_generic_with_colors(point_list: PointList,
 
 def _create_line_generic(point_list: PointList,
                         color: Color,
-                        shape_mode: int, line_width: float = 1) -> Shape:
+                        shape_mode: int, line_width: float = 1):
     """
-    This function is used by ``create_line_strip`` and ``create_line_loop``,
+    This function is used by ``draw_line_strip`` and ``draw_line_loop``,
     just changing the OpenGL type for the line drawing.
     """
     colors = [get_four_byte_color(color)] * len(point_list)
@@ -376,7 +378,7 @@ def _create_line_generic(point_list: PointList,
 
 def _generic_draw_line_strip(point_list: PointList,
                              color: Color,
-                             mode: int = gl.GL_LINE_STRIP) -> Shape:
+                             mode: int = gl.GL_LINE_STRIP):
     """
     Draw a line strip. A line strip is a set of continuously connected
     line segments.
@@ -442,13 +444,7 @@ def _get_points_for_points(point_list, size):
     return new_point_list
 
 
-def _create_triangles_filled_with_colors(point_list, color_list) -> Shape:
-    """
-    This function creates multiple rectangle/quads using a vertex buffer object.
-    Creating the rectangles, and then later drawing it with ``render``
-    is faster than calling ``draw_rectangle``.
-    """
-
+def _create_triangles_filled_with_colors(point_list, color_list):
     shape_mode = gl.GL_TRIANGLE_STRIP
     return _create_line_generic_with_colors(point_list, color_list, shape_mode)
 
@@ -571,8 +567,7 @@ def get_image(x: int = 0, y: int = 0, width: int = None, height: int = None):
 def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
                 color: Color, line_width: float = 1):
     """
-    Create a line to be rendered later. This works faster than draw_line because
-    the vertexes are only loaded to the graphics card once, rather than each frame.
+    Draw a simple line, made up of two points.
 
     :param float start_x:
     :param float start_y:
@@ -597,8 +592,7 @@ def draw_line(start_x: float, start_y: float, end_x: float, end_y: float,
 def draw_line_strip(point_list: PointList,
                       color: Color, line_width: float = 1):
     """
-    Create a multi-point line to be rendered later. This works faster than draw_line because
-    the vertexes are only loaded to the graphics card once, rather than each frame.
+    Draw a line made up of multiple points.
 
     :param PointList point_list:
     :param Color color:
@@ -662,8 +656,7 @@ def draw_line_loop(point_list: PointList,
 def draw_lines(point_list: PointList,
                  color: Color, line_width: float = 1):
     """
-    Create a multi-point line loop to be rendered later. This works faster than draw_line because
-    the vertexes are only loaded to the graphics card once, rather than each frame.
+    Draw multiple lines made up of two points.
 
     :param PointList point_list:
     :param Color color:
@@ -752,9 +745,7 @@ def draw_rectangle(center_x: float, center_y: float, width: float,
                      border_width: float = 1, tilt_angle: float = 0,
                      filled=True):
     """
-    This function creates a rectangle using a vertex buffer object.
-    Creating the rectangle, and then later drawing it with ``render_rectangle``
-    is faster than calling ``draw_rectangle``.
+    Draw a rectangle.
 
     Args:
         center_x:
@@ -813,25 +804,17 @@ def draw_rectangle(center_x: float, center_y: float, width: float,
 
 def draw_rectangle_filled(center_x: float, center_y: float, width: float,
                      height: float, color: Color,
-                     border_width: float = 1, tilt_angle: float = 0,
-                     filled=True):
+                     border_width: float = 1, tilt_angle: float = 0):
     """
-    This function creates a rectangle using a vertex buffer object.
-    Creating the rectangle, and then later drawing it with ``render_rectangle``
-    is faster than calling ``draw_rectangle``.
+    Draw a rectangle filled.
 
-    Args:
-        center_x:
-        center_y:
-        width:
-        height:
-        color:
-        border_width:
-        tilt_angle:
-        filled:
-
-    Returns:
-
+    :param float center_x:
+    :param float center_y:
+    :param float width:
+    :param float height:
+    :param Color color:
+    :param float tilt_angle:
+    :param float border_width:
     """
     draw_rectangle(center_x, center_y, width, height,
                             color, border_width=border_width, tilt_angle=tilt_angle, filled=True)
@@ -839,35 +822,27 @@ def draw_rectangle_filled(center_x: float, center_y: float, width: float,
 
 def draw_rectangle_outline(center_x: float, center_y: float, width: float,
                      height: float, color: Color,
-                     border_width: float = 1, tilt_angle: float = 0,
-                     filled=False):
+                     border_width: float = 1, tilt_angle: float = 0):
     """
-    This function creates a rectangle using a vertex buffer object.
-    Creating the rectangle, and then later drawing it with ``render_rectangle``
-    is faster than calling ``draw_rectangle``.
+    Draw a rectangle outline.
 
-    Args:
-        center_x:
-        center_y:
-        width:
-        height:
-        color:
-        border_width:
-        tilt_angle:
-        filled:
-
-    Returns:
-
+    :param float center_x:
+    :param float center_y:
+    :param float width:
+    :param float height:
+    :param Color color:
+    :param float tilt_angle:
+    :param float border_width:
     """
     draw_rectangle(center_x, center_y, width, height,
-                            color, border_width=border_width, tilt_angle=tilt_angle, filled=False, )
+                            color, border_width=border_width, tilt_angle=tilt_angle, filled=False)
 
 
 def draw_lrtb_rectangle_filled(left: float, right: float, top: float,
                             bottom: float, color: Color,
                             tilt_angle: float = 0, border_width: float = 1):
     """
-    Create a filled rectangle.
+    Draw a ltrb rectangle filled.
 
     :param float left:
     :param float right:
@@ -875,9 +850,7 @@ def draw_lrtb_rectangle_filled(left: float, right: float, top: float,
     :param float bottom:
     :param Color color:
     :param float tilt_angle:
-
-    :Returns Shape:
-
+    :param float border_width:
     """
     center_x = (left + right) / 2
     center_y = (top + bottom) / 2
@@ -891,7 +864,7 @@ def draw_xywh_rectangle_filled(bottom_left_x: float, bottom_left_y: float, width
                             height: float, color: Color, border_width: float = 1,
                             tilt_angle: float = 0):
     """
-    Create a filled rectangle.
+    Draw a xywh rectangle filled.
 
     :param float bottom_left_x:
     :param float bottom_left_y:
@@ -899,9 +872,7 @@ def draw_xywh_rectangle_filled(bottom_left_x: float, bottom_left_y: float, width
     :param float height:
     :param Color color:
     :param float tilt_angle:
-
-    :Returns Shape:
-
+    :param float border_width:
     """
     center_x = bottom_left_x + (width / 2)
     center_y = bottom_left_y + (height / 2)
@@ -913,7 +884,7 @@ def draw_lrtb_rectangle_outline(left: float, right: float, top: float,
                             bottom: float, color: Color, border_width: float = 1,
                             tilt_angle: float = 0):
     """
-    Create a filled rectangle.
+    Draw a ltrb rectangle outline.
 
     :param float left:
     :param float right:
@@ -921,9 +892,7 @@ def draw_lrtb_rectangle_outline(left: float, right: float, top: float,
     :param float bottom:
     :param Color color:
     :param float tilt_angle:
-
-    :Returns Shape:
-
+    :param float border_width:
     """
     center_x = (left + right) / 2
     center_y = (top + bottom) / 2
@@ -937,7 +906,7 @@ def draw_xywh_rectangle_outline(bottom_left_x: float, bottom_left_y: float, widt
                             height: float, color: Color, border_width: float = 1,
                             tilt_angle: float = 0):
     """
-    Create a filled rectangle.
+    Draw a xywh rectangle outline.
 
     :param float bottom_left_x:
     :param float bottom_left_y:
@@ -945,9 +914,7 @@ def draw_xywh_rectangle_outline(bottom_left_x: float, bottom_left_y: float, widt
     :param float height:
     :param Color color:
     :param float tilt_angle:
-
-    :Returns Shape:
-
+    :param float border_width:
     """
     center_x = bottom_left_x + (width / 2)
     center_y = bottom_left_y + (height / 2)
@@ -961,7 +928,7 @@ def draw_triangle_outline(x1: float, y1: float,
                           color: Color,
                           border_width: float = 1):
     """
-    Draw a the outline of a triangle.
+    Draw a triangle outline.
 
     :param float x1: x value of first coordinate.
     :param float y1: y value of first coordinate.
@@ -986,10 +953,7 @@ def draw_ellipse(center_x: float, center_y: float,
                    filled=True):
 
     """
-    This creates an ellipse vertex buffer object (VBO). It can later be
-    drawn with ``render_ellipse_filled``. This method of drawing an ellipse
-    is much faster than calling ``draw_ellipse_filled`` each frame.
-
+    Draw an ellipse.
     Note: This can't be unit tested on Appveyor because its support for OpenGL is
     poor.
     """
@@ -1033,7 +997,7 @@ def draw_ellipse_filled(center_x: float, center_y: float,
                           width: float, height: float, color: Color,
                           tilt_angle: float = 0, num_segments: int = 128):
     """
-    Create a filled ellipse. Or circle if you use the same width and height.
+    Draw a filled ellipse.
     """
 
     border_width = 1
@@ -1046,7 +1010,7 @@ def draw_ellipse_outline(center_x: float, center_y: float,
                            border_width: float = 1,
                            tilt_angle: float = 0, num_segments: int = 128):
     """
-    Create an outline of an ellipse.
+    Draw an ellipse outline.
     """
 
     draw_ellipse(center_x, center_y, width, height, color,
@@ -1101,7 +1065,7 @@ def draw_circle_filled(center_x: float, center_y: float, radius: float,
                        color: Color,
                        num_segments: int = 128):
     """
-    Draw a filled-in circle.
+    Draw a circle filled.
 
     :param float center_x: x position that is the center of the circle.
     :param float center_y: y position that is the center of the circle.
@@ -1118,7 +1082,7 @@ def draw_circle_outline(center_x: float, center_y: float, radius: float,
                         color: Color, border_width: float = 1,
                         num_segments: int = 128):
     """
-    Draw the outline of a circle.
+    Draw a circle outline.
 
     :param float center_x: x position that is the center of the circle.
     :param float center_y: y position that is the center of the circle.
@@ -1153,7 +1117,7 @@ def draw_triangle_filled(x1: float, y1: float,
                          x2: float, y2: float,
                          x3: float, y3: float, color: Color):
     """
-    Draw a filled in triangle.
+    Draw a triangle filled.
 
     :param float x1: x value of first coordinate.
     :param float y1: y value of first coordinate.
@@ -1342,7 +1306,7 @@ def draw_scaled_texture_rectangle(center_x: float, center_y: float,
                                   angle: float = 0,
                                   alpha: int = 255):
     """
-    Draw a textured rectangle on-screen.
+    Draw a textured rectangle.
 
     :param float center_x: x coordinate of rectangle center.
     :param float center_y: y coordinate of rectangle center.
@@ -1396,5 +1360,3 @@ def draw_lrwh_rectangle_textured(bottom_left_x: float, bottom_left_y: float,
     center_x = bottom_left_x + (width / 2)
     center_y = bottom_left_y + (height / 2)
     texture.draw_sized(center_x, center_y, width, height, angle=angle, alpha=alpha)
-
-
