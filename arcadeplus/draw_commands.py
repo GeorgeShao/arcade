@@ -955,32 +955,6 @@ def draw_xywh_rectangle_outline(bottom_left_x: float, bottom_left_y: float, widt
                             color, border_width=border_width, tilt_angle=tilt_angle, filled=False)
 
 
-def draw_triangle_filled(x1: float, y1: float,
-                         x2: float, y2: float,
-                         x3: float, y3: float, color: Color):
-    """
-    Draw a filled in triangle.
-
-    :param float x1: x value of first coordinate.
-    :param float y1: y value of first coordinate.
-    :param float x2: x value of second coordinate.
-    :param float y2: y value of second coordinate.
-    :param float x3: x value of third coordinate.
-    :param float y3: y value of third coordinate.
-    :param Color color: Color of triangle.
-    """
-
-    first_point = (x1, y1)
-    second_point = (x2, y2)
-    third_point = (x3, y3)
-    point_list = (first_point, second_point, third_point)
-    id = f"triangle-{point_list}-{color}"
-    if id not in buffered_shapes.keys():
-        shape = _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLES)
-        buffered_shapes[id] = shape
-    buffered_shapes[id].draw()
-
-
 def draw_triangle_outline(x1: float, y1: float,
                           x2: float, y2: float,
                           x3: float, y3: float,
@@ -1173,6 +1147,28 @@ def draw_point(x: float, y: float, color: Color, size: float):
 
 
 # VBO-Unoptimized Functions
+
+
+def draw_triangle_filled(x1: float, y1: float,
+                         x2: float, y2: float,
+                         x3: float, y3: float, color: Color):
+    """
+    Draw a filled in triangle.
+
+    :param float x1: x value of first coordinate.
+    :param float y1: y value of first coordinate.
+    :param float x2: x value of second coordinate.
+    :param float y2: y value of second coordinate.
+    :param float x3: x value of third coordinate.
+    :param float y3: y value of third coordinate.
+    :param Color color: Color of triangle.
+    """
+
+    first_point = (x1, y1)
+    second_point = (x2, y2)
+    third_point = (x3, y3)
+    point_list = (first_point, second_point, third_point)
+    _generic_draw_line_strip(point_list, color, gl.GL_TRIANGLES)
 
 
 def draw_arc_filled(center_x: float, center_y: float,
