@@ -9,7 +9,7 @@ ArcadePlus is built on top of Pyglet and OpenGL.
 
 The ArcadePlus Python library is made by George Shao.
 ArcadePlus was forked from Arcade, a Python library made by Paul Vincent Craven.
-ArcadePlus is intended to be a simpler, more performant Python graphics library than Arcade.
+ArcadePlus is a simpler, more performant Python graphics library than Arcade.
 
 .. image:: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat
     :target: http://makeapullrequest.com
