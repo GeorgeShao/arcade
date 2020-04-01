@@ -30,3 +30,4 @@ arcade/examples/test.png
 /doc/resources.rst
 .mypy_cache/
 arcadeplus.egg-info
+dist
