@@ -22,5 +22,5 @@ ArcadePlus is a simpler, more performant Python graphics library than Arcade.
 .. image:: https://img.shields.io/pypi/l/arcadeplus
     :alt: PyPI - License
 
-.. image:: ./arcadeplus/examples/perf_test/stress_test_comparison_results.svg
+.. image:: https://raw.githubusercontent.com/greyli/flask-share/master/images/demo.png
     :alt: ArcadePlus vs Arcade - Python Library Performance Comparison Chart
