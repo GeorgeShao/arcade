@@ -22,5 +22,22 @@ ArcadePlus is a simpler, more performant Python graphics library than Arcade.
 .. image:: https://img.shields.io/pypi/l/arcadeplus
     :alt: PyPI - License
 
+How to Install
+##############
+
+Type ``pip install arcadeplus`` into your terminal.
+
+
+Performance Comparison
+######################
+
+As seen in the graph below, the ArcadePlus Python library has much better performance than the Arcade Python library.
+
 .. image:: https://github.com/GeorgeShao/arcadeplus/blob/master/arcadeplus/examples/perf_test/stress_test_comparison_results.svg
     :alt: ArcadePlus vs Arcade - Python Library Performance Comparison Chart
+
+
+How to Convert Arcade Code to ArcadePlus Code
+#############################################
+1. Replace any imports such as ``import arcade`` with ``import arcadeplus``
+2. Use your IDE's built-in find function to replace all instances of ``arcade.`` with ``arcadeplus.``
