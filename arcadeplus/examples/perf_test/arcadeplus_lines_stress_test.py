@@ -6,9 +6,9 @@ import time
 import collections
 import pyglet
 
-START_COUNT = 10
+START_COUNT = 5
 STOP_COUNT = 200
-SHAPE_INCREMENT = 1
+SHAPE_INCREMENT = START_COUNT
 RESULTS_FILE = "arcadeplus_results.csv"
 
 SCREEN_WIDTH = 640

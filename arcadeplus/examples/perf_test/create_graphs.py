@@ -13,33 +13,26 @@ def read_results(filename):
         return results
 
 
-def chart_stress_test_draw_moving_process_comparison():
-    r1 = read_results("arcade_results.csv")
-    r2 = read_results("arcadeplus_results.csv")
+def create_stress_test_comparison_results_chart():
+    r1 = read_results("arcadeplus/examples/perf_test/arcade_results.csv")
+    r2 = read_results("arcadeplus/examples/perf_test/arcadeplus_results.csv")
 
     sprite_count = [row[LINE_COUNT] for row in r1]
     d1 = [row[FPS] for row in r1]
     d2 = [row[FPS] for row in r2]
 
     # Plot our results
-    plt.title("Moving Sprites - Arcade vs. Pygame")
-    plt.plot(sprite_count, d1, label="Processing Time Arcade")
-    plt.plot(sprite_count, d2, label="Processing Time Pygame")
+    plt.title("Line Drawing Stress Test - Arcade vs. ArcadePlus")
+    plt.plot(sprite_count, d1, label="Arcade")
+    plt.plot(sprite_count, d2, label="ArcadePlus")
 
-    plt.legend(loc='upper left', shadow=True, fontsize='x-large')
+    plt.legend(loc='lower left', shadow=True, fontsize='medium')
 
-    plt.ylabel('Time')
-    plt.xlabel('# of Lines')
+    plt.ylabel('Frames Per Second (FPS) - Higher is Better')
+    plt.xlabel('# of Lines Drawn')
 
     # plt.show()
-    plt.savefig("chart_stress_test_draw_moving_process_comparison.svg")
+    plt.savefig("arcadeplus/examples/perf_test/stress_test_comparison_results.svg")
     plt.clf()
 
-
-
-
-def main():
-    chart_stress_test_draw_moving_process_comparison()
-
-
-main()
+create_stress_test_comparison_results_chart()
