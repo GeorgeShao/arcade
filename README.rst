@@ -45,7 +45,10 @@ As seen in the graph below, the ArcadePlus Python library has much better perfor
     :alt: ArcadePlus vs Arcade - Python Library Performance Comparison Chart
 
 
-How to Convert Existing Arcade Code to ArcadePlus Code
+Code Compatibility & Conversion
 ######################################################
+With a few simple changes (listed below), your existing Arcade code will work as intended with ArcadePlus, but an order of magnitude more efficiently.
+However, any future ArcadePlus code may not work with Arcade code due to new features and optimizations that may be added.
+
 1. Replace any imports such as ``import arcade`` with ``import arcadeplus``
 2. Use your IDE's built-in find function to replace all instances of ``arcade.`` with ``arcadeplus.``
