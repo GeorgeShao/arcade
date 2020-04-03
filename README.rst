@@ -38,6 +38,6 @@ As seen in the graph below, the ArcadePlus Python library has much better perfor
 
 
 How to Convert Existing Arcade Code to ArcadePlus Code
-#############################################
+######################################################
 1. Replace any imports such as ``import arcade`` with ``import arcadeplus``
 2. Use your IDE's built-in find function to replace all instances of ``arcade.`` with ``arcadeplus.``
