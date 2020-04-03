@@ -98,6 +98,24 @@ def pause(seconds: Number):
     time.sleep(cast(float, seconds))
 
 
+def pause_seconds(seconds: Number):
+    """
+    Pause for the specified number of seconds. This is a convenience function that just calls time.sleep()
+
+    :param float seconds: Time interval to pause in seconds.
+    """
+    time.sleep(cast(float, seconds))
+
+
+def pause_milliseconds(milliseconds: Number):
+    """
+    Pause for the specified number of milliseconds. This is a convenience function that just calls time.sleep()
+
+    :param float milliseconds: Time interval to pause in milliseconds.
+    """
+    time.sleep(cast(float, milliseconds/1000))
+
+
 def get_window() -> Union[pyglet.window.Window, None]:
     """
     Return a handle to the current window.
