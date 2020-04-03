@@ -19,6 +19,14 @@ ArcadePlus is a simpler, more performant Python graphics library than Arcade.
     :target: https://pepy.tech/project/arcadeplus
     :alt: Downloads
 
+.. image:: https://pepy.tech/badge/arcadeplus/month
+    :target: https://pepy.tech/project/arcadeplus
+    :alt: Downloads
+
+.. image:: https://pepy.tech/badge/arcadeplus/week
+    :target: https://pepy.tech/project/arcadeplus
+    :alt: Downloads
+
 .. image:: https://img.shields.io/pypi/l/arcadeplus
     :alt: PyPI - License
 
