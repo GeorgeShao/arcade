@@ -30,9 +30,9 @@ from arcadeplus import draw_polygon_outline
 from arcadeplus import Color
 from arcadeplus.color import BLACK
 
-from arcadeplus.arcade_types import RGB, Point
+from arcade.arcade_types import RGB, Point
 if TYPE_CHECKING:  # handle import cycle caused by type hinting
-    from arcadeplus.sprite_list import SpriteList
+    from arcade.sprite_list import SpriteList
 
 FACE_RIGHT = 1
 FACE_LEFT = 2
@@ -268,7 +268,7 @@ class Sprite:
         """
         Set a sprite's hit box. Hitbox should be relative to a sprite's center,
         and with a scale of 1.0.
-Points will be scaled with get_adjusted_hit_box.
+        Points will be scaled with get_adjusted_hit_box.
         """
         self._points = points
 
@@ -773,7 +773,7 @@ Points will be scaled with get_adjusted_hit_box.
         """ Draw the sprite. """
 
         if self._sprite_list is None:
-            from arcadeplus import SpriteList
+            from arcade import SpriteList
             self._sprite_list = SpriteList()
             self._sprite_list.append(self)
 
@@ -814,7 +814,14 @@ Points will be scaled with get_adjusted_hit_box.
         """
         Remove the sprite from all sprite lists.
         """
-        for sprite_list in self.sprite_lists:
+        if len(self.sprite_lists) > 0:
+            # We can't modify a list as we iterate through it, so create a copy.
+            sprite_lists = self.sprite_lists.copy()
+        else:
+            # If the list is a size 1, we don't need to copy
+            sprite_lists = self.sprite_lists
+
+        for sprite_list in sprite_lists:
             if self in sprite_list:
                 sprite_list.remove(self)
         self.sprite_lists.clear()
@@ -835,7 +842,7 @@ Points will be scaled with get_adjusted_hit_box.
         Returns:
             True if the point is contained within the sprite's boundary.
         """
-        from arcadeplus.geometry import is_point_in_polygon
+        from arcade.geometry import is_point_in_polygon
 
         x, y = point
         return is_point_in_polygon(x, y, self.get_adjusted_hit_box())
@@ -850,7 +857,7 @@ Points will be scaled with get_adjusted_hit_box.
         Returns:
             True or False, whether or not they are overlapping.
         """
-        from arcadeplus import check_for_collision
+        from arcade import check_for_collision
         return check_for_collision(self, other)
 
     def collides_with_list(self, sprite_list: 'SpriteList') -> list:
@@ -863,7 +870,7 @@ Points will be scaled with get_adjusted_hit_box.
         Returns:
             SpriteList of all overlapping Sprites from the original SpriteList
         """
-        from arcadeplus import check_for_collision_with_list
+        from arcade import check_for_collision_with_list
         # noinspection PyTypeChecker
         return check_for_collision_with_list(self, sprite_list)
 
