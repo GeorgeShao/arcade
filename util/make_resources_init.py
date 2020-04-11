@@ -33,8 +33,7 @@ def main() -> None:
 
                 if variable_name not in duplicate_variable_names:
                     f.write(f"{variable_name} = '{resource_path}'\n")
-                else:
-                    f.write(f"{variable_name}_{resource_path[-3:]} = '{resource_path}'\n")
+                f.write(f"{variable_name}_{resource_path[-3:]} = '{resource_path}'\n")
 
 
 def get_prefix(path: pathlib.Path) -> str:
