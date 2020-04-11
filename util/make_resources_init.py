@@ -1,16 +1,3 @@
-"""
-Getting duplicate name errors:
-
-Warning: There is a duplicate resource variable name (image_ladder_mid).
-Warning: There is a duplicate resource variable name (image_ladder_top).
-Warning: There is a duplicate resource variable name (sound_laser1).
-Warning: There is a duplicate resource variable name (sound_laser1).
-Warning: There is a duplicate resource variable name (sound_phase_jump1).
-Warning: There is a duplicate resource variable name (sound_rock_hit2).
-
-However, cannot delete resources for compatibility issues with older projects
-"""
-
 import pathlib
 from typing import List
 
@@ -21,6 +8,7 @@ def main() -> None:
     parent = pathlib.Path(__file__).parent.parent / "arcadeplus/resources"
 
     used_variable_names: List[str] = []
+    duplicate_variable_names = dict()
 
     with open(parent.as_posix() + "/__init__.py", 'w') as f:
         for item in parent.glob('**/*'):
@@ -35,12 +23,18 @@ def main() -> None:
                 variable_name = f"{prefix}_{pythonic_stem}"
 
                 if variable_name in used_variable_names:
-                    print(f"Warning: There is a duplicate resource variable name ({variable_name}).")
+                    if variable_name not in duplicate_variable_names:
+                        duplicate_variable_names[str(variable_name)] = 1
+                    else:
+                        duplicate_variable_names[str(variable_name)] += 1
                 used_variable_names.append(variable_name)
 
                 resource_path = ":resources:/" + relative_path.as_posix()
 
-                f.write(f"{variable_name} = '{resource_path}'\n")
+                if variable_name not in duplicate_variable_names:
+                    f.write(f"{variable_name} = '{resource_path}'\n")
+                else:
+                    f.write(f"{variable_name}_{resource_path[-3:]} = '{resource_path}'\n")
 
 
 def get_prefix(path: pathlib.Path) -> str:
