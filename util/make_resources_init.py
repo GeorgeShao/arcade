@@ -7,6 +7,8 @@ Warning: There is a duplicate resource variable name (sound_laser1).
 Warning: There is a duplicate resource variable name (sound_laser1).
 Warning: There is a duplicate resource variable name (sound_phase_jump1).
 Warning: There is a duplicate resource variable name (sound_rock_hit2).
+
+However, cannot delete resources for compatibility issues with older projects
 """
 
 import pathlib
