@@ -36,12 +36,12 @@ class NoOpenGLException(Exception):
 
 class Window(pyglet.window.Window):
     """
-    The Window class forms the basis of most advanced games that use Arcade.
+    The Window class forms the basis of most advanced games that use ArcadePlus.
     It represents a window on the screen, and manages events.
     """
 
     def __init__(self, width: int = 800, height: int = 600,
-                 title: str = 'Arcade Window', fullscreen: bool = False,
+                 title: str = 'ArcadePlus Window', fullscreen: bool = False,
                  resizable: bool = False, update_rate: Optional[float] = 1/60,
                  antialiasing: bool = True):
         """
@@ -167,8 +167,8 @@ class Window(pyglet.window.Window):
         :param float x: x position of the mouse
         :param float y: y position of the mouse
         :param int button: What button was hit. One of:
-                           arcade.MOUSE_BUTTON_LEFT, arcade.MOUSE_BUTTON_RIGHT,
-                           arcade.MOUSE_BUTTON_MIDDLE
+                           arcadeplus.MOUSE_BUTTON_LEFT, arcadeplus.MOUSE_BUTTON_RIGHT,
+                           arcadeplus.MOUSE_BUTTON_MIDDLE
         :param int modifiers: Shift/click, ctrl/click, etc.
         """
         try:
@@ -442,7 +442,7 @@ class Window(pyglet.window.Window):
 
     def show_view(self, new_view: 'View'):
         if not isinstance(new_view, View):
-            raise ValueError("Must pass an arcade.View object to "
+            raise ValueError("Must pass an arcadeplus.View object to "
                              "Window.show_view()")
 
         # Store the Window that is showing the "new_view" View.
@@ -512,7 +512,7 @@ class Window(pyglet.window.Window):
         super().set_exclusive_keyboard(exclusive)
 
     def get_system_mouse_cursor(self, name):
-        super().get_system_mouse_cursor(name)
+        return super().get_system_mouse_cursor(name)
 
     def dispatch_events(self):
         super().dispatch_events()
@@ -533,7 +533,7 @@ def open_window(width: int, height: int, window_title: str, resizable: bool = Fa
     :param bool antialiasing: Smooth the graphics?
 
     :returns: Handle to window
-    :rtype arcade.Window:
+    :rtype arcadeplus.Window:
     """
 
     global _window
@@ -625,8 +625,8 @@ class View:
         :param float x: x position of the mouse
         :param float y: y position of the mouse
         :param int button: What button was hit. One of:
-                           arcade.MOUSE_BUTTON_LEFT, arcade.MOUSE_BUTTON_RIGHT,
-                           arcade.MOUSE_BUTTON_MIDDLE
+                           arcadeplus.MOUSE_BUTTON_LEFT, arcadeplus.MOUSE_BUTTON_RIGHT,
+                           arcadeplus.MOUSE_BUTTON_MIDDLE
         :param int modifiers: Shift/click, ctrl/click, etc.
         """
         try:
