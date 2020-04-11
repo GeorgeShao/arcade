@@ -39,6 +39,8 @@ from .window_commands import get_scaling_factor
 from .window_commands import get_viewport
 from .window_commands import get_window
 from .window_commands import pause
+from .window_commands import pause_milliseconds
+from .window_commands import pause_seconds
 from .window_commands import quick_run
 from .window_commands import run
 from .window_commands import schedule
@@ -422,6 +424,8 @@ __all__ = ['AnimatedTimeBasedSprite',
            'make_transparent_color',
            'open_window',
            'pause',
+           'pause_milliseconds',
+           'pause_seconds',
            'play_sound',
            'process_layer',
            'quick_run',
