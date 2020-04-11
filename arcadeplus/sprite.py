@@ -30,9 +30,9 @@ from arcadeplus import draw_polygon_outline
 from arcadeplus import Color
 from arcadeplus.color import BLACK
 
-from arcade.arcade_types import RGB, Point
+from arcadeplus.arcade_types import RGB, Point
 if TYPE_CHECKING:  # handle import cycle caused by type hinting
-    from arcade.sprite_list import SpriteList
+    from arcadeplus.sprite_list import SpriteList
 
 FACE_RIGHT = 1
 FACE_LEFT = 2
@@ -44,7 +44,7 @@ class Sprite:
     """
     Class that represents a 'sprite' on-screen. Most games center around sprites.
     For examples on how to use this class, see:
-    http://arcade.academy/examples/index.html#sprites
+    http://arcadeplus.academy/examples/index.html#sprites
 
     Attributes:
         :alpha: Transparency of sprite. 0 is invisible, 255 is opaque.
@@ -74,7 +74,7 @@ class Sprite:
         :left: Set/query the sprite location by using the left coordinate. This \
         will be the 'x' of the left of the sprite.
         :points: Points, in relation to the center of the sprite, that are used \
-        for collision detection. Arcade defaults to creating points for a rectangle \
+        for collision detection. ArcadePlus defaults to creating points for a rectangle \
         that encompass the image. If you are creating a ramp or making better \
         hit-boxes, you can custom-set these.
         :position: A list with the (x, y) of where the sprite is.
@@ -842,7 +842,7 @@ class Sprite:
         Returns:
             True if the point is contained within the sprite's boundary.
         """
-        from arcade.geometry import is_point_in_polygon
+        from arcadeplus.geometry import is_point_in_polygon
 
         x, y = point
         return is_point_in_polygon(x, y, self.get_adjusted_hit_box())
@@ -1068,7 +1068,7 @@ class SpriteSolidColor(Sprite):
         super().__init__()
 
         image = PIL.Image.new('RGBA', (width, height), color)
-        self.texture = Texture("Solid", image)
+        self.texture = Texture(f"Solid-{color[0]}-{color[1]}-{color[2]}", image)
         self._points = self.texture.hit_box_points
 
 
