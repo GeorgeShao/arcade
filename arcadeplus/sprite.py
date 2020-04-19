@@ -773,7 +773,7 @@ class Sprite:
         """ Draw the sprite. """
 
         if self._sprite_list is None:
-            from arcade import SpriteList
+            from arcadeplus import SpriteList
             self._sprite_list = SpriteList()
             self._sprite_list.append(self)
 
