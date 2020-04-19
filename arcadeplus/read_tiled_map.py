@@ -112,7 +112,7 @@ def _parse_points(point_text: str):
 @typing.no_type_check
 def read_tiled_map(tmx_file: str, scaling: float = 1, tsx_file: str = None) -> TiledMap:
     """
-    read_tiled_map has been deprecated. Use arcade.tilemap.read_tmx instead.
+    read_tiled_map has been deprecated. Use arcadeplus.tilemap.read_tmx instead.
 
     Given a tmx_file, this will read in a tiled map, and return
     a TiledMap object.
@@ -135,13 +135,13 @@ def read_tiled_map(tmx_file: str, scaling: float = 1, tsx_file: str = None) -> T
     :rtype: TiledMap
     """
     from warnings import warn
-    warn('read_tiled_map has been deprecated. Use arcade.tilemap.read_tmx instead.', DeprecationWarning)
+    warn('read_tiled_map has been deprecated. Use arcadeplus.tilemap.read_tmx instead.', DeprecationWarning)
 
     # Create a map object to store this stuff in
     my_map = TiledMap()
 
     # If we should pull from local resources, replace with proper path
-    if tmx_file.startswith(":resources:"):
+    if isinstance(tmx_file, str) and str(tmx_file).startswith(":resources:"):
         import os
         path = os.path.dirname(os.path.abspath(__file__))
         tmx_file = f"{path}/resources/{tmx_file[11:]}"
@@ -322,7 +322,7 @@ def read_tiled_map(tmx_file: str, scaling: float = 1, tsx_file: str = None) -> T
 @typing.no_type_check
 def generate_sprites(map_object: TiledMap, layer_name: str, scaling: float, base_directory="") -> SpriteList:
     """
-    generate_sprites has been deprecated. Use arcade.tilemap.process_layer instead.
+    generate_sprites has been deprecated. Use arcadeplus.tilemap.process_layer instead.
     Generate the sprites for a layer in a map.
 
     :param TiledMap map_object: Map previously read in from read_tiled_map function
