@@ -186,15 +186,6 @@ def load_textures(file_name: str,
     """
     Load a set of textures from a single image file.
 
-    Note: If the code is to load only part of the image, the given `x`, `y`
-    coordinates will start with the origin `(0, 0)` in the upper left of the
-    image. When drawing, ArcadePlus uses `(0, 0)` in the lower left corner.
-    Be careful with this reversal.
-
-    For a longer explanation of why computers sometimes start in the upper
-    left, see:
-    http://programarcadegames.com/index.php?chapter=introduction_to_graphics&lang=en#section_5
-
     :param str file_name: Name of the file.
     :param List image_location_list: List of image sub-locations. Each rectangle should be
            a `List` of four floats: `[x, y, width, height]`.
@@ -212,7 +203,7 @@ def load_textures(file_name: str,
         source_image = texture.image
     else:
         # If we should pull from local resources, replace with proper path
-        if str(file_name).startswith(":resources:"):
+        if isinstance(file_name, str) and str(file_name).startswith(":resources:"):
             import os
             path = os.path.dirname(os.path.abspath(__file__))
             file_name = f"{path}/resources/{file_name[11:]}"
@@ -276,15 +267,6 @@ def load_texture(file_name: str,
     """
     Load an image from disk and create a texture.
 
-    Note: If the code is to load only part of the image, the given `x`, `y`
-    coordinates will start with the origin `(0, 0)` in the upper left of the
-    image. When drawing, ArcadePlus uses `(0, 0)` in the lower left corner.
-    Be careful with this reversal.
-
-    For a longer explanation of why computers sometimes start in the upper
-    left, see:
-    http://programarcadegames.com/index.php?chapter=introduction_to_graphics&lang=en#section_5
-
     :param str file_name: Name of the file to that holds the texture.
     :param float x: X position of the crop area of the texture.
     :param float y: Y position of the crop area of the texture.
@@ -313,7 +295,7 @@ def load_texture(file_name: str,
         source_image = texture.image
     else:
         # If we should pull from local resources, replace with proper path
-        if str(file_name).startswith(":resources:"):
+        if isinstance(file_name, str) and str(file_name).startswith(":resources:"):
             import os
             path = os.path.dirname(os.path.abspath(__file__))
             file_name = f"{path}/resources/{file_name[11:]}"
@@ -390,7 +372,7 @@ def load_spritesheet(file_name: str,
     texture_list = []
 
     # If we should pull from local resources, replace with proper path
-    if str(file_name).startswith(":resources:"):
+    if isinstance(file_name, str) and str(file_name).startswith(":resources:"):
         path = os.path.dirname(os.path.abspath(__file__))
         file_name = f"{path}/resources/{file_name[11:]}"
 
