@@ -41,6 +41,12 @@ Performance Comparison
 
 As seen in the graph below, the ArcadePlus Python library has much better performance than the Arcade Python library.
 
+**Pros:**
+Massive frame rate improvements
+
+**Cons:**
+Slightly more memory usage (an insignificant amount)
+
 .. image:: https://github.com/GeorgeShao/arcadeplus/blob/master/arcadeplus/examples/perf_test/stress_test_comparison_results.svg
     :alt: ArcadePlus vs Arcade - Python Library Performance Comparison Chart
 
@@ -50,5 +56,11 @@ Code Compatibility & Conversion
 With a few simple changes (listed below), your existing Arcade code will work as intended with ArcadePlus, but an order of magnitude more efficiently.
 However, any future ArcadePlus code may not work with Arcade code due to new features and optimizations that may be added.
 
+Method #1
+*********
 1. Replace any imports such as ``import arcade`` with ``import arcadeplus``
 2. Use your IDE's built-in find function to replace all instances of ``arcade.`` with ``arcadeplus.``
+
+Method #2
+*********
+1. Instead of ``import arcade``, use ``import arcadeplus as arcade``
