@@ -6,8 +6,8 @@ import time
 import collections
 import pyglet
 
-START_COUNT = 5
-STOP_COUNT = 200
+START_COUNT = 100
+STOP_COUNT = 2500
 SHAPE_INCREMENT = START_COUNT
 RESULTS_FILE = "arcade_results.csv"
 
