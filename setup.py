@@ -13,7 +13,6 @@ def execfile(filepath, globals=None, locals=None):
     with open(filepath, 'rb') as file:
         exec(compile(file.read(), filepath, 'exec'), globals, locals)
 
-
 # execute the file
 execfile("arcadeplus/version.py", locals=locals())
 
