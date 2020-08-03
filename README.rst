@@ -42,10 +42,11 @@ Performance Comparison
 As seen in the graph below, the ArcadePlus Python library has much better performance than the Arcade Python library.
 
 **Pros:**
-Massive frame rate improvements
+Massive frame rate improvements (compared to Arcade v2.3)
+UPDATE: As of Arcade v2.4, this depends on your machine specs. It may perform better, worse, or about the same depending on your RAM speed, GPU, and more.
 
 **Cons:**
-Slightly more memory usage (an insignificant amount)
+More memory usage.
 
 .. image:: https://github.com/GeorgeShao/arcadeplus/blob/master/arcadeplus/examples/perf_test/stress_test_comparison_results.svg
     :alt: ArcadePlus vs Arcade - Python Library Performance Comparison Chart
