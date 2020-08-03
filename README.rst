@@ -43,6 +43,7 @@ As seen in the graph below, the ArcadePlus Python library has much better perfor
 
 **Pros:**
 Massive frame rate improvements (compared to Arcade v2.3)
+
 UPDATE: As of Arcade v2.4, this depends on your machine specs. It may perform better, worse, or about the same depending on your RAM speed, GPU, and more.
 
 **Cons:**
