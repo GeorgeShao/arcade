@@ -43,7 +43,7 @@ if __name__ == "__main__":
           author_email="georgeshao123@gmail.com",
           license="gpl-3.0",
           url="https://github.com/GeorgeShao/arcadeplus",
-          download_url="https://github.com/GeorgeShao/arcadeplus/archive/0.6.2.tar.gz",
+          download_url="https://github.com/GeorgeShao/arcadeplus/archive/0.6.3.tar.gz",
           install_requires=install_requires,
           packages=["arcadeplus",
                     "arcadeplus.key",
