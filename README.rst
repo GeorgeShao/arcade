@@ -49,8 +49,11 @@ UPDATE: As of Arcade v2.4, this depends on your machine specs. It may perform be
 **Cons:**
 More memory usage.
 
+.. image:: https://github.com/GeorgeShao/arcadeplus/blob/master/arcadeplus/examples/perf_test/original_stress_test_comparison_results.svg
+    :alt: Performance Comparison with Arcade (Arcade 2.3 and earlier)
+
 .. image:: https://github.com/GeorgeShao/arcadeplus/blob/master/arcadeplus/examples/perf_test/stress_test_comparison_results.svg
-    :alt: ArcadePlus vs Arcade - Python Library Performance Comparison Chart
+    :alt: Performance Comparison with Arcade (After similar changes were implemented into Arcade v2.4)
 
 
 Code Compatibility & Conversion

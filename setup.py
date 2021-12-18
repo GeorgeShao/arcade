@@ -43,7 +43,7 @@ if __name__ == "__main__":
           author_email="georgeshao123@gmail.com",
           license="gpl-3.0",
           url="https://github.com/GeorgeShao/arcadeplus",
-          download_url="https://github.com/GeorgeShao/arcadeplus/archive/0.6.3.tar.gz",
+          download_url="https://github.com/GeorgeShao/arcadeplus/archive/1.0.0.tar.gz",
           install_requires=install_requires,
           packages=["arcadeplus",
                     "arcadeplus.key",
@@ -53,7 +53,7 @@ if __name__ == "__main__":
                     ],
           python_requires='>=3.6',
           classifiers=[
-              "Development Status :: 4 - Beta", # Choose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable"
+              "Development Status :: 5 - Production/Stable", # Choose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable"
               "Intended Audience :: Developers",
               "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
               "Operating System :: OS Independent",
