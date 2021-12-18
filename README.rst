@@ -52,12 +52,12 @@ More memory usage.
 
 **Performance Comparison with Arcade (Arcade 2.3 and earlier):**
 
-.. image:: https://github.com/GeorgeShao/arcadeplus/blob/master/arcadeplus/examples/perf_test/original_stress_test_comparison_results.svg
+.. image:: https://raw.githubusercontent.com/GeorgeShao/arcadeplus/master/arcadeplus/examples/perf_test/original_stress_test_comparison_results.svg
     :alt: Performance Comparison with Arcade (Arcade 2.3 and earlier)
 
 **Performance Comparison with Arcade (After similar changes were integrated into Arcade v2.4):**
 
-.. image:: https://github.com/GeorgeShao/arcadeplus/blob/master/arcadeplus/examples/perf_test/stress_test_comparison_results.svg
+.. image:: https://raw.githubusercontent.com/GeorgeShao/arcadeplus/master/arcadeplus/examples/perf_test/stress_test_comparison_results.svg
     :alt: Performance Comparison with Arcade (After similar changes were integrated into Arcade v2.4)
 
 
